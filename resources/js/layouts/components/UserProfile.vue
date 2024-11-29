@@ -1,5 +1,5 @@
 <script setup>
-import avatar1 from '@images/avatars/avatar-1.png'
+import avatar from '@images/avatars/avatar-9.png'
 </script>
 
 <template>
@@ -16,14 +16,21 @@ import avatar1 from '@images/avatars/avatar-1.png'
       color="primary"
       variant="tonal"
     >
-      <VImg :src="avatar1" />
+      <VTooltip
+        location="bottom"
+        activator="parent"
+        open-delay="1000"
+      >
+        <span class="text-capitalize">Profile</span>
+      </VTooltip>
+      <VImg :src="avatar" />
 
       <!-- SECTION Menu -->
       <VMenu
         activator="parent"
         width="230"
         location="bottom end"
-        offset="14px"
+        offset="20px"
       >
         <VList>
           <!-- 👉 User Avatar & Name -->
@@ -41,7 +48,7 @@ import avatar1 from '@images/avatars/avatar-1.png'
                     color="primary"
                     variant="tonal"
                   >
-                    <VImg :src="avatar1" />
+                    <VImg :src="avatar" />
                   </VAvatar>
                 </VBadge>
               </VListItemAction>
@@ -80,19 +87,6 @@ import avatar1 from '@images/avatars/avatar-1.png'
             <VListItemTitle>Settings</VListItemTitle>
           </VListItem>
 
-          <!-- 👉 Pricing -->
-          <VListItem link>
-            <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="bx-dollar"
-                size="22"
-              />
-            </template>
-
-            <VListItemTitle>Pricing</VListItemTitle>
-          </VListItem>
-
           <!-- 👉 FAQ -->
           <VListItem link>
             <template #prepend>
@@ -123,7 +117,6 @@ import avatar1 from '@images/avatars/avatar-1.png'
           </VListItem>
         </VList>
       </VMenu>
-      <!-- !SECTION -->
     </VAvatar>
   </VBadge>
 </template>

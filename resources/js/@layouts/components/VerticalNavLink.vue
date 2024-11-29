@@ -12,11 +12,10 @@ const props = defineProps({
     class="nav-link"
     :class="{ disabled: item.disable }"
   >
-    <Component
-      :is="item.to ? 'RouterLink' : 'a'"
-      :to="item.to"
+    <Link
       :href="item.href"
       :target="item.target"
+      :class="{'router-link-active router-link-exact-active': item.active}"
     >
       <VIcon
         :icon="item.icon || 'bxs-circle'"
@@ -32,7 +31,7 @@ const props = defineProps({
       >
         {{ item.badgeContent }}
       </span>
-    </Component>
+    </Link>
   </li>
 </template>
 

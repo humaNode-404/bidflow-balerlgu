@@ -14,6 +14,12 @@ importers:
       '@floating-ui/dom':
         specifier: 1.6.3
         version: 1.6.3
+      '@iconify-json/bi':
+        specifier: ^1.2.1
+        version: 1.2.1
+      '@inertiajs/inertia':
+        specifier: ^0.11.1
+        version: 0.11.1
       '@inertiajs/vue3':
         specifier: ^1.2.0
         version: 1.2.0(vue@3.4.31(typescript@5.5.3))
@@ -85,7 +91,7 @@ importers:
         specifier: ^1.1.8
         version: 1.1.8
       '@iconify-json/mdi':
-        specifier: ^1.1.58
+        specifier: ^1.1.67
         version: 1.1.67
       '@iconify/tools':
         specifier: ^4.0.0
@@ -565,6 +571,9 @@ packages:
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
     deprecated: Use @eslint/object-schema instead
 
+  '@iconify-json/bi@1.2.1':
+    resolution: {integrity: sha512-wsIWb6bcnBkfN8/2puIIE2ul6NYVjclbE/nI7JZsPnfzBamd3NuRFstXQH9Ckkbrw9eiBTNKwHbH90w3UE5QIg==}
+
   '@iconify-json/bx@1.1.10':
     resolution: {integrity: sha512-4JzMDYhs/hkU9mO8nNMNKZwHn706oQaD46URyUuD4fP/XAWGf01vg6wKITmQseEHsHDrtKAXjwcumfnTUDi3OQ==}
 
@@ -596,6 +605,9 @@ packages:
 
   '@inertiajs/core@1.2.0':
     resolution: {integrity: sha512-6U0gqCPbGGGMcLoDm+ckKipc5gptZMmfVFfPGdO7vlO7yipWf1RD+TKkcZGJklFvfgFMKwK2VPw8GAv1OctuQA==}
+
+  '@inertiajs/inertia@0.11.1':
+    resolution: {integrity: sha512-btmV53c54oW4Z9XF0YyTdIUnM7ue0ONy3/KJOz6J1C5CYIwimiKfDMpz8ZbGJuxS+SPdOlNsqj2ZhlHslpJRZg==}
 
   '@inertiajs/vue3@1.2.0':
     resolution: {integrity: sha512-Y6AsvwIK/E1pQKAMp8B7i99CbNApcTYb7j8R+TXM/AFQG6yBlQ1Qb9oFMItb6VimXSnDyfO4+FWe/JPLk9OIVA==}
@@ -1041,6 +1053,9 @@ packages:
   available-typed-arrays@1.0.7:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
     engines: {node: '>= 0.4'}
+
+  axios@0.21.4:
+    resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
 
   axios@1.7.2:
     resolution: {integrity: sha512-2A8QhOMrbomlDuiLeK9XibIBzuHeRcqqNOHp0Cyp5EoJ1IFDh+XZH3A6BkXtv0K4gFGCI0Y4BM7B1wOEi0Rmgw==}
@@ -3868,6 +3883,10 @@ snapshots:
 
   '@humanwhocodes/object-schema@2.0.3': {}
 
+  '@iconify-json/bi@1.2.1':
+    dependencies:
+      '@iconify/types': 2.0.0
+
   '@iconify-json/bx@1.1.10':
     dependencies:
       '@iconify/types': 2.0.0
@@ -3928,6 +3947,14 @@ snapshots:
       axios: 1.7.2
       deepmerge: 4.3.1
       nprogress: 0.2.0
+      qs: 6.13.1
+    transitivePeerDependencies:
+      - debug
+
+  '@inertiajs/inertia@0.11.1':
+    dependencies:
+      axios: 0.21.4
+      deepmerge: 4.3.1
       qs: 6.13.1
     transitivePeerDependencies:
       - debug
@@ -4473,6 +4500,12 @@ snapshots:
   available-typed-arrays@1.0.7:
     dependencies:
       possible-typed-array-names: 1.0.0
+
+  axios@0.21.4:
+    dependencies:
+      follow-redirects: 1.15.6
+    transitivePeerDependencies:
+      - debug
 
   axios@1.7.2:
     dependencies:

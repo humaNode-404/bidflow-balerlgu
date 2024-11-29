@@ -10,11 +10,41 @@ import misc404 from '@images/pages/404.png'
       description="We couldn't find the page you are looking for."
     />
 
-    <VBtn class="mb-6">
-      <Link href="/dashboard">
-        Back to Home
+    <div>
+      <Link
+        href="/"
+        as="button"
+        class="d-block mx-auto"
+      >
+        <VBtn class="mb-6">
+          Back to Home
+        </VBtn>
       </Link>
-    </VBtn>
+      <div class="demo-space-y">
+        <VAlert
+          color="primary"
+          icon="bx-happy"
+        >
+          Suspendisse enim turpis, dictum sed, iaculis a, condimentum nec, nisi.
+        </VAlert>
+
+        <VAlert
+          color="primary"
+          icon="bx-bolt-circle"
+          variant="tonal"
+        >
+          Phasellus blandit leo ut odio. Morbi mattis ullamcorper velit.
+        </VAlert>
+
+        <VAlert
+          color="primary"
+          icon="bx-bxl-nodejs"
+          variant="outlined"
+        >
+          Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus.
+        </VAlert>
+      </div>
+    </div>
 
     <!-- 👉 Image -->
     <div class="misc-avatar w-100 text-center">

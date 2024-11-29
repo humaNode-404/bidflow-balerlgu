@@ -29,6 +29,7 @@ const sources = {
     // },
     ],
     icons: [
+        'bi:cart4',
     // 'mdi:home',
     // 'mdi:account',
     // 'mdi:login',
@@ -40,6 +41,8 @@ const sources = {
         // Custom JSON file
         // 'json/gg.json',
         // Iconify JSON file (@iconify/json is a package name, /json/ is directory where files are, then filename)
+        require.resolve('@iconify-json/mdi/icons.json'), // Material Design Icons
+        require.resolve('@iconify-json/bi/icons.json'), // Bootstrap Icons
         require.resolve('@iconify-json/bx/icons.json'),
         require.resolve('@iconify-json/bxl/icons.json'),
         require.resolve('@iconify-json/bxs/icons.json'),
@@ -99,7 +102,7 @@ const target = join(__dirname, 'icons.css');
         // Sort icons by prefix
         const organizedList = organizeIconsList(sources.icons);
         for (const prefix in organizedList) {
-            const filename = require.resolve(`@iconify/json/json/${prefix}.json`);
+            const filename = require.resolve(`@iconify-json/${prefix}/icons.json`);
             sourcesJSON.push({
                 filename,
                 icons: organizedList[prefix],

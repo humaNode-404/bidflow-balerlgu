@@ -17,7 +17,8 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
     <VerticalNavLink
       :item="{
         title: 'Analytics',
-        to: '/dashboard',
+        href: '/dashboard',
+        active: $page.component.includes('dashboard')
       }"
     />
     <VerticalNavLink
@@ -150,12 +151,21 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
       badgeClass: 'bg-light-primary text-primary',
     }"
   />
+  <VerticalNavLink
+    :item="{
+      title: 'Users',
+      icon: 'bx-user',
+      href: '/users',
+      active: $page.component.includes('users')
+    }"
+  />
 
   <VerticalNavLink
     :item="{
       title: 'Account Settings',
       icon: 'bx-user',
-      to: '/account-settings',
+      href: '/settings',
+      active: $page.component.includes('settings')
     }"
   />
 
@@ -163,21 +173,24 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
     :item="{
       title: 'Login',
       icon: 'bx-log-in',
-      to: '/login',
+      href: '/login',
+      active: $page.component.includes('login')
     }"
   />
   <VerticalNavLink
     :item="{
       title: 'Register',
       icon: 'bx-user-plus',
-      to: '/register',
+      href: '/register',
+      active: $page.component.includes('register')
     }"
   />
   <VerticalNavLink
     :item="{
       title: 'Error',
       icon: 'bx-info-circle',
-      to: '/no-existence',
+      href: '/no-existence',
+      active: $page.component.includes('error')
     }"
   />
 
@@ -191,21 +204,24 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
     :item="{
       title: 'Typography',
       icon: 'bx-text',
-      to: '/typography',
+      href: '/typography',
+      active: $page.component.includes('typography')
     }"
   />
   <VerticalNavLink
     :item="{
       title: 'Icons',
       icon: 'bx-package',
-      to: '/icons',
+      href: '/icons',
+      active: $page.component.includes('icons')
     }"
   />
   <VerticalNavLink
     :item="{
       title: 'Cards',
       icon: 'bx-credit-card',
-      to: '/cards',
+      href: '/cards',
+      active: $page.component.includes('cards')
     }"
   />
 
@@ -219,7 +235,8 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
     :item="{
       title: 'Form Layouts',
       icon: 'bx-layout',
-      to: '/form-layouts',
+      href: '/form-layouts',
+      active: $page.component.includes('form-layouts')
     }"
   />
   <VerticalNavLink
@@ -246,7 +263,8 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
     :item="{
       title: 'Tables',
       icon: 'bx-table',
-      to: '/tables',
+      href: '/tables',
+      active: $page.component.includes('tables')
     }"
   />
 

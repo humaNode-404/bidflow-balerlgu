@@ -4,38 +4,19 @@
     <span class="d-flex align-center">
       &copy;
       {{ new Date().getFullYear() }}
-      Made With
       <VIcon
-        icon="bx-heart"
-        color="error"
-        size="1.25rem"
-        class="mx-1"
-      />
-      By <a
-        href="https://themeselection.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-primary ms-1"
-      >ThemeSelection</a>
+        icon="bi-cart4"
+        size="1rem"
+        class="ms-2"
+      /> <Link
+        href="/"
+        class="text-primary ms-2"
+      >Bidflow</Link>
     </span>
     <!-- 👉 Footer: right content -->
     <span class="d-md-flex gap-x-4 text-primary d-none">
-      <a
-        href="https://themeselection.com/license/"
-        target="noopener noreferrer"
-      >License</a>
-      <a
-        href="https://themeselection.com/"
-        target="noopener noreferrer"
-      >More Themes</a>
-      <a
-        href="https://demos.themeselection.com/sneat-vuetify-vuejs-admin-template/documentation/guide/laravel-integration/folder-structure.html"
-        target="noopener noreferrer"
-      >Documentation</a>
-      <a
-        href="https://themeselection.com/support/"
-        target="noopener noreferrer"
-      >Support</a>
+      <Link href="/">Privacy Policy</Link>
+      <Link href="/">Terms of Service</Link>
     </span>
   </div>
 </template>

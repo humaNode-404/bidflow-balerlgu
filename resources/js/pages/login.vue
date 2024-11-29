@@ -5,7 +5,6 @@ export default {
 </script>
 
 <script setup>
-import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 import logo from '@images/logo.svg?raw'
 import authV1BottomShape from '@images/svg/auth-v1-bottom-shape.svg?url'
 import authV1TopShape from '@images/svg/auth-v1-top-shape.svg?url'
@@ -41,8 +40,8 @@ const isPasswordVisible = ref(false)
         :class="$vuetify.display.smAndUp ? 'pa-6' : 'pa-0'"
       >
         <VCardItem class="justify-center">
-          <RouterLink
-            to="/"
+          <Link
+            href="/"
             class="app-logo"
           >
             <!-- eslint-disable vue/no-v-html -->
@@ -51,14 +50,14 @@ const isPasswordVisible = ref(false)
               v-html="logo"
             />
             <h1 class="app-logo-title">
-              sneat
+              bidflow
             </h1>
-          </RouterLink>
+          </Link>
         </VCardItem>
 
         <VCardText>
           <h4 class="text-h4 mb-1">
-            Welcome to Sneat! 👋🏻
+            Welcome to Bidflow!
           </h4>
           <p class="mb-0">
             Please sign-in to your account and start the adventure
@@ -112,39 +111,6 @@ const isPasswordVisible = ref(false)
                 >
                   Login
                 </VBtn>
-              </VCol>
-
-              <!-- create account -->
-              <VCol
-                cols="12"
-                class="text-body-1 text-center"
-              >
-                <span class="d-inline-block">
-                  New on our platform?
-                </span>
-                <RouterLink
-                  class="text-primary ms-1 d-inline-block text-body-1"
-                  to="/register"
-                >
-                  Create an account
-                </RouterLink>
-              </VCol>
-
-              <VCol
-                cols="12"
-                class="d-flex align-center"
-              >
-                <VDivider />
-                <span class="mx-4 text-high-emphasis">or</span>
-                <VDivider />
-              </VCol>
-
-              <!-- auth providers -->
-              <VCol
-                cols="12"
-                class="text-center"
-              >
-                <AuthProvider />
               </VCol>
             </VRow>
           </VForm>

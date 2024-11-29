@@ -3,6 +3,9 @@ import DefaultLayoutWithVerticalNav from './components/DefaultLayoutWithVertical
 </script>
 
 <template>
+  <Head>
+    <title>{{ $page.component }}</title>
+  </Head>
   <DefaultLayoutWithVerticalNav>
     <!-- <RouterView /> -->
     <slot />

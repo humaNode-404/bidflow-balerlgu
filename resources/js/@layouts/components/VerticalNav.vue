@@ -1,7 +1,7 @@
 <script setup>
+import logo from '@images/logo.svg?raw'
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import { useDisplay } from 'vuetify'
-import logo from '@images/logo.svg?raw'
 
 const props = defineProps({
   tag: {
@@ -55,7 +55,7 @@ const handleNavScroll = evt => {
     <!-- 👉 Header -->
     <div class="nav-header">
       <slot name="nav-header">
-        <RouterLink
+        <Link
           to="/"
           class="app-logo app-title-wrapper"
         >
@@ -65,9 +65,9 @@ const handleNavScroll = evt => {
           />
 
           <h1 class="leading-normal">
-            sneat
+            bidflow
           </h1>
-        </RouterLink>
+        </Link>
       </slot>
     </div>
     <slot name="before-nav-items">

@@ -4,6 +4,7 @@ export const themes = {
   light: {
     dark: false,
     colors: {
+      'skin-default': '#f5f5f9',
       'primary': staticPrimaryColor,
       'on-primary': '#fff',
       'primary-darken-1': staticPrimaryDarkenColor,
@@ -84,6 +85,7 @@ export const themes = {
   dark: {
     dark: true,
     colors: {
+      'skin-default': '#232333',
       'primary': staticPrimaryColor,
       'on-primary': '#fff',
       'primary-darken-1': staticPrimaryDarkenColor,

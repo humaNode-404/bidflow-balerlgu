@@ -1,4 +1,7 @@
 <template>
+  <Head>
+    <title>{{ $page.component }}</title>
+  </Head>
   <div class="layout-wrapper layout-blank">
     <!-- <RouterView /> -->
     <slot />

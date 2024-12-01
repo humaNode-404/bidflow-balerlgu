@@ -1,14 +1,14 @@
 <script setup>
-import VerticalNavSectionTitle from '@/@layouts/components/VerticalNavSectionTitle.vue'
-import VerticalNavGroup from '@layouts/components/VerticalNavGroup.vue'
-import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
+import VerticalNavSectionTitle from '@/@layouts/components/VerticalNavSectionTitle.vue';
+import VerticalNavGroup from '@layouts/components/VerticalNavGroup.vue';
+import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
 </script>
 
 <template>
   <!-- 👉 Dashboards -->
   <VerticalNavGroup
     :item="{
-      title: 'Dashboards',
+      title: 'Home',
       badgeContent: '5',
       badgeClass: 'bg-error',
       icon: 'bx-home-smile',
@@ -16,56 +16,20 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
   >
     <VerticalNavLink
       :item="{
-        title: 'Analytics',
+        title: 'Dashboard',
         href: '/dashboard',
-        active: $page.component.includes('dashboard')
-      }"
-    />
-    <VerticalNavLink
-      :item="{
-        title: 'CRM',
-        href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-laravel-admin-template/demo-1/dashboards/crm',
-        target: '_blank',
-        badgeContent: 'Pro',
-        badgeClass: 'bg-light-primary text-primary',
-      }"
-    />
-    <VerticalNavLink
-      :item="{
-        title: 'ECommerce',
-        href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-laravel-admin-template/demo-1/dashboards/ecommerce',
-        target: '_blank',
-        badgeContent: 'Pro',
-        badgeClass: 'bg-light-primary text-primary',
-      }"
-    />
-    <VerticalNavLink
-      :item="{
-        title: 'Academy',
-        href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-laravel-admin-template/demo-1/dashboards/academy',
-        target: '_blank',
-        badgeContent: 'Pro',
-        badgeClass: 'bg-light-primary text-primary',
-      }"
-    />
-    <VerticalNavLink
-      :item="{
-        title: 'Logistics',
-        href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-laravel-admin-template/demo-1/dashboards/logistics',
-        target: '_blank',
-        badgeContent: 'Pro',
-        badgeClass: 'bg-light-primary text-primary',
+        active: $page.component.includes('Dashboard'),
       }"
     />
   </VerticalNavGroup>
 
-  <!-- 👉 Front Pages -->
+  <!-- 👉 Starred PR -->
   <VerticalNavGroup
     :item="{
-      title: 'Front Pages',
-      icon: 'bx-file',
-      badgeContent: 'Pro',
-      badgeClass: 'bg-light-primary text-primary',
+      title: 'Starred PR',
+      icon: 'bx-star',
+      badgeContent: '7',
+      badgeClass: 'bg-light-warning text-warning',
     }"
   >
     <VerticalNavLink
@@ -156,16 +120,16 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
       title: 'Users',
       icon: 'bx-user',
       href: '/users',
-      active: $page.component.includes('users')
+      active: $page.component.includes('users'),
     }"
   />
 
   <VerticalNavLink
     :item="{
-      title: 'Account Settings',
+      title: 'Profile',
       icon: 'bx-user',
-      href: '/settings',
-      active: $page.component.includes('settings')
+      href: '/profile',
+      active: $page.component.includes('Profile'),
     }"
   />
 
@@ -174,7 +138,7 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
       title: 'Login',
       icon: 'bx-log-in',
       href: '/login',
-      active: $page.component.includes('login')
+      active: $page.component.includes('login'),
     }"
   />
   <VerticalNavLink
@@ -182,7 +146,7 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
       title: 'Register',
       icon: 'bx-user-plus',
       href: '/register',
-      active: $page.component.includes('register')
+      active: $page.component.includes('register'),
     }"
   />
   <VerticalNavLink
@@ -190,7 +154,7 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
       title: 'Error',
       icon: 'bx-info-circle',
       href: '/no-existence',
-      active: $page.component.includes('error')
+      active: $page.component.includes('error'),
     }"
   />
 
@@ -205,7 +169,7 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
       title: 'Typography',
       icon: 'bx-text',
       href: '/typography',
-      active: $page.component.includes('typography')
+      active: $page.component.includes('typography'),
     }"
   />
   <VerticalNavLink
@@ -213,7 +177,7 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
       title: 'Icons',
       icon: 'bx-package',
       href: '/icons',
-      active: $page.component.includes('icons')
+      active: $page.component.includes('icons'),
     }"
   />
   <VerticalNavLink
@@ -221,7 +185,7 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
       title: 'Cards',
       icon: 'bx-credit-card',
       href: '/cards',
-      active: $page.component.includes('cards')
+      active: $page.component.includes('cards'),
     }"
   />
 
@@ -236,7 +200,7 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
       title: 'Form Layouts',
       icon: 'bx-layout',
       href: '/form-layouts',
-      active: $page.component.includes('form-layouts')
+      active: $page.component.includes('form-layouts'),
     }"
   />
   <VerticalNavLink
@@ -264,7 +228,7 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
       title: 'Tables',
       icon: 'bx-table',
       href: '/tables',
-      active: $page.component.includes('tables')
+      active: $page.component.includes('tables'),
     }"
   />
 

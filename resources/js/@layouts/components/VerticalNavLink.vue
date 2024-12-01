@@ -4,31 +4,22 @@ const props = defineProps({
     type: null,
     required: true,
   },
-})
+});
 </script>
 
 <template>
-  <li
-    class="nav-link"
-    :class="{ disabled: item.disable }"
-  >
+  <li class="nav-link" :class="{ disabled: item.disable }">
     <Link
       :href="item.href"
       :target="item.target"
-      :class="{'router-link-active router-link-exact-active': item.active}"
+      :class="{ 'router-link-active router-link-exact-active': item.active }"
     >
-      <VIcon
-        :icon="item.icon || 'bxs-circle'"
-        class="nav-item-icon"
-      />
+      <VIcon :icon="item.icon || 'bxs-circle'" class="nav-item-icon" />
       <!-- 👉 Title -->
       <span class="nav-item-title">
         {{ item.title }}
       </span>
-      <span
-        class="nav-item-badge"
-        :class="item.badgeClass"
-      >
+      <span class="nav-item-badge" :class="item.badgeClass">
         {{ item.badgeContent }}
       </span>
     </Link>

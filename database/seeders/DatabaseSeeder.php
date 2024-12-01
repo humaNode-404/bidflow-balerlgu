@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             'prefix' => 'Mr.',
             'suffix' => 'Jr.',
             'role' => 'admin',
-            'email' => 'marzan@gmail.com',
+            'email' => 'rymemarzan.stud.ofclacc1@gmail.com',
             'password' => Hash::make('mypassword'),
         ]);
     }

@@ -1,5 +1,5 @@
 <script setup>
-import DefaultLayoutWithVerticalNav from './components/DefaultLayoutWithVerticalNav.vue'
+import DefaultLayoutWithVerticalNav from './components/DefaultLayoutWithVerticalNav.vue';
 </script>
 
 <template>
@@ -14,5 +14,5 @@ import DefaultLayoutWithVerticalNav from './components/DefaultLayoutWithVertical
 
 <style lang="scss">
 // As we are using `layouts` plugin we need its styles to be imported
-@use "@layouts/styles/default-layout";
+@use '@layouts/styles/default-layout';
 </style>

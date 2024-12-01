@@ -1,61 +1,57 @@
 <script setup>
-import { Inertia } from '@inertiajs/inertia' // Import Inertia to hook into page navigation events
-import { onMounted, onUnmounted, ref } from 'vue'
+import { Inertia } from '@inertiajs/inertia'; // Import Inertia to hook into page navigation events
+import { onMounted, ref } from 'vue';
 
-const props = defineProps({
+defineProps({
   item: {
     type: Object,
     required: true,
   },
-})
+});
 
-const isOpen = ref(false)       // Whether the nav group is open
-const isActive = ref(false)     // Whether the nav group has an active child
-const navGroupRef = ref(null)  // Ref to the current `nav-group` element
+const isOpen = ref(false); // Whether the nav group is open
+const isActive = ref(false); // Whether the nav group has an active child
+const navGroupRef = ref(null); // Ref to the current `nav-group` element
 
 // Function to check if any child of the nav-group has active classes
 const checkActiveChild = () => {
-  if (!navGroupRef.value) return false
+  if (!navGroupRef.value) return false;
 
   // Check if any child has the active class
-  return Array.from(navGroupRef.value.querySelectorAll('*')).some(child =>
-    child.classList.contains('router-link-active') &&
-    child.classList.contains('router-link-exact-active'),
-  )
-}
+  return Array.from(navGroupRef.value.querySelectorAll('*')).some(
+    (child) =>
+      child.classList.contains('router-link-active') &&
+      child.classList.contains('router-link-exact-active'),
+  );
+};
 
 // Automatically check the active child and update the state
 const updateActiveState = () => {
-  const hasActiveChild = checkActiveChild()
+  const hasActiveChild = checkActiveChild();
 
-  isActive.value = hasActiveChild
+  isActive.value = hasActiveChild;
 
   // Automatically close the group if no active child is found
   if (!hasActiveChild) {
-    isOpen.value = false
+    isOpen.value = false;
   }
-}
+};
 
 // Handle the manual toggle of the group
 const toggleGroup = () => {
-  isOpen.value = !isOpen.value    // Toggle the group open/close manually
-}
+  isOpen.value = !isOpen.value; // Toggle the group open/close manually
+};
 
 // Handle Inertia navigation event to check if the group should be active or closed
 onMounted(() => {
   // Set initial state on mount
-  updateActiveState()
+  updateActiveState();
 
   // Listen for Inertia navigation events
   Inertia.on('navigate', () => {
-    updateActiveState() // Recheck active state after page navigation
-  })
-})
-
-// Cleanup the Inertia event listener on unmount
-onUnmounted(() => {
-  Inertia.off('navigate') // Clean up the Inertia event listener
-})
+    updateActiveState(); // Recheck active state after page navigation
+  });
+});
 </script>
 
 <template>
@@ -69,21 +65,12 @@ onUnmounted(() => {
       :class="{ 'bg-primary': isActive }"
       @click="toggleGroup"
     >
-      <VIcon
-        :icon="item.icon || 'bxs-circle'"
-        class="nav-item-icon"
-      />
+      <VIcon :icon="item.icon || 'bxs-circle'" class="nav-item-icon" />
       <span class="nav-item-title">{{ item.title }}</span>
-      <span
-        class="nav-item-badge"
-        :class="item.badgeClass"
-      >
+      <span class="nav-item-badge" :class="item.badgeClass">
         {{ item.badgeContent }}
       </span>
-      <VIcon
-        icon="bx-chevron-right"
-        class="nav-group-arrow"
-      />
+      <VIcon icon="bx-chevron-right" class="nav-group-arrow" />
     </div>
     <div class="nav-group-children-wrapper">
       <ul class="nav-group-children">

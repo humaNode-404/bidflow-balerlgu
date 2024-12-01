@@ -1,5 +1,7 @@
+<!-- eslint-disable prettier/prettier -->
 <script setup>
-import avatar from '@images/avatars/avatar-9.png'
+import avatar from '@images/avatars/avatar-9.png';
+
 </script>
 
 <template>
@@ -11,27 +13,14 @@ import avatar from '@images/avatars/avatar-9.png'
     color="success"
     bordered
   >
-    <VAvatar
-      class="cursor-pointer"
-      color="primary"
-      variant="tonal"
-    >
-      <VTooltip
-        location="bottom"
-        activator="parent"
-        open-delay="1000"
-      >
+    <VAvatar class="cursor-pointer" color="primary" variant="tonal">
+      <VTooltip location="bottom" activator="parent" open-delay="1000">
         <span class="text-capitalize">Profile</span>
       </VTooltip>
       <VImg :src="avatar" />
 
       <!-- SECTION Menu -->
-      <VMenu
-        activator="parent"
-        width="230"
-        location="bottom end"
-        offset="20px"
-      >
+      <VMenu activator="parent" width="230" location="bottom end" offset="20px">
         <VList>
           <!-- 👉 User Avatar & Name -->
           <VListItem>
@@ -44,10 +33,7 @@ import avatar from '@images/avatars/avatar-9.png'
                   offset-y="3"
                   color="success"
                 >
-                  <VAvatar
-                    color="primary"
-                    variant="tonal"
-                  >
+                  <VAvatar color="primary" variant="tonal">
                     <VImg :src="avatar" />
                   </VAvatar>
                 </VBadge>
@@ -64,11 +50,7 @@ import avatar from '@images/avatars/avatar-9.png'
           <!-- 👉 Profile -->
           <VListItem link>
             <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="bx-user"
-                size="22"
-              />
+              <VIcon class="me-2" icon="bx-user" size="22" />
             </template>
 
             <VListItemTitle>Profile</VListItemTitle>
@@ -77,11 +59,7 @@ import avatar from '@images/avatars/avatar-9.png'
           <!-- 👉 Settings -->
           <VListItem link>
             <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="bx-cog"
-                size="22"
-              />
+              <VIcon class="me-2" icon="bx-cog" size="22" />
             </template>
 
             <VListItemTitle>Settings</VListItemTitle>
@@ -90,11 +68,7 @@ import avatar from '@images/avatars/avatar-9.png'
           <!-- 👉 FAQ -->
           <VListItem link>
             <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="bx-help-circle"
-                size="22"
-              />
+              <VIcon class="me-2" icon="bx-help-circle" size="22" />
             </template>
 
             <VListItemTitle>FAQ</VListItemTitle>
@@ -104,17 +78,15 @@ import avatar from '@images/avatars/avatar-9.png'
           <VDivider class="my-2" />
 
           <!-- 👉 Logout -->
-          <VListItem to="/login">
-            <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="bx-log-out"
-                size="22"
-              />
-            </template>
+          <Link :href="route('logout')" method="post" as="button"
+            ><VListItem>
+              <template #prepend>
+                <VIcon class="me-2" icon="bx-log-out" size="22" />
+              </template>
 
-            <VListItemTitle>Logout</VListItemTitle>
-          </VListItem>
+              <VListItemTitle>Logout</VListItemTitle>
+            </VListItem></Link
+          >
         </VList>
       </VMenu>
     </VAvatar>

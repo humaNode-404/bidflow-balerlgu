@@ -1,7 +1,8 @@
 <script setup>
-import logo from '@images/logo.svg?raw'
-import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
-import { useDisplay } from 'vuetify'
+import logo from '@images/logo.svg?raw';
+import { usePage } from '@inertiajs/vue3';
+import { PerfectScrollbar } from 'vue3-perfect-scrollbar';
+import { useDisplay } from 'vuetify';
 
 const props = defineProps({
   tag: {
@@ -17,26 +18,30 @@ const props = defineProps({
     type: Function,
     required: true,
   },
-})
+});
 
-const { mdAndDown } = useDisplay()
-const refNav = ref()
+const { mdAndDown } = useDisplay();
+const refNav = ref();
 
-/*ℹ️ Close overlay side when route is changed
-Close overlay vertical nav when link is clicked
-*/
-const route = useRoute()
+const page = usePage();
 
-watch(() => route.path, () => {
-  props.toggleIsOverlayNavActive(false)
-})
+// Close overlay side nav when the URL changes
+watch(
+  () => page.url,
+  () => {
+    if (props.isOverlayNavActive) {
+      props.toggleIsOverlayNavActive(false);
+    }
+  },
+);
 
-const isVerticalNavScrolled = ref(false)
-const updateIsVerticalNavScrolled = val => isVerticalNavScrolled.value = val
+const isVerticalNavScrolled = ref(false);
+const updateIsVerticalNavScrolled = (val) =>
+  (isVerticalNavScrolled.value = val);
 
-const handleNavScroll = evt => {
-  isVerticalNavScrolled.value = evt.target.scrollTop > 0
-}
+const handleNavScroll = (evt) => {
+  isVerticalNavScrolled.value = evt.target.scrollTop > 0;
+};
 </script>
 
 <template>
@@ -46,8 +51,8 @@ const handleNavScroll = evt => {
     class="layout-vertical-nav"
     :class="[
       {
-        'visible': isOverlayNavActive,
-        'scrolled': isVerticalNavScrolled,
+        visible: isOverlayNavActive,
+        scrolled: isVerticalNavScrolled,
         'overlay-nav': mdAndDown,
       },
     ]"
@@ -55,18 +60,10 @@ const handleNavScroll = evt => {
     <!-- 👉 Header -->
     <div class="nav-header">
       <slot name="nav-header">
-        <Link
-          to="/"
-          class="app-logo app-title-wrapper"
-        >
-          <div
-            class="d-flex"
-            v-html="logo"
-          />
+        <Link to="/" class="app-logo app-title-wrapper">
+          <div class="d-flex" v-html="logo" />
 
-          <h1 class="leading-normal">
-            bidflow
-          </h1>
+          <h1 class="leading-normal">bidflow</h1>
         </Link>
       </slot>
     </div>
@@ -106,8 +103,10 @@ const handleNavScroll = evt => {
 </style>
 
 <style lang="scss">
-@use "@configured-variables" as variables;
-@use "@layouts/styles/mixins";
+/* stylelint-disable-next-line @stylistic/string-quotes */
+@use '@configured-variables' as variables;
+/* stylelint-disable-next-line @stylistic/string-quotes */
+@use '@layouts/styles/mixins';
 
 // 👉 Vertical Nav
 .layout-vertical-nav {
@@ -119,7 +118,9 @@ const handleNavScroll = evt => {
   inline-size: variables.$layout-vertical-nav-width;
   inset-block-start: 0;
   inset-inline-start: 0;
-  transition: inline-size 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
+  transition:
+    inline-size 0.25s ease-in-out,
+    box-shadow 0.25s ease-in-out;
   will-change: transform, inline-size;
 
   .nav-header {

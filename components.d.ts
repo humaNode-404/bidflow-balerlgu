@@ -21,7 +21,6 @@ declare module 'vue' {
     Modal: typeof import('./resources/js/components/Modal.vue')['default']
     MoreBtn: typeof import('./resources/js/@core/components/MoreBtn.vue')['default']
     NavLink: typeof import('./resources/js/components/NavLink.vue')['default']
-    Notification: typeof import('./resources/js/@core/components/Notification.vue')['default']
     Notifications: typeof import('./resources/js/@core/components/Notifications.vue')['default']
     PrimaryButton: typeof import('./resources/js/components/PrimaryButton.vue')['default']
     ResponsiveNavLink: typeof import('./resources/js/components/ResponsiveNavLink.vue')['default']

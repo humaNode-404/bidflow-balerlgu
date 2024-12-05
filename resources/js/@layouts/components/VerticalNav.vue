@@ -146,7 +146,7 @@ const handleNavScroll = (evt) => {
   }
 
   .nav-items {
-    block-size: 100%;
+    min-block-size: 87%;
 
     // ℹ️ We no loner needs this overflow styles as perfect scrollbar applies it
     // overflow-x: hidden;

@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Models\Office;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -23,14 +24,36 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $gender = fake()->randomElement(['male', 'female']);
         $roles = ['admin', 'user', 'approver', 'reviewer'];
+        $num = rand(1, 15);
+        if ($gender[0] == 'm' && $num % 2 == 0) {
+            $num++;
+        } elseif ($gender[0] == 'f' && $num % 2 == 1) {
+            $num--;
+        }
+        $avatarPath = ['http://[::1]:5173/resources/images/avatars/avatar-' . $num . '.png'];
+
         return [
-            'last_name' => fake()->lastName(),
-            'first_name' => fake()->firstName(),
-            'middle_name' => fake()->lastName(),
-            'prefix' => fake()->optional()->title(),
+            'last_name' => fake()->lastName($gender),
+            'first_name' => fake()->firstName($gender),
+            'middle_name' => fake()->lastName($gender),
+            'prefix' => fake()->optional()->title($gender),
             'suffix' => fake()->optional()->suffix(),
+            'gender' => $gender,
+            'avatar' => fake()->optional(0.75)->randomElement($avatarPath),
             'role' => fake()->randomElement($roles),
+
+            'office_id' => Office::inRandomOrder()->first()->id, // Assigning a random office
+            'designation' => $this->faker->jobTitle,
+            'phone' => "09" . $this->faker->randomNumber(9, true),
+            'address' => $this->faker->address,
+            'city' => $this->faker->city,
+            'province' => $this->faker->state,
+            'country' => $this->faker->country,
+            'zip' => $this->faker->postcode,
+            'status' => $this->faker->randomElement(['inactive', 'active', 'restricted']),
+
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),

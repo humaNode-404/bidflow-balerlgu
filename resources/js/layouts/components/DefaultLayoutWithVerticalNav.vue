@@ -1,11 +1,34 @@
 <script setup>
-import Footer from '@/layouts/components/Footer.vue'
-import NavbarNotifications from '@/layouts/components/NavbarNotifications.vue'
-import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
-import NavItems from '@/layouts/components/NavItems.vue'
-import UserProfile from '@/layouts/components/UserProfile.vue'
-import logo from '@images/logo.svg?raw'
-import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
+import Footer from '@/layouts/components/Footer.vue';
+import NavbarNotifications from '@/layouts/components/NavbarNotifications.vue';
+import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue';
+import NavItems from '@/layouts/components/NavItems.vue';
+import UserProfile from '@/layouts/components/UserProfile.vue';
+import logo from '@images/logo.svg?raw';
+import { router, usePage } from '@inertiajs/vue3';
+import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue';
+import { useDisplay } from 'vuetify';
+const { mdAndDown } = useDisplay();
+
+// Create a reactive variables for the URL
+const url = reactive({
+  prev: usePage().url,
+  page: usePage().url,
+  aw: false,
+});
+
+// Listen to Inertia's navigation event
+onMounted(() => {
+  router.on('navigate', (event) => {
+    url.page = event.detail.page.url;
+  });
+  router.on('before', () => {
+    url.prev = url.page;
+  });
+  setTimeout(() => {
+    url.aw = true;
+  }, 4000);
+});
 </script>
 
 <template>
@@ -13,13 +36,30 @@ import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
     <!-- 👉 navbar -->
     <template #navbar="{ toggleVerticalOverlayNavActive }">
       <div class="d-flex h-100 align-center">
-        <!-- 👉 Vertical nav toggle in overlay mode -->
+        <Link v-if="$page.component.includes('Error')" :href="url.prev || ''">
+          <IconBtn class="ms-0">
+            <VIcon icon="mdi-arrow-left" color="muted" />
+          </IconBtn>
+        </Link>
         <IconBtn
-          class="ms-n3 d-lg-none"
+          v-if="mdAndDown"
+          class="ms-0"
           @click="toggleVerticalOverlayNavActive(true)"
         >
           <VIcon icon="bx-menu" />
         </IconBtn>
+        <Transition name="slide-fade">
+          <div v-if="mdAndDown" class="d-flex flex-row">
+            <Link href="/dashboard" class="app-logo app-title-wrapper">
+              <IconBtn class="mx-0">
+                <VIcon icon="bi-cart4" color="primary" />
+              </IconBtn>
+            </Link>
+            <h5 class="d-inline text-h5 text-capitalize ms-1 pt-2">
+              {{ $page.component.split('/')[0] }}
+            </h5>
+          </div>
+        </Transition>
 
         <!-- 👉 Search -->
         <!--
@@ -48,20 +88,12 @@ import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
     </template>
 
     <template #vertical-nav-header="{ toggleIsOverlayNavActive }">
-      <Link
-        href="/"
-        class="app-logo app-title-wrapper"
-      >
+      <Link href="/dashboard" class="app-logo app-title-wrapper">
         <!-- eslint-disable vue/no-v-html -->
-        <div
-          class="d-flex"
-          v-html="logo"
-        />
+        <div class="d-flex" v-html="logo" />
         <!-- eslint-enable -->
 
-        <h1 class="app-logo-title">
-          bidflow
-        </h1>
+        <h1 class="app-logo-title">bidflow</h1>
       </Link>
 
       <IconBtn
@@ -107,5 +139,20 @@ import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
     line-height: 1.75rem;
     text-transform: uppercase;
   }
+}
+
+/*
+  Enter and leave animations can use different
+  durations and timing functions.
+*/
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.5s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
 }
 </style>

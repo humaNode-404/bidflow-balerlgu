@@ -1,13 +1,11 @@
-<script>
-export default {
-  layout: null,
-};
-</script>
-
 <script setup>
 // eslint-disable-next-line prettier/prettier
 import logo from '@images/logo.svg?raw';
+import authV1BottomShape from '@images/svg/auth-v1-bottom-shape.svg?url';
+import authV1TopShape from '@images/svg/auth-v1-top-shape.svg?url';
 import { useForm } from '@inertiajs/vue3';
+
+defineOptions({ layout: null });
 
 defineProps({
   canResetPassword: {
@@ -60,7 +58,7 @@ const isPasswordVisible = ref(false);
         </VCardItem>
 
         <VCardText>
-          <h4 class="text-h4 mb-1">Welcome to Bidflow!</h4>
+          <h4 class="text-h4 mb-1">Login</h4>
           <p class="mb-0">
             Please sign-in to your account and start the adventure
           </p>
@@ -71,7 +69,7 @@ const isPasswordVisible = ref(false);
         </div>
 
         <VCardText>
-          <VForm @submit.prevent="submit" validate-on="submit lazy">
+          <VForm @submit.prevent="submit" validate-on="input">
             <VRow>
               <VAlert
                 v-if="form.errors.email"
@@ -80,7 +78,6 @@ const isPasswordVisible = ref(false);
                 icon="bx-error"
                 :text="form.errors.email"
                 class="text-small m-3 mb-4"
-                required
               ></VAlert>
 
               <!-- email -->
@@ -107,6 +104,12 @@ const isPasswordVisible = ref(false);
                   :type="isPasswordVisible ? 'text' : 'password'"
                   :append-inner-icon="isPasswordVisible ? 'bx-hide' : 'bx-show'"
                   @click:append-inner="isPasswordVisible = !isPasswordVisible"
+                  :rules="[
+                    (v) =>
+                      form.errors.password
+                        ? form.errors.password
+                        : !!v || 'The password field is required.',
+                  ]"
                 />
 
                 <!-- remember me checkbox -->

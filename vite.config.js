@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { defineConfig } from 'vite';
+import vueDevTools from 'vite-plugin-vue-devtools';
 import vuetify from 'vite-plugin-vuetify';
 import svgLoader from 'vite-svg-loader';
 
@@ -19,6 +20,7 @@ export default defineConfig({
         },
       },
     }),
+    vueDevTools(),
     vueJsx(),
     laravel({
       input: ['resources/js/app.js'],
@@ -72,6 +74,9 @@ export default defineConfig({
       '@styles': fileURLToPath(new URL('./resources/styles/', import.meta.url)),
       '@configured-variables': fileURLToPath(
         new URL('./resources/styles/variables/_template.scss', import.meta.url),
+      ),
+      'ziggy-js': fileURLToPath(
+        new URL('vendor/tightenco/ziggy', import.meta.url),
       ),
     },
   },

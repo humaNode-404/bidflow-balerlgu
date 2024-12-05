@@ -1,5 +1,5 @@
 <script setup>
-import avatar1 from '@images/avatars/avatar-1.png'
+import avatar1 from '@images/avatars/avatar-1.png';
 
 const accountData = {
   avatarImg: avatar1,
@@ -15,32 +15,32 @@ const accountData = {
   language: 'English',
   timezone: '(GMT-11:00) International Date Line West',
   currency: 'USD',
-}
+};
 
-const refInputEl = ref()
-const accountDataLocal = ref(structuredClone(accountData))
-const isAccountDeactivated = ref(false)
+const refInputEl = ref();
+const accountDataLocal = ref(structuredClone(accountData));
+const isAccountDeactivated = ref(false);
 
 const resetForm = () => {
-  accountDataLocal.value = structuredClone(accountData)
-}
+  accountDataLocal.value = structuredClone(accountData);
+};
 
-const changeAvatar = file => {
-  const fileReader = new FileReader()
-  const { files } = file.target
+const changeAvatar = (file) => {
+  const fileReader = new FileReader();
+  const { files } = file.target;
   if (files && files.length) {
-    fileReader.readAsDataURL(files[0])
+    fileReader.readAsDataURL(files[0]);
     fileReader.onload = () => {
       if (typeof fileReader.result === 'string')
-        accountDataLocal.value.avatarImg = fileReader.result
-    }
+        accountDataLocal.value.avatarImg = fileReader.result;
+    };
   }
-}
+};
 
 // reset avatar image
 const resetAvatar = () => {
-  accountDataLocal.value.avatarImg = accountData.avatarImg
-}
+  accountDataLocal.value.avatarImg = accountData.avatarImg;
+};
 
 const timezones = [
   '(GMT-11:00) International Date Line West',
@@ -82,7 +82,7 @@ const timezones = [
   '(GMT+00:00) Edinburgh',
   '(GMT+00:00) Lisbon',
   '(GMT+00:00) London',
-]
+];
 
 const currencies = [
   'USD',
@@ -97,7 +97,7 @@ const currencies = [
   'HKD',
   'HUF',
   'INR',
-]
+];
 </script>
 
 <template>
@@ -116,14 +116,8 @@ const currencies = [
           <!-- 👉 Upload Photo -->
           <form class="d-flex flex-column justify-center gap-5">
             <div class="d-flex flex-wrap gap-2">
-              <VBtn
-                color="primary"
-                @click="refInputEl?.click()"
-              >
-                <VIcon
-                  icon="bx-cloud-upload"
-                  class="d-sm-none"
-                />
+              <VBtn color="primary" @click="refInputEl?.click()">
+                <VIcon icon="bx-cloud-upload" class="d-sm-none" />
                 <span class="d-none d-sm-block">Upload new photo</span>
               </VBtn>
 
@@ -134,7 +128,7 @@ const currencies = [
                 accept=".jpeg,.png,.jpg,GIF"
                 hidden
                 @input="changeAvatar"
-              >
+              />
 
               <VBtn
                 type="reset"
@@ -143,10 +137,7 @@ const currencies = [
                 @click="resetAvatar"
               >
                 <span class="d-none d-sm-block">Reset</span>
-                <VIcon
-                  icon="bx-refresh"
-                  class="d-sm-none"
-                />
+                <VIcon icon="bx-refresh" class="d-sm-none" />
               </VBtn>
             </div>
 
@@ -163,10 +154,7 @@ const currencies = [
           <VForm class="mt-6">
             <VRow>
               <!-- 👉 First Name -->
-              <VCol
-                md="6"
-                cols="12"
-              >
+              <VCol md="6" cols="12">
                 <VTextField
                   v-model="accountDataLocal.firstName"
                   placeholder="John"
@@ -175,10 +163,7 @@ const currencies = [
               </VCol>
 
               <!-- 👉 Last Name -->
-              <VCol
-                md="6"
-                cols="12"
-              >
+              <VCol md="6" cols="12">
                 <VTextField
                   v-model="accountDataLocal.lastName"
                   placeholder="Doe"
@@ -187,10 +172,7 @@ const currencies = [
               </VCol>
 
               <!-- 👉 Email -->
-              <VCol
-                cols="12"
-                md="6"
-              >
+              <VCol cols="12" md="6">
                 <VTextField
                   v-model="accountDataLocal.email"
                   label="E-mail"
@@ -200,10 +182,7 @@ const currencies = [
               </VCol>
 
               <!-- 👉 Organization -->
-              <VCol
-                cols="12"
-                md="6"
-              >
+              <VCol cols="12" md="6">
                 <VTextField
                   v-model="accountDataLocal.org"
                   label="Organization"
@@ -212,10 +191,7 @@ const currencies = [
               </VCol>
 
               <!-- 👉 Phone -->
-              <VCol
-                cols="12"
-                md="6"
-              >
+              <VCol cols="12" md="6">
                 <VTextField
                   v-model="accountDataLocal.phone"
                   label="Phone Number"
@@ -224,10 +200,7 @@ const currencies = [
               </VCol>
 
               <!-- 👉 Address -->
-              <VCol
-                cols="12"
-                md="6"
-              >
+              <VCol cols="12" md="6">
                 <VTextField
                   v-model="accountDataLocal.address"
                   label="Address"
@@ -236,10 +209,7 @@ const currencies = [
               </VCol>
 
               <!-- 👉 State -->
-              <VCol
-                cols="12"
-                md="6"
-              >
+              <VCol cols="12" md="6">
                 <VTextField
                   v-model="accountDataLocal.state"
                   label="State"
@@ -248,10 +218,7 @@ const currencies = [
               </VCol>
 
               <!-- 👉 Zip Code -->
-              <VCol
-                cols="12"
-                md="6"
-              >
+              <VCol cols="12" md="6">
                 <VTextField
                   v-model="accountDataLocal.zip"
                   label="Zip Code"
@@ -260,10 +227,7 @@ const currencies = [
               </VCol>
 
               <!-- 👉 Country -->
-              <VCol
-                cols="12"
-                md="6"
-              >
+              <VCol cols="12" md="6">
                 <VSelect
                   v-model="accountDataLocal.country"
                   label="Country"
@@ -273,10 +237,7 @@ const currencies = [
               </VCol>
 
               <!-- 👉 Language -->
-              <VCol
-                cols="12"
-                md="6"
-              >
+              <VCol cols="12" md="6">
                 <VSelect
                   v-model="accountDataLocal.language"
                   label="Language"
@@ -286,10 +247,7 @@ const currencies = [
               </VCol>
 
               <!-- 👉 Timezone -->
-              <VCol
-                cols="12"
-                md="6"
-              >
+              <VCol cols="12" md="6">
                 <VSelect
                   v-model="accountDataLocal.timezone"
                   label="Timezone"
@@ -300,10 +258,7 @@ const currencies = [
               </VCol>
 
               <!-- 👉 Currency -->
-              <VCol
-                cols="12"
-                md="6"
-              >
+              <VCol cols="12" md="6">
                 <VSelect
                   v-model="accountDataLocal.currency"
                   label="Currency"
@@ -314,10 +269,7 @@ const currencies = [
               </VCol>
 
               <!-- 👉 Form Actions -->
-              <VCol
-                cols="12"
-                class="d-flex flex-wrap gap-4"
-              >
+              <VCol cols="12" class="d-flex flex-wrap gap-4">
                 <VBtn>Save changes</VBtn>
 
                 <VBtn
@@ -346,11 +298,7 @@ const currencies = [
             />
           </div>
 
-          <VBtn
-            :disabled="!isAccountDeactivated"
-            color="error"
-            class="mt-3"
-          >
+          <VBtn :disabled="!isAccountDeactivated" color="error" class="mt-3">
             Deactivate Account
           </VBtn>
         </VCardText>

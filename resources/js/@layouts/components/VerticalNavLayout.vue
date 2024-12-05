@@ -9,7 +9,7 @@ export default defineComponent({
     const isLayoutOverlayVisible = ref(false);
     const toggleIsOverlayNavActive = useToggle(isOverlayNavActive);
     //const route = useRoute();
-    const { mdAndDown } = useDisplay();
+    const { mdAndDown, xs } = useDisplay();
 
     // ℹ️ This is alternative to below two commented watcher
     // We want to show overlay if overlay nav is visible and want to hide overlay if overlay is hidden and vice versa.
@@ -33,20 +33,30 @@ export default defineComponent({
       );
 
       // 👉 Navbar
-      const navbar = h('header', { class: ['layout-navbar navbar-blur'] }, [
-        h(
-          'div',
-          { class: 'navbar-content-container' },
-          slots.navbar?.({
-            toggleVerticalOverlayNavActive: toggleIsOverlayNavActive,
-          }),
-        ),
-      ]);
+      const navbar = h(
+        'header',
+        {
+          class: ['layout-navbar navbar-blur', xs.value && 'top-0 px-0'],
+        },
+        [
+          h(
+            'div',
+            { class: ['navbar-content-container', xs.value && 'px-0'] },
+            slots.navbar?.({
+              toggleVerticalOverlayNavActive: toggleIsOverlayNavActive,
+            }),
+          ),
+        ],
+      );
 
       const main = h(
         'main',
         { class: 'layout-page-content' },
-        h('div', { class: 'page-content-container' }, slots.default?.()),
+        h(
+          'div',
+          { id: 'page-content-container', class: 'page-content-container' },
+          slots.default?.(),
+        ),
       );
 
       // 👉 Footer
@@ -110,6 +120,7 @@ export default defineComponent({
     z-index: variables.$layout-vertical-nav-layout-navbar-z-index;
 
     .navbar-content-container {
+      overflow: hidden;
       block-size: variables.$layout-vertical-nav-navbar-height;
     }
 

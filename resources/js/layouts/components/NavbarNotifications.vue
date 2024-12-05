@@ -2,8 +2,63 @@
 const notifications = ref([
   {
     id: 1,
-    img: 'avatar-4',
-    title: 'Congratulation Flora! 🎉',
+    avatar: 'http://[::1]:5173/resources/images/avatars/avatar-7.png',
+    avatarName: 'CJ',
+    title: 'Congratulation David! 🎉',
+    subtitle: 'Won the monthly best seller badge',
+    time: 'Today',
+    isSeen: true,
+  },
+  {
+    id: 2,
+    avatar: '',
+    avatarName: 'CJ',
+    title: 'Congratulation David! 🎉',
+    subtitle: 'Won the monthly best seller badge',
+    time: 'Today',
+    isSeen: false,
+  },
+  {
+    id: 3,
+    avatar: 'http://[::1]:5173/resources/images/avatars/avatar-9.png',
+    avatarName: 'CJ',
+    title: 'Congratulation David! 🎉',
+    subtitle: 'Won the monthly best seller badge',
+    time: 'Today',
+    isSeen: false,
+  },
+  {
+    id: 4,
+    avatar: 'http://[::1]:5173/resources/images/avatars/avatar-12.png',
+    avatarName: 'CJ',
+    title: 'Congratulation David! 🎉',
+    subtitle: 'Won the monthly best seller badge',
+    time: 'Today',
+    isSeen: false,
+  },
+  {
+    id: 5,
+    avatar: 'http://[::1]:5173/resources/images/avatars/avatar-12.png',
+    avatarName: 'CJ',
+    title: 'Congratulation David! 🎉',
+    subtitle: 'Won the monthly best seller badge',
+    time: 'Today',
+    isSeen: true,
+  },
+  {
+    id: 6,
+    avatar: 'http://[::1]:5173/resources/images/avatars/avatar-12.png',
+    avatarName: 'CJ',
+    title: 'Congratulation David! 🎉',
+    subtitle: 'Won the monthly best seller badge',
+    time: 'Today',
+    isSeen: false,
+  },
+  {
+    id: 7,
+    avatar: 'http://[::1]:5173/resources/images/avatars/avatar-12.png',
+    avatarName: 'CJ',
+    title: 'Congratulation David! 🎉',
     subtitle: 'Won the monthly best seller badge',
     time: 'Today',
     isSeen: true,
@@ -16,35 +71,31 @@ const removeNotification = (notificationId) => {
   });
 };
 
-const markRead = (notificationId) => {
+const toggleAllRead = (prevState) => {
   notifications.value.forEach((item) => {
-    notificationId.forEach((id) => {
-      if (id === item.id) item.isSeen = true;
-    });
+    item.isSeen = prevState ? false : true;
   });
 };
 
-const markUnRead = (notificationId) => {
+const toggleRead = (notificationId) => {
   notifications.value.forEach((item) => {
     notificationId.forEach((id) => {
-      if (id === item.id) item.isSeen = false;
+      if (id === item.id) item.isSeen = !item.isSeen;
     });
   });
 };
 
 const handleNotificationClick = (notification) => {
-  if (!notification.isSeen) markRead([notification.id]);
+  toggleRead([notification.id]);
 };
 </script>
 
 <template>
-  <VBadge dot location="top right" offset-x="9" offset-y="9" color="error">
-    <Notifications
-      :notifications="notifications"
-      @remove="removeNotification"
-      @read="markRead"
-      @unread="markUnRead"
-      @click:notification="handleNotificationClick"
-    />
-  </VBadge>
+  <Notifications
+    :notifications="notifications"
+    @remove="removeNotification"
+    @read="toggleRead"
+    @allread="toggleAllRead"
+    @click:notification="handleNotificationClick"
+  />
 </template>

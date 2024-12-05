@@ -1,6 +1,5 @@
 <script setup>
 import { Inertia } from '@inertiajs/inertia'; // Import Inertia to hook into page navigation events
-import { onMounted, ref } from 'vue';
 
 defineProps({
   item: {
@@ -9,16 +8,15 @@ defineProps({
   },
 });
 
-const isOpen = ref(false); // Whether the nav group is open
-const isActive = ref(false); // Whether the nav group has an active child
-const navGroupRef = ref(null); // Ref to the current `nav-group` element
+const isOpen = ref(false);
+const isActive = ref(false);
+const navRef = ref(null);
 
 // Function to check if any child of the nav-group has active classes
 const checkActiveChild = () => {
-  if (!navGroupRef.value) return false;
+  if (!navRef.value) return false;
 
-  // Check if any child has the active class
-  return Array.from(navGroupRef.value.querySelectorAll('*')).some(
+  return Array.from(navRef.value.querySelectorAll('*')).some(
     (child) =>
       child.classList.contains('router-link-active') &&
       child.classList.contains('router-link-exact-active'),
@@ -27,12 +25,11 @@ const checkActiveChild = () => {
 
 // Automatically check the active child and update the state
 const updateActiveState = () => {
-  const hasActiveChild = checkActiveChild();
+  let has = checkActiveChild();
 
-  isActive.value = hasActiveChild;
+  isActive.value = has;
 
-  // Automatically close the group if no active child is found
-  if (!hasActiveChild) {
+  if (!has) {
     isOpen.value = false;
   }
 };
@@ -44,22 +41,14 @@ const toggleGroup = () => {
 
 // Handle Inertia navigation event to check if the group should be active or closed
 onMounted(() => {
-  // Set initial state on mount
-  updateActiveState();
-
-  // Listen for Inertia navigation events
   Inertia.on('navigate', () => {
-    updateActiveState(); // Recheck active state after page navigation
+    updateActiveState();
   });
 });
 </script>
 
 <template>
-  <li
-    ref="navGroupRef"
-    class="nav-group"
-    :class="{ active: isActive, open: isOpen }"
-  >
+  <li ref="navRef" class="nav-group" :class="{ open: isOpen }">
     <div
       class="nav-group-label"
       :class="{ 'bg-primary': isActive }"

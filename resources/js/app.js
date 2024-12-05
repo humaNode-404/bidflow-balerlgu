@@ -5,7 +5,7 @@ import defLayout from '@/layouts/Default.vue';
 import { registerPlugins } from '@core/utils/plugins';
 import { createInertiaApp, Head, Link } from '@inertiajs/vue3';
 import { createApp, h } from 'vue';
-import { ZiggyVue } from '../../vendor/tightenco/ziggy';
+import { ZiggyVue } from 'ziggy-js';
 import './inertia-progress';
 
 import '@core-scss/template/index.scss';
@@ -15,7 +15,7 @@ import '@styles/styles.scss';
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
-  title: (title) => `${title} - ${appName}`,
+  title: (title) => (title ? `${title} - ${appName}` : appName),
   resolve: (name) => {
     const pages = import.meta.glob('./pages/**/*.vue', { eager: true });
     let page = pages[`./pages/${name}.vue`];

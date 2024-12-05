@@ -3,7 +3,7 @@ import InputError from '@/components/InputError.vue';
 import InputLabel from '@/components/InputLabel.vue';
 import PrimaryButton from '@/components/PrimaryButton.vue';
 import TextInput from '@/components/TextInput.vue';
-import { Link, useForm, usePage } from '@inertiajs/vue3';
+import { router, useForm, usePage } from '@inertiajs/vue3';
 
 defineProps({
   mustVerifyEmail: {
@@ -17,9 +17,15 @@ defineProps({
 const user = usePage().props.auth.user;
 
 const form = useForm({
-  name: user.name,
+  first_name: user.first_name,
   email: user.email,
 });
+
+function submit() {
+  router.patch('/profile', form, {
+    only: ['auth'],
+  });
+}
 </script>
 
 <template>
@@ -32,24 +38,21 @@ const form = useForm({
       </p>
     </header>
 
-    <form
-      @submit.prevent="form.patch(route('profile.update'))"
-      class="mt-6 space-y-6"
-    >
+    <form @submit.prevent="submit" class="mt-6 space-y-6">
       <div>
-        <InputLabel for="name" value="Name" />
+        <InputLabel for="first_name" value="First Name" />
 
         <TextInput
-          id="name"
+          id="first_name"
           type="text"
           class="mt-1 block w-full"
-          v-model="form.name"
+          v-model="form.first_name"
           required
           autofocus
-          autocomplete="name"
+          autocomplete="first_name"
         />
 
-        <InputError class="mt-2" :message="form.errors.name" />
+        <InputError class="mt-2" :message="form.errors.first_name" />
       </div>
 
       <div>

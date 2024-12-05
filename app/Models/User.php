@@ -23,10 +23,46 @@ class User extends Authenticatable
         'middle_name',
         'prefix',
         'suffix',
+        'gender',
+        'avatar',
         'role',
         'email',
         'password',
     ];
+
+    public function getNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
+
+    public function getFullnameAttribute()
+    {
+        $middleInitial = $this->middle_name ? strtoupper($this->middle_name[0]) . '.' : '';
+        return "{$this->first_name} {$middleInitial} {$this->last_name}";
+    }
+
+    /**
+     * Compute the full name with affixes.
+     *
+     * @param string|null $option (accepts 'prefix', 'suffix', or null for both)
+     * @return string
+     */
+    public function name_affix(?string $option = null): string
+    {
+
+        $fullname = $this->fullname;
+        $prefix = $this->prefix ?? '';
+        $suffix = $this->suffix ?? '';
+
+        switch ($option) {
+            case 'prefix':
+                return trim("{$this->prefix} {$fullname}");
+            case 'suffix':
+                return trim("{$fullname} {$this->suffix}");
+            default: // Both prefix and suffix
+                return trim("{$this->prefix} {$fullname} {$this->suffix}");
+        }
+    }
 
     /**
      * The attributes that should be hidden for serialization.

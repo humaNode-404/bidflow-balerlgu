@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -18,7 +17,24 @@ return new class extends Migration
             $table->string('middle_name');
             $table->string('prefix')->nullable();
             $table->string('suffix')->nullable();
+            $table->string('gender')->nullable();
+            $table->string('avatar')->nullable();
             $table->enum('role', ['admin', 'user', 'approver', 'reviewer']);
+
+            // Adding new columns
+            $table->unsignedBigInteger('office_id')->nullable();  // Only define it once
+            $table->string('designation')->nullable();
+            $table->string('phone', 11)->unique();
+            $table->string('address')->nullable();
+            $table->string('city')->default('Baler');
+            $table->string('province')->default('Aurora');
+            $table->string('country')->default('Philippines');
+            $table->string('zip')->nullable();
+            $table->enum('status', ['inactive', 'active', 'restricted'])->default('inactive');
+
+            // Foreign Key Reference for office_id
+            $table->foreign('office_id')->references('id')->on('offices')->onDelete('set null');
+
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
@@ -50,5 +66,11 @@ return new class extends Migration
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+
+        Schema::table('users', function (Blueprint $table) {
+            // Dropping columns
+            $table->dropForeign(['office_id']);
+            $table->dropColumn(['office_id', 'designation', 'phone', 'address', 'city', 'province', 'country', 'zip', 'status']);
+        });
     }
 };

@@ -195,4 +195,4 @@ export default {
   VNavigationDrawer: {
     touchless: true,
   },
-}
+};

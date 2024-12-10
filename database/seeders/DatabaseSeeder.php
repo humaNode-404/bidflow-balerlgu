@@ -33,10 +33,9 @@ class DatabaseSeeder extends Seeder
             'address' => 'Recto St. Brgy. Suklayin',
             'city' => 'Baler',
             'province' => 'Aurora',
-            'country' => 'Philippines',
             'zip' => '3201',
             'status' => 'active',
-            'email' => 'gmail@gmail.com',
+            'email' => 'rymemarzan.stud.ofclacc1@gmail.com',
             'password' => Hash::make('mypassword'),
         ]);
 
@@ -49,7 +48,7 @@ class DatabaseSeeder extends Seeder
         // Limit starred Pdocs to 7 per user
         $users = User::all();
         foreach ($users as $user) {
-            $starredPdocs = Prdoc::where('end_user', $user->id)->take(7)->update(['starred' => 1]);
+            $starredPdocs = Prdoc::where('user', $user->id)->take(7)->update(['starred' => 1]);
         }
 
     }

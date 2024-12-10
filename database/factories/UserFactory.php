@@ -25,7 +25,7 @@ class UserFactory extends Factory
     public function definition(): array
     {
         $gender = fake()->randomElement(['male', 'female']);
-        $roles = ['admin', 'user', 'approver', 'reviewer'];
+        $roles = ['admin', 'user', 'mod'];
         $num = rand(1, 15);
         if ($gender[0] == 'm' && $num % 2 == 0) {
             $num++;
@@ -50,7 +50,6 @@ class UserFactory extends Factory
             'address' => $this->faker->address,
             'city' => $this->faker->city,
             'province' => $this->faker->state,
-            'country' => $this->faker->country,
             'zip' => $this->faker->postcode,
             'status' => $this->faker->randomElement(['inactive', 'active', 'restricted']),
 

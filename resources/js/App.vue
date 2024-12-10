@@ -1,3 +1,0 @@
-<template>
-  <VApp> </VApp>
-</template>

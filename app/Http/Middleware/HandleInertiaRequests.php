@@ -2,8 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Prdoc;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Inertia\Inertia;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -29,18 +31,21 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = $request->user();
+
         return [
             ...parent::share($request),
             'auth' => [
-                'user' =>
-                    $request->user()->only([
-                        'id',
-                        'name',
-                        'first_name',
-                        'email',
-                        'role',
-                        'avatar'
-                    ]),
+                'user' => Inertia::lazy(fn() => $user ? $user->only([
+                    'uuid',
+                    'name',
+                    'first_name',
+                    'email',
+                    'role',
+                    'avatar',
+                ]) : null),
+                'bookmarks' => Inertia::lazy(fn() => $user ? Prdoc::where('user', $user->id)
+                    ->get(['uuid', 'desc', 'number']) : []),
             ],
         ];
     }

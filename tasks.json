@@ -1,0 +1,85 @@
+// See https://go.microsoft.com/fwlink/?LinkId=733558
+// for the documentation about the tasks.json format
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "🔊 Reverb Start",
+            "type": "shell",
+            "command": "php artisan reverb:start",
+            "group": "Artisan",
+            "problemMatcher": []
+        },
+        {
+            "label": "🚀 Artisan Serve",
+            "type": "shell",
+            "command": "php artisan serve",
+            "group": "Artisan",
+            "problemMatcher": []
+        },
+        {
+            "label": "🔽 Composer Install",
+            "type": "shell",
+            "command": "composer install",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "🔽 PNPM Install",
+            "type": "shell",
+            "command": "pnpm install",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "🔽 NPM Install",
+            "type": "shell",
+            "command": "npm install",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "⚡ PNPM Run Build",
+            "type": "shell",
+            "command": "pnpm run build",
+            "group": "Vite",
+            "problemMatcher": []
+        },
+        {
+            "label": "⚡ NPM Run Build",
+            "type": "shell",
+            "command": "npm run build",
+            "group": "Vite",
+            "problemMatcher": []
+        },
+        {
+            "label": "👨🏻‍💻 PNPM Run Dev",
+            "type": "shell",
+            "command": "pnpm run dev",
+            "group": "Vite",
+            "problemMatcher": []
+        },
+        {
+            "label": "👨🏻‍💻 NPM Run Dev",
+            "type": "shell",
+            "command": "npm run dev",
+            "group": "Vite",
+            "problemMatcher": []
+        },
+        {
+            "label": "🗑️ Clear All Caches",
+            "type": "shell",
+            "command": "php artisan cache:clear; php artisan route:clear; php artisan config:clear; php artisan view:clear; ",
+            "group": "build",
+            "problemMatcher": [],
+            "options": {
+                "shell": {
+                    "executable": "powershell",
+                    "args": [
+                        "-Command"
+                    ]
+                }
+            }
+        }
+    ]
+}

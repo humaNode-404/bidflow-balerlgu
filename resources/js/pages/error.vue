@@ -1,16 +1,17 @@
 <!-- eslint-disable prettier/prettier -->
 <script setup>
 import misc404 from '@images/pages/404.png';
+import { Link } from '@inertiajs/vue3';
 
 defineOptions({ layout: null });
 const props = defineProps({ status: Number })
 
 const title = computed(() => {
   return {
-    503: '503: Service Unavailable',
-    500: '500: Server Error',
-    404: '404: Page Not Found',
-    403: '403: Forbidden',
+    503: 'Service Unavailable',
+    500: 'Server Error',
+    404: 'Page Not Found',
+    403: 'Forbidden',
   }[props.status|| 404]
 })
 
@@ -53,5 +54,5 @@ const description = computed(() => {
 
 <style lang="scss">
 /* stylelint-disable-next-line @stylistic/string-quotes */
-@use '@core-scss/template/pages/misc.scss';
+@use '@core-scss/template/pages/misc';
 </style>

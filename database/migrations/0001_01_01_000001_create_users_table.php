@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->string('last_name');
             $table->string('first_name');
             $table->string('middle_name');
@@ -19,7 +20,7 @@ return new class extends Migration {
             $table->string('suffix')->nullable();
             $table->string('gender')->nullable();
             $table->string('avatar')->nullable();
-            $table->enum('role', ['admin', 'user', 'approver', 'reviewer']);
+            $table->enum('role', ['admin', 'user', 'mod'])->default('user');
 
             // Adding new columns
             $table->unsignedBigInteger('office_id')->nullable();  // Only define it once
@@ -28,7 +29,6 @@ return new class extends Migration {
             $table->string('address')->nullable();
             $table->string('city')->default('Baler');
             $table->string('province')->default('Aurora');
-            $table->string('country')->default('Philippines');
             $table->string('zip')->nullable();
             $table->enum('status', ['inactive', 'active', 'restricted'])->default('inactive');
 

@@ -8,6 +8,8 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     ApplicationLogo: typeof import('./resources/js/components/ApplicationLogo.vue')['default']
+    Avatar: typeof import('./resources/js/components/Avatar.vue')['default']
+    Bookmarks: typeof import('./resources/js/components/Bookmarks.vue')['default']
     CardStatisticsHorizontal: typeof import('./resources/js/@core/components/cards/CardStatisticsHorizontal.vue')['default']
     CardStatisticsVertical: typeof import('./resources/js/@core/components/cards/CardStatisticsVertical.vue')['default']
     CardStatisticsWithImages: typeof import('./resources/js/@core/components/cards/CardStatisticsWithImages.vue')['default']
@@ -21,7 +23,7 @@ declare module 'vue' {
     Modal: typeof import('./resources/js/components/Modal.vue')['default']
     MoreBtn: typeof import('./resources/js/@core/components/MoreBtn.vue')['default']
     NavLink: typeof import('./resources/js/components/NavLink.vue')['default']
-    Notifications: typeof import('./resources/js/@core/components/Notifications.vue')['default']
+    Notifications: typeof import('./resources/js/components/Notifications.vue')['default']
     PrimaryButton: typeof import('./resources/js/components/PrimaryButton.vue')['default']
     ResponsiveNavLink: typeof import('./resources/js/components/ResponsiveNavLink.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
@@ -29,7 +31,5 @@ declare module 'vue' {
     SecondaryButton: typeof import('./resources/js/components/SecondaryButton.vue')['default']
     TextInput: typeof import('./resources/js/components/TextInput.vue')['default']
     ThemeSwitcher: typeof import('./resources/js/@core/components/ThemeSwitcher.vue')['default']
-    UpgradeToPro: typeof import('./resources/js/components/UpgradeToPro.vue')['default']
-    VueApexCharts: typeof import('vue3-apexcharts')['default']
   }
 }

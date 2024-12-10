@@ -3,10 +3,10 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Enums\PrMode;
 use App\Models\Prdoc;
 use App\Models\Office;
 use App\Models\User;
-use Faker\Generator as Faker;
 
 class PrdocSeeder extends Seeder
 {
@@ -22,16 +22,16 @@ class PrdocSeeder extends Seeder
 
             Prdoc::create([
                 'number' => $faker->unique()->numerify('###-##-###-####'), // A random number like 000-00-000-0000
-                'mode' => $faker->word(), // Random mode
-                'desc' => $faker->sentence(4), // Random description
+                'mode' => PrMode::cases()[array_rand(PrMode::cases())]->value, // Random mode
+                'desc' => $faker->sentence(2), // Random description
                 'purpose' => $faker->sentence(10), // Same as desc, for simplicity
                 'event_need' => $faker->dateTimeBetween('+1 month', '+5 months')->format('Y-m-d'), // Random date for event need
                 'event_start' => $faker->dateTimeThisYear()->format('Y-m-d'), // Random start date
                 'event_end' => $faker->dateTimeThisYear()->format('Y-m-d'), // Random end date
-                'event_loc' => "Baler, Aurora",// $faker->city(), // Random city as event location
-                'end_office' => $end_office->id, // Random office ID from existing offices
-                'end_user' => $end_user->id, // Random user ID from existing users
-                'status' => $faker->randomElement(['Pending', 'Approved', 'Rejected']), // Random status
+                'event_loc' => "Baler, Aurora",
+                'office' => $end_office->id, // Random office ID from existing offices
+                'user' => $end_user->id, // Random user ID from existing users
+                'status' => $faker->randomElement(['pending', 'in progress', 'on hold', 'completed']), // Random status
                 'value' => $faker->randomFloat(2, 1000, 100000), // Random monetary value up to a billion
                 'archived' => $faker->boolean(10), // Random archived status
                 'starred' => $faker->numberBetween(1, 7), // Random starred value (only up to 7)

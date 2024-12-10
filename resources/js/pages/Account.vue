@@ -2,9 +2,24 @@
 import AccountSettingsAccount from '@/views/pages/account-settings/AccountSettingsAccount.vue';
 import AccountSettingsNotification from '@/views/pages/account-settings/AccountSettingsNotification.vue';
 import AccountSettingsSecurity from '@/views/pages/account-settings/AccountSettingsSecurity.vue';
-import QrCode from './QrCode.vue';
+import { router } from '@inertiajs/vue3';
 
-const activeTab = ref('');
+const props = defineProps({
+  filters: Object,
+});
+
+const activeTab = ref(props.filters.tab);
+
+watch(activeTab, (value) => {
+  router.get(
+    '/account',
+    { tab: value },
+    {
+      preserveScroll: true,
+      preserveState: true,
+    },
+  );
+});
 
 // tabs
 const tabs = [
@@ -27,8 +42,6 @@ const tabs = [
 </script>
 
 <template>
-  <QrCode :item="{ scale: 5, link: `http://127.0.0.1:8000/settings` }"></QrCode>
-
   <div>
     <VTabs v-model="activeTab" show-arrows class="v-tabs-pill">
       <VTab v-for="item in tabs" :key="item.icon" :value="item.tab">

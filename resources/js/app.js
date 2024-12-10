@@ -1,4 +1,4 @@
-import '../css/app.css';
+import './echo';
 
 import blankLayout from '@/layouts/Blank.vue';
 import defLayout from '@/layouts/Default.vue';

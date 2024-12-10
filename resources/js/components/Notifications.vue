@@ -96,7 +96,7 @@ const notificationClicked = (notification) => {
               appear
               name="list"
               tag="div"
-              id="tg-list"
+              class="tg-list"
               mode="out-in"
             >
               <VListItem
@@ -162,8 +162,8 @@ const notificationClicked = (notification) => {
   </IconBtn>
 </template>
 
-<style lang="scss">
-#tg-list {
+<style lang="scss" scoped>
+.tg-list {
   overflow: hidden; /* Prevent scrollbar flickering during transition */
 }
 

@@ -1,12 +1,15 @@
 <!-- eslint-disable prettier/prettier -->
 <script setup>
+import Avatar from '@/components/Avatar.vue';
 import { router, usePage } from '@inertiajs/vue3';
 
-const page = usePage();
-const user = ref(page.props.auth.user||null);
+const user =  computed(() => {
+  return usePage().props.auth.user;
+});
 
-const link = (href) => {
-  router.get(href,{},{
+const link = (href,m ='get') => {
+  router.visit(href,{
+    method: m,
     preserveState: false,
     preserveScroll: false,
   });
@@ -25,16 +28,16 @@ const link = (href) => {
     class="me-2"
   >
     <VAvatar class="cursor-pointer" color="primary" variant="tonal">
-      <VTooltip location="bottom" activator="parent" open-delay="1000">
+      <VTooltip location="bottom" activator="parent" open-delay="500">
         <span class="text-capitalize">Profile</span>
       </VTooltip>
       <VImg v-if="user.avatar" :src="user.avatar" />
-      <span v-else class="text-h5 initialism">{{
-        `${user.first_name[0]}${user.last_name[0]} `
+      <span v-else class="text-body-2 initialism">{{
+        user.name.split(' ').at(0)[0] + user.name.split(' ').at(-1)[0]
       }}</span>
 
       <!-- SECTION Menu -->
-      <VMenu activator="parent" width="230" location="bottom end" offset="20px">
+      <VMenu activator="parent" location="bottom end" offset="20px">
         <VList>
           <!-- 👉 User Avatar & Name -->
           <VListItem>
@@ -47,20 +50,27 @@ const link = (href) => {
                   offset-y="3"
                   color="success"
                 >
-                  <VAvatar color="primary" variant="tonal">
-                    <VImg v-if="user.avatar" :src="user.avatar" />
-                    <span v-else class="text-h5">{{
-                      `${user.first_name[0]}${user.last_name[0]} `
-                    }}</span>
-                  </VAvatar>
+                  <Avatar
+                    :item="{
+                      name: user.name,
+                      role: user.role,
+                      avatar: user.avatar,
+                    }"
+                  >
+                  </Avatar>
                 </VBadge>
               </VListItemAction>
             </template>
 
-            <VListItemTitle class="font-weight-semibold text-capitalize">
+            <VListItemTitle
+              class="font-weight-semibold text-capitalize text-wrap"
+              width="146"
+            >
               {{ user.name }}
             </VListItemTitle>
-            <VListItemSubtitle>{{ user.role }}</VListItemSubtitle>
+            <VListItemSubtitle class="text-capitalize">
+              {{ user.role }}
+            </VListItemSubtitle>
           </VListItem>
           <VDivider class="my-2" />
 
@@ -102,7 +112,7 @@ const link = (href) => {
           <VListItem
             color="error"
             class="text-button"
-            @click="link(`route('logout')`)"
+            @click="link(route('logout'), 'post')"
             :active="true"
           >
             <template #prepend>
@@ -116,3 +126,9 @@ const link = (href) => {
     </VAvatar>
   </VBadge>
 </template>
+
+<style lang="scss" scoped>
+.v-list {
+  max-inline-size: 16rem;
+}
+</style>

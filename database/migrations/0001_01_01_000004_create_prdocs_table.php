@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('prdocs', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->string('number')->unique();
             $table->string('mode');
             $table->string('desc');
@@ -20,10 +21,10 @@ return new class extends Migration {
             $table->date('event_start')->nullable();
             $table->date('event_end')->nullable();
             $table->string('event_loc')->default("Baler, Aurora");
-            $table->unsignedBigInteger('end_office'); // Ensure only one definition
-            $table->foreign('end_office')->references('id')->on('offices')->onDelete('cascade');
-            $table->unsignedBigInteger('end_user'); // Ensure only one definition
-            $table->foreign('end_user')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('office'); // Ensure only one definition
+            $table->foreign('office')->references('id')->on('offices')->onDelete('cascade');
+            $table->unsignedBigInteger('user'); // Ensure only one definition
+            $table->foreign('user')->references('id')->on('users')->onDelete('cascade');
             $table->string('status');
             $table->decimal('value', 15, 2);
             $table->boolean('archived')->default(false);

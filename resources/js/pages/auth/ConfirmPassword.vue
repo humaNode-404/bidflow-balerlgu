@@ -1,14 +1,16 @@
 <script setup>
-import InputError from '@/components/InputError.vue';
-import InputLabel from '@/components/InputLabel.vue';
-import PrimaryButton from '@/components/PrimaryButton.vue';
-import TextInput from '@/components/TextInput.vue';
-import GuestLayout from '@/layouts/GuestLayout.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import Auth from '@/layouts/Auth.vue';
+import { useForm } from '@inertiajs/vue3';
+
+defineOptions({ layout: null });
 
 const form = useForm({
   password: '',
 });
+
+const rules = {
+  required: (value) => !!value || 'Field is required',
+};
 
 const submit = () => {
   form.post(route('password.confirm'), {
@@ -18,38 +20,42 @@ const submit = () => {
 </script>
 
 <template>
-  <GuestLayout>
+  <Auth>
     <Head title="Confirm Password" />
 
-    <div class="mb-4 text-sm text-gray-600">
-      This is a secure area of the application. Please confirm your password
-      before continuing.
-    </div>
+    <VCardText>
+      <p class="mb-0">
+        This is a secure area of the application. Please confirm your password
+        before continuing.
+      </p>
+    </VCardText>
 
-    <form @submit.prevent="submit">
-      <div>
-        <InputLabel for="password" value="Password" />
-        <TextInput
-          id="password"
-          type="password"
-          class="mt-1 block w-full"
+    <VForm @submit.prevent="submit" validate-on="lazy">
+      <!-- password -->
+      <VCol cols="12">
+        <VTextField
+          variant="outlined"
           v-model="form.password"
-          required
+          label="Password"
+          placeholder="············"
           autocomplete="current-password"
-          autofocus
+          :type="isPasswordVisible ? 'text' : 'password'"
+          :append-inner-icon="isPasswordVisible ? 'bx-hide' : 'bx-show'"
+          @click:append-inner="isPasswordVisible = !isPasswordVisible"
+          :rules="
+            form.errors.password ? [form.errors.password] : [rules.required]
+          "
         />
-        <InputError class="mt-2" :message="form.errors.password" />
-      </div>
 
-      <div class="mt-4 flex justify-end">
-        <PrimaryButton
-          class="ms-4"
+        <VBtn
+          block
+          type="submit"
           :class="{ 'opacity-25': form.processing }"
           :disabled="form.processing"
         >
           Confirm
-        </PrimaryButton>
-      </div>
-    </form>
-  </GuestLayout>
+        </VBtn>
+      </VCol>
+    </VForm>
+  </Auth>
 </template>

@@ -1,6 +1,7 @@
 <script setup>
 import illustrationJohnDark from '@images/cards/illustration-john-dark.png';
 import illustrationJohnLight from '@images/cards/illustration-john-light.png';
+import { usePage } from '@inertiajs/vue3';
 import { useTheme } from 'vuetify';
 
 const { global } = useTheme();
@@ -15,7 +16,7 @@ const illustrationJohn = computed(() =>
       <VCol cols="12" sm="8" order="2" order-sm="1">
         <VCardItem class="pb-3">
           <VCardTitle class="text-primary">
-            Congratulations John! 🎉
+            Welcome back {{ usePage().props.auth.user.first_name }}!
           </VCardTitle>
         </VCardItem>
 

@@ -2,7 +2,6 @@
 defineProps({
   item: {
     type: null,
-    required: true,
   },
 });
 </script>
@@ -15,7 +14,6 @@ defineProps({
       :class="{ 'router-link-active router-link-exact-active': item.active }"
     >
       <VIcon :icon="item.icon || 'bxs-circle'" class="nav-item-icon" />
-      <!-- 👉 Title -->
       <span class="nav-item-title">
         {{ item.title }}
       </span>

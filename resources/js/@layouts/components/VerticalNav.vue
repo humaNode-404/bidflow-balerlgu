@@ -60,10 +60,14 @@ const handleNavScroll = (evt) => {
     <!-- 👉 Header -->
     <div class="nav-header">
       <slot name="nav-header">
-        <Link to="/" class="app-logo app-title-wrapper">
+        <Link
+          to="/"
+          class="app-logo app-title-wrapper"
+          preserve-scroll
+          preserve-state
+        >
           <div class="d-flex" v-html="logo" />
-
-          <h1 class="leading-normal">bidflow</h1>
+          <h1 class="app-logo-title mt-1 leading-normal">bidflow</h1>
         </Link>
       </slot>
     </div>

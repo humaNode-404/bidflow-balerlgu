@@ -61,7 +61,6 @@ onMounted(() => {
           </div>
         </Transition>
 
-        <!-- 👉 Search -->
         <!--
           <div
           class="d-flex align-center cursor-pointer ms-lg-n3"
@@ -93,7 +92,7 @@ onMounted(() => {
         <div class="d-flex" v-html="logo" />
         <!-- eslint-enable -->
 
-        <h1 class="app-logo-title">bidflow</h1>
+        <h1 class="app-logo-title mt-2">bidflow</h1>
       </Link>
 
       <IconBtn

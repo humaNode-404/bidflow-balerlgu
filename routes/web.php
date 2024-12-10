@@ -1,19 +1,18 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PrController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Models\User;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use App\Events\NotificationSent;
+use App\Mail\TestMail;
+use Illuminate\Support\Facades\Mail;
+use App\Models\Office;
 
-Route::get('/', function () {
-  return Inertia::render('Welcome', [
-    'canLogin' => Route::has('login'),
-    'laravelVersion' => Application::VERSION,
-    'phpVersion' => PHP_VERSION,
-  ]);
-});
+Route::redirect('/', '/login');
 
 Route::middleware('auth')->group(function () {
   Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -25,16 +24,36 @@ require __DIR__ . '/auth.php';
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-  Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-  })->name('dashboard');
+  Route::redirect('/', '/dashboard');
 
-  Route::get('/settings', function () {
-    return Inertia::render('Settings', [
+  Route::controller(DashboardController::class)->group(function () {
+    Route::get('/dashboard', 'show')->name('dashboard');
+  });
+
+  Route::controller(PrController::class)->group(function () {
+    Route::get('/pr/{uuid}', 'show')->name('pr');
+  });
+
+
+
+  Route::get('/account', function () {
+    return Inertia::render('Account', [
       "filters" => request()->only(['tab']),
+      "Office" => Office::select('id', 'name', 'abbr')->distinct()->get(),
     ]);
   })->name('settings');
 
+  Route::get('/calendar', function () {
+    return Inertia::render('Calendar', [
+
+    ]);
+  })->name('calendar');
+
+
+  // Route::get('/send-test-email', function () {
+  //   Mail::to('rymemarzan.stud.ofclacc1@gmail.com')->send(new TestMail());
+  //   return 'Test email sent!';
+  // });
 
   Route::get('/users', function () {
     return Inertia::render('Users', [

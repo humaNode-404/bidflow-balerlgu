@@ -162,6 +162,15 @@ const currencies = [
                 />
               </VCol>
 
+              <!-- 👉 Middle Name -->
+              <VCol md="6" cols="12">
+                <VTextField
+                  v-model="accountDataLocal.lastName"
+                  placeholder="Doe"
+                  label="Last Name"
+                />
+              </VCol>
+
               <!-- 👉 Last Name -->
               <VCol md="6" cols="12">
                 <VTextField

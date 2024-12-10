@@ -16,6 +16,7 @@ html {
   block-size: 100%;
   gap: 1rem 0;
   inline-size: 100%;
+  inset-block-end: 75px;
 }
 
 #loading-bg.hidden {

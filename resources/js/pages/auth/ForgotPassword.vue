@@ -1,10 +1,8 @@
 <script setup>
-import InputError from '@/components/InputError.vue';
-import InputLabel from '@/components/InputLabel.vue';
-import PrimaryButton from '@/components/PrimaryButton.vue';
-import TextInput from '@/components/TextInput.vue';
-import GuestLayout from '@/layouts/GuestLayout.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import Auth from '@/layouts/Auth.vue';
+import { useForm } from '@inertiajs/vue3';
+
+defineOptions({ layout: null });
 
 defineProps({
   status: {
@@ -16,50 +14,78 @@ const form = useForm({
   email: '',
 });
 
+const rules = {
+  required: (value) => !!value || 'Field is required',
+};
+
 const submit = () => {
   form.post(route('password.email'));
 };
 </script>
 
 <template>
-  <GuestLayout>
+  <Auth>
     <Head title="Forgot Password" />
 
-    <div class="mb-4 text-sm text-gray-600">
-      Forgot your password? No problem. Just let us know your email address and
-      we will email you a password reset link that will allow you to choose a
-      new one.
-    </div>
+    <VCardText>
+      <h4 class="text-h4 mb-1">Forgotten?</h4>
+      <p class="mb-0">
+        No problem. Just let us know your email address and we will email you a
+        password reset link that will allow you to choose a new one.
+      </p>
+    </VCardText>
 
-    <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
-      {{ status }}
-    </div>
+    <VAlert
+      v-if="status"
+      type="warning"
+      variant="tonal"
+      icon="bx-error"
+      :text="status"
+      class="text-small mx-2 mb-4"
+    ></VAlert>
 
-    <form @submit.prevent="submit">
-      <div>
-        <InputLabel for="email" value="Email" />
+    <VCardText>
+      <VForm @submit.prevent="submit" validate-on="lazy">
+        <VRow>
+          <VAlert
+            v-if="
+              form.errors.email &&
+              form.errors.email != 'The email field is required.'
+            "
+            type="error"
+            variant="tonal"
+            icon="bx-error"
+            :text="form.errors.email"
+            class="text-small mx-2 mb-4"
+          ></VAlert>
 
-        <TextInput
-          id="email"
-          type="email"
-          class="mt-1 block w-full"
-          v-model="form.email"
-          required
-          autofocus
-          autocomplete="username"
-        />
+          <!-- email -->
+          <VCol cols="12">
+            <VTextField
+              variant="outlined"
+              v-model="form.email"
+              autofocus
+              label="Email"
+              type="email"
+              placeholder="username@email.com"
+              autocomplete="username"
+              :rules="[rules.required]"
+            />
 
-        <InputError class="mt-2" :message="form.errors.email" />
-      </div>
-
-      <div class="mt-4 flex items-center justify-end">
-        <PrimaryButton
-          :class="{ 'opacity-25': form.processing }"
-          :disabled="form.processing"
-        >
-          Email Password Reset Link
-        </PrimaryButton>
-      </div>
-    </form>
-  </GuestLayout>
+            <div class="mt-4">
+              <!-- Submit button -->
+              <VBtn
+                block
+                type="submit"
+                :class="{ 'opacity-25': form.processing }"
+                :disabled="form.processing"
+              >
+                Email Password Reset Link
+              </VBtn>
+            </div>
+          </VCol>
+        </VRow>
+      </VForm>
+    </VCardText>
+  </Auth>
 </template>

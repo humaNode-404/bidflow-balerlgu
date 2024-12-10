@@ -1,10 +1,8 @@
 <script setup>
-import InputError from '@/components/InputError.vue';
-import InputLabel from '@/components/InputLabel.vue';
-import PrimaryButton from '@/components/PrimaryButton.vue';
-import TextInput from '@/components/TextInput.vue';
-import GuestLayout from '@/layouts/GuestLayout.vue';
+import Auth from '@/layouts/Auth.vue';
 import { Head, useForm } from '@inertiajs/vue3';
+
+defineOptions({ layout: null });
 
 const props = defineProps({
   email: {
@@ -24,72 +22,85 @@ const form = useForm({
   password_confirmation: '',
 });
 
+const rules = {
+  required: (value) => !!value || 'Field is required',
+};
+
 const submit = () => {
   form.post(route('password.store'), {
     onFinish: () => form.reset('password', 'password_confirmation'),
   });
 };
+
+const isPasswordVisible = ref(false);
 </script>
 
 <template>
-  <GuestLayout>
+  <Auth>
     <Head title="Reset Password" />
 
-    <form @submit.prevent="submit">
-      <div>
-        <InputLabel for="email" value="Email" />
+    <VCardText>
+      <VForm @submit.prevent="submit" validate-on="lazy">
+        <VRow>
+          <!-- email -->
+          <VCol cols="12">
+            <VTextField
+              variant="outlined"
+              v-model="form.email"
+              autofocus
+              label="Email or Username"
+              type="email"
+              placeholder="username@email.com"
+              autocomplete="username"
+              :rules="[rules.required]"
+            />
+          </VCol>
 
-        <TextInput
-          id="email"
-          type="email"
-          class="mt-1 block w-full"
-          v-model="form.email"
-          required
-          autofocus
-          autocomplete="username"
-        />
+          <!-- password -->
+          <VCol cols="12">
+            <VTextField
+              variant="outlined"
+              v-model="form.password"
+              label="Password"
+              placeholder="············"
+              autocomplete="current-password"
+              :type="isPasswordVisible ? 'text' : 'password'"
+              :append-inner-icon="isPasswordVisible ? 'bx-hide' : 'bx-show'"
+              @click:append-inner="isPasswordVisible = !isPasswordVisible"
+              :rules="
+                form.errors.password ? [form.errors.password] : [rules.required]
+              "
+            />
+          </VCol>
 
-        <InputError class="mt-2" :message="form.errors.email" />
-      </div>
-
-      <div class="mt-4">
-        <InputLabel for="password" value="Password" />
-
-        <TextInput
-          id="password"
-          type="password"
-          class="mt-1 block w-full"
-          v-model="form.password"
-          required
-          autocomplete="new-password"
-        />
-
-        <InputError class="mt-2" :message="form.errors.password" />
-      </div>
-
-      <div class="mt-4">
-        <InputLabel for="password_confirmation" value="Confirm Password" />
-
-        <TextInput
-          id="password_confirmation"
-          type="password"
-          class="mt-1 block w-full"
-          v-model="form.password_confirmation"
-          required
-          autocomplete="new-password"
-        />
-
-        <InputError class="mt-2" :message="form.errors.password_confirmation" />
-      </div>
-
-      <div class="mt-4 flex items-center justify-end">
-        <PrimaryButton
-          :class="{ 'opacity-25': form.processing }"
-          :disabled="form.processing"
-        >
-          Reset Password
-        </PrimaryButton>
-      </div>
-    </form>
-  </GuestLayout>
+          <!-- confirm password -->
+          <VCol cols="12" class="mb-4">
+            <VTextField
+              variant="outlined"
+              v-model="form.password_confirmation"
+              label="Confirm Password"
+              placeholder="············"
+              type="password"
+              autocomplete="confirm-password"
+              :rules="
+                form.errors.password_confirmation
+                  ? [form.errors.password_confirmation]
+                  : [rules.required]
+              "
+            />
+            <div class="mt-6">
+              <VBtn
+                block
+                type="submit"
+                :class="{ 'opacity-25': form.processing }"
+                :disabled="form.processing"
+              >
+                Reset Password
+              </VBtn>
+            </div>
+          </VCol>
+        </VRow>
+      </VForm>
+    </VCardText>
+  </Auth>
 </template>

@@ -1,8 +1,13 @@
 <script setup>
-import Avatar from '@/components/Avatar.vue';
+import QrCode from '@/components/QrCode.vue';
 import { router, usePage } from '@inertiajs/vue3';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { provide } from 'vue';
+import { useDisplay } from 'vuetify';
+import PrTabs from './partials/PrTabs.vue';
+
+const { md, mdAndDown } = useDisplay();
 
 const page = usePage();
 const pageUser = page.props.auth.user;
@@ -14,6 +19,7 @@ const props = defineProps({
 
 const pr = ref(props.prdoc[0]);
 
+provide(/* key */ 'pr', /* value */ pr);
 // onMounted(() => {
 //   console.log('mounted');
 // });
@@ -108,60 +114,74 @@ const link = (href) => {
 </script>
 
 <template>
-  <VContainer>
-    <VRow>
-      <VCol cols="8">
+  <VContainer fluid class="mx-0 px-0">
+    <VRow justify="space-between">
+      <VCol cols="12" md="8">
         <VCard>
-          <VListItem class="px-6 py-2" @click="link(`/pr/${pr.uuid}`)">
-            <template #prepend>
-              <VListItemAction>
-                <VBadge
-                  dot
-                  location="bottom right"
-                  offset-x="3"
-                  offset-y="3"
-                  color="success"
-                  bordered
+          <VListItem class="px-4 py-2" :class="{ 'px-3': mdAndDown }">
+            <template #append>
+              <IconBtn>
+                <VIcon icon="bx-share-alt"></VIcon>
+                <VMenu
+                  activator="parent"
+                  width="250"
+                  location="bottom end"
+                  offset="20px"
+                  :close-on-content-click="false"
                 >
-                  <Avatar
-                    :item="{
-                      id: pr.user.uuid,
-                      name: pr.user.name,
-                      role: pr.user.role,
-                      avatar: pr.user.avatar,
-                      tooltipTitle: pr.user.name,
-                    }"
-                  ></Avatar>
-                </VBadge>
-              </VListItemAction>
+                  <QrCode
+                    :item="{ scale: 5, link: route('pr', pr.uuid) }"
+                  ></QrCode>
+                </VMenu>
+              </IconBtn>
+              <IconBtn>
+                <VIcon icon="bx-bookmark"></VIcon>
+              </IconBtn>
             </template>
-            <VListItemTitle class="text-button text-capitalize">
-              {{ pr.user.name }}
-              <span v-if="pr.user.uuid == pageUser.uuid" class="text-caption">
-                - You
-              </span>
-            </VListItemTitle>
-            <VListItemSubtitle>
-              <VChip
-                class="text-overline cursor-help px-1 ps-2"
-                prepend-icon="bi-buildings"
-                variant="text"
-                color="secondary"
+            <VCardTitle class="text-h5 pa-0 text-wrap">
+              {{ pr.desc }}
+            </VCardTitle>
+            <VCardSubtitle class="text-body-2 pa-0">
+              {{ pr.number }}
+            </VCardSubtitle>
+          </VListItem>
+          <PrTabs />
+          <VExpansionPanels variant="accordion">
+            <VExpansionPanel :hide-actions="md">
+              <v-expansion-panel-title disable-icon-rotate>
+                <h4 class="text-h5">About this PR</h4>
+                <template v-slot:actions>
+                  <v-icon color="primary" icon="bx-info-circle" size="x-large">
+                  </v-icon>
+                </template>
+              </v-expansion-panel-title>
+              <VExpansionPanel-text
+                >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat.</VExpansionPanel-text
               >
-                {{ pr.office.abbr }}
-                <VTooltip location="bottom" activator="parent" open-delay="250">
-                  <span class="text-capitalize">{{ pr.office.name }}</span>
-                </VTooltip>
-              </VChip>
-              •
-              <VChip class="text-caption px-1" variant="text" color="secondary">
-                {{ dayjs(pr.created_at).fromNow() }}
-              </VChip>
-            </VListItemSubtitle>
+            </VExpansionPanel>
+          </VExpansionPanels>
+        </VCard>
+      </VCol>
+      <VCol cols="12" md="4">
+        <VCard>
+          <VListItem class="px-3 py-2 pe-1" @click="link(`/pr/${pr.uuid}`)">
+            <template #append>
+              <IconBtn>
+                <VIcon icon="bx-dots-vertical"></VIcon>
+              </IconBtn>
+            </template>
+            <VCardTitle class="text-h5 pa-0 text-wrap">
+              {{ pr.desc }}
+            </VCardTitle>
+            <VCardSubtitle class="text-caption pa-0">
+              {{ pr.number }}
+            </VCardSubtitle>
           </VListItem>
         </VCard>
       </VCol>
-      <VCol></VCol>
     </VRow>
   </VContainer>
 </template>

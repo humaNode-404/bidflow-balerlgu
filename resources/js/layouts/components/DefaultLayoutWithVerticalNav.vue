@@ -47,12 +47,18 @@ onMounted(() => {
           @click="toggleVerticalOverlayNavActive(true)"
         >
           <VIcon icon="bx-menu" />
+          <VTooltip location="bottom" activator="parent" open-delay="250">
+            <span class="text-capitalize">Menu</span>
+          </VTooltip>
         </IconBtn>
         <Transition name="slide-fade">
           <div v-if="mdAndDown" class="d-flex flex-row">
             <Link href="/dashboard" class="app-logo app-title-wrapper">
               <IconBtn class="mx-0">
                 <VIcon icon="bi-cart4" color="primary" />
+                <VTooltip location="bottom" activator="parent" open-delay="250">
+                  <span class="text-capitalize">Home</span>
+                </VTooltip>
               </IconBtn>
             </Link>
             <h5 class="d-inline text-h5 text-capitalize ms-1 pt-2">

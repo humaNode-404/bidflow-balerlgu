@@ -1,10 +1,7 @@
 <script setup>
 import VerticalNavSectionTitle from '@/@layouts/components/VerticalNavSectionTitle.vue';
 import Bookmarks from '@/components/Bookmarks.vue';
-import { usePage } from '@inertiajs/vue3';
 import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
-
-const page = usePage();
 </script>
 
 <template>
@@ -17,15 +14,6 @@ const page = usePage();
     }"
   />
 
-  <VerticalNavLink
-    :item="{
-      title: 'Calendar',
-      icon: 'bx-calendar',
-      href: '/calendar',
-      active: $page.component.includes('Calendar'),
-    }"
-  />
-
   <!-- 👉 Purchase Requests -->
   <VerticalNavSectionTitle
     :item="{
@@ -33,14 +21,6 @@ const page = usePage();
     }"
   />
 
-  <VerticalNavLink
-    key="1"
-    :item="{
-      title: page.props.auth.user.role == 'user' ? 'My PR' : 'PR Docs',
-      icon: 'bx-file',
-      href: '/pr',
-    }"
-  />
   <Bookmarks key="2" />
   <!-- 👉 Starred PR -->
   <VerticalNavLink

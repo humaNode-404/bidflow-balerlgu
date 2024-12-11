@@ -44,7 +44,7 @@ const notificationClicked = (notification) => {
   <IconBtn class="me-0">
     <slot name="notif-icon">
       <VIcon icon="bx-bell" />
-      <VTooltip location="bottom" activator="parent" open-delay="1000">
+      <VTooltip location="bottom" activator="parent" open-delay="250">
         <span class="text-capitalize">Notifications</span>
       </VTooltip>
     </slot>

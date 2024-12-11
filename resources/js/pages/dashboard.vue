@@ -3,7 +3,9 @@ import Avatar from '@/components/Avatar.vue';
 import { router, usePage } from '@inertiajs/vue3';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useDisplay } from 'vuetify';
 
+const { xs } = useDisplay();
 const pageUser = usePage().props.auth.user;
 dayjs.extend(relativeTime);
 
@@ -106,8 +108,20 @@ const link = (href) => {
 
 <template>
   <VRow>
-    <VCol v-for="pr in prdocs" :key="pr.number" cols="12" sm="6" md="4">
-      <VCard density="compact" rounded="medium" elevation="4">
+    <VCol
+      v-for="pr in prdocs"
+      :key="pr.number"
+      cols="12"
+      sm="6"
+      md="4"
+      :class="{ 'mx-0 px-0 pt-0': xs }"
+    >
+      <VCard
+        density="compact"
+        rounded="medium"
+        elevation="4"
+        :class="{ 'mx-0 px-0': xs }"
+      >
         <VListItem hover class="px-6 py-2" @click="link(`/pr/${pr.uuid}`)">
           <template #prepend>
             <VListItemAction>
@@ -199,12 +213,32 @@ const link = (href) => {
                 hint="In-Charge: HRMO "
                 persistent-hint
                 readonly
-                label="Process Detail"
+                label="Process • Posting in Philgeps"
                 model-value="RFQ Recieved at BAC Office"
                 type="input"
               ></VTextField>
             </VCol>
             <VCol cols="12">
+              <IconBtn>
+                <slot name="note-icon">
+                  <VIcon icon="bx-notepad" />
+                  <VTooltip
+                    location="bottom"
+                    activator="parent"
+                    open-delay="250"
+                  >
+                    <span class="text-capitalize">Notes</span>
+                  </VTooltip>
+                </slot>
+                <VBadge
+                  dot
+                  location="top right"
+                  offset-x="2"
+                  offset-y="-9"
+                  color="error"
+                  ><slot for="note-icon"></slot>
+                </VBadge>
+              </IconBtn>
               <VFab
                 density="compact"
                 :color="prstatus[pr.status].color"

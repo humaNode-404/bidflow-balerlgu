@@ -12,7 +12,7 @@ const props = defineProps({
 });
 
 const qrContainer = ref(null);
-const copyInfo = ref([false, 'Copy']);
+const copyInfo = ref([true, 'Copy']);
 const isDark = computed(() => (global.name.value === 'dark' ? true : false));
 const scale = ref(props.item.scale);
 
@@ -34,7 +34,7 @@ let opts = [
     maskPattern: 1,
     scale: 8,
     quality: 1,
-    margin: 0.5,
+    margin: 2,
   },
 ];
 
@@ -91,27 +91,39 @@ const downloadQRCode = () => {
 </script>
 
 <template>
-  <VCard title="PR QR-code" class="mb-7">
-    <VCardText class="d-flex">
+  <VCard>
+    <VCardItem class="px-4 py-2">
+      <VCardTitle class="text-h6">
+        <strong>Qr Code</strong>
+      </VCardTitle>
+    </VCardItem>
+    <div class="d-flex m-4 justify-center">
       <canvas ref="qrContainer"></canvas>
-
-      <div class="d-flex flex-column ms-4 justify-center gap-5">
-        <div class="d-flex flex-wrap gap-2">
-          <VBtn
-            @click="copyQRCodeLink"
-            :color="!copyInfo[0] ? 'error' : 'primary'"
-            variant="tonal"
-          >
-            <VIcon icon="bx-copy" class="d-sm-none" />
-            <span class="d-none d-sm-block">{{ copyInfo[1] }}</span>
-          </VBtn>
-
-          <VBtn @click="downloadQRCode" color="info" variant="tonal">
-            <span class="d-none d-sm-block">Download</span>
-            <VIcon icon="bx-download" class="d-sm-none" />
-          </VBtn>
-        </div>
-      </div>
+    </div>
+    <VCardText class="py-4">
+      <VTextField
+        readonly
+        label="Scan me"
+        :model-value="item.link"
+        type="input"
+      ></VTextField>
     </VCardText>
+    <VCardActions class="d-flex justify-center">
+      <div>
+        <VBtn
+          @click="copyQRCodeLink"
+          :color="!copyInfo[0] ? 'error' : 'secondary'"
+          variant="tonal"
+        >
+          <VIcon icon="bx-copy" class="d-sm-none" />
+          <span class="d-none d-sm-block">{{ copyInfo[1] }}</span>
+        </VBtn>
+
+        <VBtn @click="downloadQRCode" color="secondary" variant="tonal">
+          <span class="d-none d-sm-block">Download</span>
+          <VIcon icon="bx-download" class="d-sm-none" />
+        </VBtn>
+      </div>
+    </VCardActions>
   </VCard>
 </template>

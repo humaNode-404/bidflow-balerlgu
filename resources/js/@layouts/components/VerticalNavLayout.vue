@@ -51,7 +51,7 @@ export default defineComponent({
 
       const main = h(
         'main',
-        { class: 'layout-page-content' },
+        { class: ['layout-page-content', xs.value && 'px-1 pt-1'] },
         h(
           'div',
           { id: 'page-content-container', class: 'page-content-container' },

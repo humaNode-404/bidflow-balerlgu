@@ -17,14 +17,7 @@ watch(usePage(), () => {
 });
 
 const link = (href) => {
-  router.get(
-    href,
-    {},
-    {
-      preserveState: true,
-      preserveScroll: true,
-    },
-  );
+  router.get(href, {});
 };
 </script>
 

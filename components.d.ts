@@ -19,6 +19,8 @@ declare module 'vue' {
     DropdownLink: typeof import('./resources/js/components/DropdownLink.vue')['default']
     ErrorHeader: typeof import('./resources/js/components/ErrorHeader.vue')['default']
     FileSlider: typeof import('./resources/js/components/FileSlider.vue')['default']
+    GobackBtn: typeof import('./resources/js/components/GoBackBtn.vue')['default']
+    GoBackBtn: typeof import('./resources/js/components/GoBackBtn.vue')['default']
     InputError: typeof import('./resources/js/components/InputError.vue')['default']
     InputLabel: typeof import('./resources/js/components/InputLabel.vue')['default']
     Modal: typeof import('./resources/js/components/Modal.vue')['default']

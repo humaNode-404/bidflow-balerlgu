@@ -21,10 +21,10 @@ return new class extends Migration {
             $table->date('event_start')->nullable();
             $table->date('event_end')->nullable();
             $table->string('event_loc')->default("Baler, Aurora");
-            $table->unsignedBigInteger('office'); // Ensure only one definition
-            $table->foreign('office')->references('id')->on('offices')->onDelete('cascade');
-            $table->unsignedBigInteger('user'); // Ensure only one definition
-            $table->foreign('user')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('office_id'); // Ensure only one definition
+            $table->foreign('office_id')->references('id')->on('offices')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id'); // Ensure only one definition
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('status');
             $table->decimal('value', 15, 2);
             $table->boolean('archived')->default(false);

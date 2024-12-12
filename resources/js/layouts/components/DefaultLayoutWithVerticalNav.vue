@@ -1,34 +1,15 @@
 <script setup>
+import GoBackBtn from '@/components/GoBackBtn.vue';
 import Footer from '@/layouts/components/Footer.vue';
 import NavbarNotifications from '@/layouts/components/NavbarNotifications.vue';
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue';
 import NavItems from '@/layouts/components/NavItems.vue';
 import UserProfile from '@/layouts/components/UserProfile.vue';
 import logo from '@images/logo.svg?raw';
-import { router, usePage } from '@inertiajs/vue3';
 import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue';
 import { useDisplay } from 'vuetify';
+
 const { mdAndDown } = useDisplay();
-
-// Create a reactive variables for the URL
-const url = reactive({
-  prev: usePage().url,
-  page: usePage().url,
-  aw: false,
-});
-
-// Listen to Inertia's navigation event
-onMounted(() => {
-  router.on('navigate', (event) => {
-    url.page = event.detail.page.url;
-  });
-  router.on('before', () => {
-    url.prev = url.page;
-  });
-  setTimeout(() => {
-    url.aw = true;
-  }, 4000);
-});
 </script>
 
 <template>
@@ -36,11 +17,9 @@ onMounted(() => {
     <!-- 👉 navbar -->
     <template #navbar="{ toggleVerticalOverlayNavActive }">
       <div class="d-flex h-100 align-center">
-        <Link v-if="$page.component.includes('Error')" :href="url.prev || ''">
-          <IconBtn class="ms-0">
-            <VIcon icon="mdi-arrow-left" color="muted" />
-          </IconBtn>
-        </Link>
+        <Transition name="slide-fade">
+          <GoBackBtn />
+        </Transition>
         <IconBtn
           v-if="mdAndDown"
           class="ms-0"
@@ -66,22 +45,6 @@ onMounted(() => {
             </h5>
           </div>
         </Transition>
-
-        <!--
-          <div
-          class="d-flex align-center cursor-pointer ms-lg-n3"
-          style="user-select: none;"
-          >
-          <IconBtn>
-          <VIcon icon="bx-search" />
-          </IconBtn>
-
-          <span class="d-none d-md-flex align-center text-disabled ms-2">
-          <span class="me-2">Search</span>
-          <span class="meta-key">&#8984;K</span>
-          </span>
-          </div> 
-        -->
 
         <VSpacer />
         <NavbarThemeSwitcher class="me-1" />

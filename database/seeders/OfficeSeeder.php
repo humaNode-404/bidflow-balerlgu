@@ -18,7 +18,7 @@ class OfficeSeeder extends Seeder
             Office::create([
                 'name' => $data['name'],
                 'abbr' => $data['abbr'],
-                'avatar' => $data['avatar'], // Leave empty string as specified
+                'avatar' => $data['avatar'],
             ]);
         }
     }

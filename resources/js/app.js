@@ -10,6 +10,7 @@ import './inertia-progress';
 
 import '@core-scss/template/index.scss';
 import '@layouts/styles/index.scss';
+import '@styles/nprogress.scss';
 import '@styles/styles.scss';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';

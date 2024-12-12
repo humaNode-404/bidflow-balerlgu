@@ -17,6 +17,7 @@ watch(activeTab, (value) => {
     {
       preserveScroll: true,
       preserveState: true,
+      replace: true,
     },
   );
 });

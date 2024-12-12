@@ -27,10 +27,9 @@ class PrController extends Controller
         'desc' => $pr->desc,
         'starred' => $pr->starred,
         'event_need' => $pr->event_need,
-        'office' => Office::find($pr->office)->only(['abbr', 'name']),
-        'user' => User::find($pr->user)->only(['uuid', 'name', 'role', 'avatar']),
+        'office' => Office::find($pr->office_id)->only(['abbr', 'name']),
+        'user' => User::find($pr->user_id)->only(['uuid', 'name', 'role', 'avatar']),
         'created_at' => Carbon::parse($pr->created_at)->format('Y-m-d H:i:s'),
-
         'files' => $this->getFile('flowchart-paper-based.pdf'),
       ]);
     }
@@ -49,7 +48,7 @@ class PrController extends Controller
 
       ]);
     } else {
-      return response()->json(['error' => 'File not found', 'filename' => $filePath], 404);
+      return response()->json(['error' => 'File not found', 'filePath' => $filePath, 'filename' => $filename,], 404);
     }
   }
 }

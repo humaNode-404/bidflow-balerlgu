@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Prdoc extends Model
+class Stage extends Model
 {
     use HasFactory;
 
@@ -20,25 +20,18 @@ class Prdoc extends Model
     }
 
     protected $fillable = [
-        'number',
-        'mode',
-        'desc',
-        'purpose',
-        'event_need',
-        'event_start',
-        'event_end',
-        'event_loc',
-        'office_id',
-        'user_id',
         'status',
-        'value',
-        'archived',
-        'starred',
+        'user_id',
+        'main_proc',
+        'proc',
+        'desc',
+        'received_at',
+        'completed_at',
     ];
 
-    public function user()
+    public function prdoc()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(Prdoc::class, 'prdoc_id');
     }
 }
 

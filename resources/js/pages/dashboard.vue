@@ -91,6 +91,7 @@ const getModeIcon = (mode) => modes[mode]?.icon || modes[0].icon;
 onMounted(() => {
   router.reload({
     only: ['prdocs'],
+    replace: true,
   });
 });
 

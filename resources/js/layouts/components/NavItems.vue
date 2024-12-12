@@ -7,8 +7,8 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
 <template>
   <VerticalNavLink
     :item="{
-      title: 'Home',
-      icon: 'bx-home-smile',
+      title: 'Dashboard',
+      icon: 'bi-speedometer',
       href: '/dashboard',
       active: $page.component.includes('Dashboard'),
     }"
@@ -21,18 +21,18 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
     }"
   />
 
-  <Bookmarks key="2" />
+  <Bookmarks />
+
   <!-- 👉 Starred PR -->
   <VerticalNavLink
-    key="3"
     :item="{
       title: 'To-do',
       icon: 'bx-check-circle',
       href: '/todos',
     }"
   />
+
   <VerticalNavLink
-    key="4"
     :item="{
       title: 'Archive',
       icon: 'bx-archive',

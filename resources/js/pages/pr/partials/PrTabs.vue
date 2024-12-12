@@ -9,7 +9,7 @@ const pr = inject('pr');
 const tabs = [
   {
     title: 'Tracking',
-    icon: 'bx-map',
+    icon: 'mdi-timeline-text-outline',
     tab: 'tracks',
   },
   {

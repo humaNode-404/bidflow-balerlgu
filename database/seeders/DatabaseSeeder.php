@@ -45,10 +45,14 @@ class DatabaseSeeder extends Seeder
             PrdocSeeder::class,
         ]);
 
+        $this->call([
+            StageSeeder::class,
+        ]);
+
         // Limit starred Pdocs to 7 per user
         $users = User::all();
         foreach ($users as $user) {
-            $starredPdocs = Prdoc::where('user', $user->id)->take(7)->update(['starred' => 1]);
+            $starredPdocs = Prdoc::where('user_id', $user->id)->take(7)->update(['starred' => 1]);
         }
 
     }

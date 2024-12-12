@@ -24,6 +24,9 @@ return new class extends Migration {
 
             // Adding new columns
             $table->unsignedBigInteger('office_id')->nullable();  // Only define it once
+
+            // Foreign Key Reference for office_id
+            $table->foreign('office_id')->references('id')->on('offices')->onDelete('set null');
             $table->string('designation')->nullable();
             $table->string('phone', 11)->unique();
             $table->string('address')->nullable();
@@ -31,9 +34,6 @@ return new class extends Migration {
             $table->string('province')->default('Aurora');
             $table->string('zip')->nullable();
             $table->enum('status', ['inactive', 'active', 'restricted'])->default('inactive');
-
-            // Foreign Key Reference for office_id
-            $table->foreign('office_id')->references('id')->on('offices')->onDelete('set null');
 
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

@@ -12,6 +12,8 @@ const link = (href,m ='get') => {
     method: m,
     preserveState: false,
     preserveScroll: false,
+    // onFinish: () => {
+    // },
   });
 };
 

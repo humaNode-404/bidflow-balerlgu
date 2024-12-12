@@ -24,8 +24,8 @@ class DashboardController extends Controller
         'status' => $prdoc->status,
         'desc' => $prdoc->desc,
         'event_need' => $prdoc->event_need,
-        'office' => Office::find($prdoc->office)->only(['abbr', 'name']),
-        'user' => User::find($prdoc->user)->only(['uuid', 'name', 'role', 'avatar']),
+        'office' => Office::find($prdoc->office_id)->only(['abbr', 'name']),
+        'user' => User::find($prdoc->user_id)->only(['uuid', 'name', 'role', 'avatar']),
         'created_at' => Carbon::parse($prdoc->created_at)->format('Y-m-d H:i:s'),
       ]);
     }

@@ -22,15 +22,15 @@ class PrdocSeeder extends Seeder
 
             Prdoc::create([
                 'number' => $faker->unique()->numerify('###-##-###-####'), // A random number like 000-00-000-0000
-                'mode' => PrMode::cases()[array_rand(PrMode::cases())]->value, // Random mode
+                'mode' => PrMode::cases()[array_rand(PrMode::cases())]->value,// Random mode
                 'desc' => $faker->sentence(2), // Random description
                 'purpose' => $faker->sentence(10), // Same as desc, for simplicity
                 'event_need' => $faker->dateTimeBetween('+1 month', '+5 months')->format('Y-m-d'), // Random date for event need
                 'event_start' => $faker->dateTimeThisYear()->format('Y-m-d'), // Random start date
                 'event_end' => $faker->dateTimeThisYear()->format('Y-m-d'), // Random end date
                 'event_loc' => "Baler, Aurora",
-                'office' => $end_office->id, // Random office ID from existing offices
-                'user' => $end_user->id, // Random user ID from existing users
+                'office_id' => $end_office->id, // Random office ID from existing offices
+                'user_id' => $end_user->id, // Random user ID from existing users
                 'status' => $faker->randomElement(['pending', 'in progress', 'on hold', 'completed']), // Random status
                 'value' => $faker->randomFloat(2, 1000, 100000), // Random monetary value up to a billion
                 'archived' => $faker->boolean(10), // Random archived status

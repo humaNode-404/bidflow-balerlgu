@@ -5,6 +5,8 @@ namespace App\Http\Middleware;
 use App\Models\Prdoc;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class HandleInertiaRequests extends Middleware
@@ -41,10 +43,11 @@ class HandleInertiaRequests extends Middleware
                     'name',
                     'first_name',
                     'email',
+                    'email_verified_at',
                     'role',
                     'avatar',
                 ]) : null),
-                'bookmarks' => Inertia::lazy(fn() => $user ? Prdoc::where('user', $user->id)
+                'bookmarks' => Inertia::lazy(fn() => $user ? Prdoc::where('user_id', $user->id)
                     ->get(['uuid', 'desc', 'number']) : []),
             ],
         ];

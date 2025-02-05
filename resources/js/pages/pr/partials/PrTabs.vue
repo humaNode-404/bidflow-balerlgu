@@ -1,27 +1,25 @@
 <script setup>
-import FileSlider from '@/components/FileSlider.vue';
-import { inject } from 'vue';
+import FileSlider from './FileSlider.vue';
+import Timeline from './Timeline.vue';
 
-const activeTab = ref('attache');
-const pr = inject('pr');
+const activeTab = ref('tracks');
 
-// tabs
 const tabs = [
   {
-    title: 'Tracking',
+    title: 'Timeline',
     icon: 'mdi-timeline-text-outline',
-    tab: 'tracks',
+    tab: 'timeline',
   },
   {
     title: 'Attachments',
     icon: 'bx-link',
     tab: 'attache',
   },
-  {
-    title: 'Notes',
-    icon: 'bx-notepad',
-    tab: 'notes',
-  },
+  // {
+  //   title: 'Notes',
+  //   icon: 'bx-notepad',
+  //   tab: 'notes',
+  // },
 ];
 </script>
 
@@ -39,14 +37,16 @@ const tabs = [
       </VTab>
     </VTabs>
 
-    <VWindow v-model="activeTab" class="disable-tab-transition mt-5">
-      <VWindowItem value="tracks"> </VWindowItem>
-
-      <VWindowItem value="attache">
-        <FileSlider :files="pr.files" />
+    <VWindow v-model="activeTab" class="disable-tab-transition mt-3">
+      <VWindowItem value="timeline">
+        <Timeline />
       </VWindowItem>
 
-      <VWindowItem value="notes"> </VWindowItem>
+      <VWindowItem value="attache">
+        <FileSlider />
+      </VWindowItem>
+
+      <!-- <VWindowItem value="notes"> </VWindowItem> -->
     </VWindow>
   </div>
 </template>

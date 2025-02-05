@@ -11,13 +11,14 @@ class OfficeSeeder extends Seeder
     public function run()
     {
         // Load office data from JSON file
-        $officeData = json_decode(File::get(storage_path('app/office_data.json')), true);
+        $offices = json_decode(File::get(storage_path('app/offices.json')), true);
 
         // Insert data into the 'offices' table
-        foreach ($officeData as $data) {
+        foreach ($offices as $data) {
             Office::create([
                 'name' => $data['name'],
                 'abbr' => $data['abbr'],
+                'user_group' => $data['user_group'],
                 'avatar' => $data['avatar'],
             ]);
         }

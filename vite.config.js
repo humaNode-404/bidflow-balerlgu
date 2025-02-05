@@ -5,7 +5,6 @@ import { fileURLToPath } from 'node:url';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { defineConfig } from 'vite';
-import vueDevTools from 'vite-plugin-vue-devtools';
 import vuetify from 'vite-plugin-vuetify';
 import svgLoader from 'vite-svg-loader';
 
@@ -20,7 +19,6 @@ export default defineConfig({
         },
       },
     }),
-    vueDevTools(),
     vueJsx(),
     laravel({
       input: ['resources/js/app.js'],

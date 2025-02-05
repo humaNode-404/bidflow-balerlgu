@@ -1,6 +1,7 @@
 #nprogress {
   pointer-events: none;
 }
+
 #nprogress .bar {
   position: fixed;
   z-index: 1031;
@@ -10,6 +11,7 @@
   inset-block-start: 0;
   inset-inline-start: 0;
 }
+
 #nprogress .peg {
   position: absolute;
   display: block;
@@ -20,13 +22,15 @@
   opacity: 1;
   transform: rotate(3deg) translate(0, -4px);
 }
+
 #nprogress .spinner {
   position: fixed;
   z-index: 1031;
-  display: none;
+  display: none !important;
   inset-block-start: 15px;
   inset-inline-end: 15px;
 }
+
 #nprogress .spinner-icon {
   box-sizing: border-box;
   border: solid 2px transparent;
@@ -42,6 +46,7 @@
   position: relative;
   overflow: hidden;
 }
+
 .nprogress-custom-parent #nprogress .spinner,
 .nprogress-custom-parent #nprogress .bar {
   position: absolute;
@@ -51,15 +56,18 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
 }
+
 @keyframes nprogress-spinner {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
-}/*# sourceMappingURL=nprogress.css.map */
+}

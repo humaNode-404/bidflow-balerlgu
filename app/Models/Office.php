@@ -20,5 +20,5 @@ class Office extends Model
     }
 
     // Allow mass assignment for these fields
-    protected $fillable = ['name', 'abbr', 'avatar'];
+    protected $fillable = ['name', 'abbr', 'user_group', 'avatar'];
 }

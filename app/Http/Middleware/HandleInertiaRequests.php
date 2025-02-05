@@ -2,12 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Prdoc;
+
 use Illuminate\Http\Request;
 use Inertia\Middleware;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -33,12 +32,18 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        $user = $request->user();
+        $user = Auth::user(); // Get the currently authenticated user or null.
+
+        $can = $user ? [ // Check if $user is not null.
+            'prCreate' => $user->role === 'admin', // Access role safely.
+            'prFilter' => $user->role === 'admin' || $user->role === 'mod',
+            'userCreate' => $user->role === 'admin',
+        ] : []; // If $user is null, default $can to an empty array.
 
         return [
-            ...parent::share($request),
+            ...parent::share($request), // Include the parent's share data.
             'auth' => [
-                'user' => Inertia::lazy(fn() => $user ? $user->only([
+                'user' => Inertia::lazy(fn() => $user ? $user->only([ // Load user data lazily.
                     'uuid',
                     'name',
                     'first_name',
@@ -46,9 +51,8 @@ class HandleInertiaRequests extends Middleware
                     'email_verified_at',
                     'role',
                     'avatar',
-                ]) : null),
-                'bookmarks' => Inertia::lazy(fn() => $user ? Prdoc::where('user_id', $user->id)
-                    ->get(['uuid', 'desc', 'number']) : []),
+                ]) : null), // If no user is logged in, return null.
+                'can' => $can, // Provide permissions or an empty array.
             ],
         ];
     }

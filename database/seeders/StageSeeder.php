@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Prdoc;
 use App\Models\Stage;
+use App\Models\StageAction;
 use App\Models\User;
 use Illuminate\Support\Facades\File;
 
@@ -17,34 +18,32 @@ class StageSeeder extends Seeder
 
         $prdocs = Prdoc::all();
         foreach ($prdocs as $prdoc) {
-            $rangeEnd = rand(1, 31);
-            $dayInterval = rand(1, 5);
+            $rangeEnd = rand(1, 30);
             $last_date = $prdoc->event_start;
-            $endDate = sprintf('+%d days', $dayInterval);
+            $endDate = (new \DateTime($last_date))->modify(sprintf('+%d days', rand(1, 5)))->format('Y-m-d');
             $cat = $faker->dateTimeBetween($last_date, $endDate)->format('Y-m-d');
 
             foreach (range(0, $rangeEnd) as $index) {
                 $status = $index != $rangeEnd ? 'completed' : $faker->randomElement(['pending', 'in progress', 'on hold']);
                 $prProcessItem = $prProcess[$index];
 
-                Stage::create([
+                StageAction::create([
                     'prdoc_id' => $prdoc->id,
                     'status' => $status,
-                    'user_id' => $prdoc->user_id,
+                    'incharge' => $prProcessItem['incharge'],
+                    'user_group' => $prProcessItem['user_group'],
+                    'proc_no' => $prProcessItem['proc_no'],
                     'main_proc' => $prProcessItem['main_proc'],
                     'proc' => $prProcessItem['proc'],
-                    'desc' => $faker->sentence(7),
+                    'desc' => $prProcessItem['desc'],
                     'received_at' => $last_date,
                     'completed_at' => $status != 'completed' ? null : $cat,
+                    'created_at' => $last_date,
                 ]);
 
-                $dayInterval = rand(0, 2);
-                $endDate = sprintf('+%d days', $dayInterval);
-                $last_date = $faker->dateTimeBetween($cat, $cat)->format('Y-m-d');
-                $last_date = $faker->dateTimeBetween($cat, $endDate)->format('Y-m-d');
+                $last_date = (new \DateTime($cat))->modify(sprintf('+%d days', rand(1, 5)))->format('Y-m-d');
 
-                $dayInterval = rand(1, 5);
-                $endDate = sprintf('+%d days', $dayInterval);
+                $endDate = (new \DateTime($last_date))->modify(sprintf('+%d days', rand(1, 5)))->format('Y-m-d');
                 $cat = $faker->dateTimeBetween($last_date, $endDate)->format('Y-m-d');
             }
         }

@@ -1,8 +1,10 @@
 <script setup>
 import Auth from '@/layouts/Auth.vue';
+import blankLayout from '@/layouts/Blank.vue';
+import { requiredRule } from '@core/utils/validationRules';
 import { useForm } from '@inertiajs/vue3';
 
-defineOptions({ layout: null });
+defineOptions({ layout: blankLayout });
 
 defineProps({
   canResetPassword: {
@@ -18,10 +20,6 @@ const form = useForm({
   password: '',
   remember: false,
 });
-
-const rules = {
-  required: (value) => !!value || 'Field is required',
-};
 
 const submit = () => {
   form.post(route('login'), {
@@ -75,7 +73,7 @@ const isPasswordVisible = ref(false);
               type="email"
               placeholder="username@email.com"
               autocomplete="username"
-              :rules="[rules.required]"
+              :rules="[...requiredRule('Email')]"
             />
           </VCol>
 
@@ -94,7 +92,7 @@ const isPasswordVisible = ref(false);
                 form.errors.email ==
                 'These credentials do not match our records.'
                   ? []
-                  : [rules.required]
+                  : [...requiredRule('Password')]
               "
             />
 

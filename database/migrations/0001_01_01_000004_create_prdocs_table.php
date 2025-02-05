@@ -17,18 +17,16 @@ return new class extends Migration {
             $table->string('mode');
             $table->string('desc');
             $table->string('purpose');
-            $table->date('event_need')->nullable();
             $table->date('event_start')->nullable();
+            $table->date('event_need')->nullable();
             $table->date('event_end')->nullable();
             $table->string('event_loc')->default("Baler, Aurora");
-            $table->unsignedBigInteger('office_id'); // Ensure only one definition
+            $table->unsignedBigInteger('office_id');
             $table->foreign('office_id')->references('id')->on('offices')->onDelete('cascade');
-            $table->unsignedBigInteger('user_id'); // Ensure only one definition
+            $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('status');
-            $table->decimal('value', 15, 2);
-            $table->boolean('archived')->default(false);
-            $table->boolean('starred')->default(false);
+            $table->decimal('value', 11, 2);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

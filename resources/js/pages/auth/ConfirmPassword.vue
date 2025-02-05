@@ -1,8 +1,9 @@
 <script setup>
 import Auth from '@/layouts/Auth.vue';
+import blankLayout from '@/layouts/Blank.vue';
 import { useForm } from '@inertiajs/vue3';
 
-defineOptions({ layout: null });
+defineOptions({ layout: blankLayout });
 
 const form = useForm({
   password: '',

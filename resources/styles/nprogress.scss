@@ -29,7 +29,7 @@ $nprogress-color: #696cff;
   .spinner {
     position: fixed;
     z-index: 1031;
-    display: none;
+    display: none !important;
     inset-block-start: 15px;
     inset-inline-end: 15px;
   }

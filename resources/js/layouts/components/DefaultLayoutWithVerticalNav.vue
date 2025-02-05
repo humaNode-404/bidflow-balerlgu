@@ -1,3 +1,4 @@
+<!-- eslint-disable prettier/prettier -->
 <script setup>
 import GoBackBtn from '@/components/GoBackBtn.vue';
 import Footer from '@/layouts/components/Footer.vue';
@@ -5,6 +6,7 @@ import NavbarNotifications from '@/layouts/components/NavbarNotifications.vue';
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue';
 import NavItems from '@/layouts/components/NavItems.vue';
 import UserProfile from '@/layouts/components/UserProfile.vue';
+import logoIcon from '@images/logo-icon.svg?raw';
 import logo from '@images/logo.svg?raw';
 import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue';
 import { useDisplay } from 'vuetify';
@@ -34,14 +36,14 @@ const { mdAndDown } = useDisplay();
           <div v-if="mdAndDown" class="d-flex flex-row">
             <Link href="/dashboard" class="app-logo app-title-wrapper">
               <IconBtn class="mx-0">
-                <VIcon icon="bi-cart4" color="primary" />
+                <div class="d-flex" v-html="logoIcon" />
                 <VTooltip location="bottom" activator="parent" open-delay="250">
                   <span class="text-capitalize">Home</span>
                 </VTooltip>
               </IconBtn>
             </Link>
             <h5 class="d-inline text-h5 text-capitalize ms-1 pt-2">
-              {{ $page.component.split('/')[0] }}
+              {{ $page.component.split('/').at(-1) }}
             </h5>
           </div>
         </Transition>

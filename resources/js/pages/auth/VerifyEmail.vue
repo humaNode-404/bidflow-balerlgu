@@ -1,9 +1,10 @@
 <script setup>
 import Auth from '@/layouts/Auth.vue';
+import blankLayout from '@/layouts/Blank.vue';
 import { useForm } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
-defineOptions({ layout: null });
+defineOptions({ layout: blankLayout });
 
 const props = defineProps({
   status: {
@@ -14,8 +15,7 @@ const props = defineProps({
 const form = useForm({});
 
 const submit = () => {
-  console.log(Navigate.online);
-  // form.post(route('verification.send'));
+  form.post(route('verification.send'));
 };
 
 const verificationLinkSent = computed(

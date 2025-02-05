@@ -2,8 +2,9 @@
 <script setup>
 import misc404 from '@images/pages/404.png';
 import { Link } from '@inertiajs/vue3';
+import blankLayout from '@/layouts/Blank.vue';
 
-defineOptions({ layout: null });
+defineOptions({ layout: blankLayout });
 const props = defineProps({ status: Number })
 
 const title = computed(() => {

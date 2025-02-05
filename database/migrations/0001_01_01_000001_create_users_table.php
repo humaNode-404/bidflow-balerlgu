@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->uuid('uuid')->unique();
             $table->string('last_name');
             $table->string('first_name');
-            $table->string('middle_name');
+            $table->string('middle_name')->nullable();
             $table->string('prefix')->nullable();
             $table->string('suffix')->nullable();
             $table->string('gender')->nullable();
@@ -28,12 +28,12 @@ return new class extends Migration {
             // Foreign Key Reference for office_id
             $table->foreign('office_id')->references('id')->on('offices')->onDelete('set null');
             $table->string('designation')->nullable();
-            $table->string('phone', 11)->unique();
+            $table->string('phone', 11)->unique()->nullable();
             $table->string('address')->nullable();
             $table->string('city')->default('Baler');
             $table->string('province')->default('Aurora');
             $table->string('zip')->nullable();
-            $table->enum('status', ['inactive', 'active', 'restricted'])->default('inactive');
+            $table->softDeletes();
 
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

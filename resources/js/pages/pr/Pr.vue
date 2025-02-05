@@ -7,26 +7,31 @@ import { provide } from 'vue';
 import { useDisplay } from 'vuetify';
 import PrTabs from './partials/PrTabs.vue';
 
-const { md, mdAndDown } = useDisplay();
-
-const page = usePage();
-const pageUser = page.props.auth.user;
 dayjs.extend(relativeTime);
+
+const { md, mdAndDown } = useDisplay();
 
 const props = defineProps({
   prdoc: Object,
+  can: Object,
 });
 
 const pr = ref(props.prdoc[0]);
+const stages = ref(props.prdoc[0].stages);
 
-provide(/* key */ 'pr', /* value */ pr);
-// onMounted(() => {
-//   console.log('mounted');
-// });
+let user = usePage().props.auth.user;
 
-// onUnmounted(() => {
-//   console.log('unmounted');
-// });
+watch(usePage, () => {
+  user = usePage().props.auth.user;
+});
+
+const assigned_stages = computed(() => {
+  if (user.role != 'admin') return props.prdoc[0].assigned_stages;
+  else return props.prdoc[0].stages;
+});
+
+provide('pr', pr);
+provide('stages', stages);
 
 const modes = {
   0: {
@@ -62,38 +67,21 @@ const modes = {
 const prstatus = {
   pending: {
     icon: 'bx-dots-horizontal',
-    color: 'info',
+    color: 'error',
   },
   'in progress': {
     icon: 'mdi-progress-clock',
-    color: 'warning',
+    color: 'info',
   },
   'on hold': {
     icon: 'mdi-pause-circle-outline',
-    color: 'error',
+    color: 'warning',
   },
   completed: {
     icon: 'mdi-check-circle-outline',
     color: 'success',
   },
 };
-
-// const rolemode = {
-//   admin: {
-//     icon: 'bx-crown',
-//     color: 'primary',
-//   },
-//   mod: {
-//     icon: 'bx-award',
-//     color: 'info',
-//   },
-//   user: {
-//     icon: 'bx-user',
-//     color: 'warning',
-//   },
-// };
-
-const getModeIcon = (mode) => modes[mode]?.icon || modes[0].icon;
 
 onMounted(() => {
   router.reload({
@@ -111,77 +99,172 @@ const link = (href) => {
     },
   );
 };
+
+const toggleArchive = (uuid) => {
+  router.post(`/pr/${uuid}/delete`);
+};
 </script>
 
 <template>
   <VContainer fluid class="mx-0 px-0">
     <VRow justify="space-between">
-      <VCol cols="12" md="8">
-        <VCard>
-          <VListItem class="px-4 py-2" :class="{ 'px-3': mdAndDown }">
-            <template #append>
-              <IconBtn>
-                <VIcon icon="bx-share-alt"></VIcon>
-                <VMenu
-                  activator="parent"
-                  width="250"
-                  location="bottom end"
-                  offset="20px"
-                  :close-on-content-click="false"
-                >
-                  <QrCode
-                    :item="{ scale: 5, link: route('pr', pr.uuid) }"
-                  ></QrCode>
-                </VMenu>
-              </IconBtn>
-              <IconBtn>
-                <VIcon icon="bx-bookmark"></VIcon>
-              </IconBtn>
-            </template>
-            <VCardTitle class="text-h5 pa-0 text-wrap">
-              {{ pr.desc }}
-            </VCardTitle>
-            <VCardSubtitle class="text-body-2 pa-0">
-              {{ pr.number }}
-            </VCardSubtitle>
-          </VListItem>
-          <PrTabs />
-          <VExpansionPanels variant="accordion">
+      <VCol cols="12" :md="can.view_stages ? '8' : '12'">
+        <VCard class="pr-detail position-sticky h-screen">
+          <VExpansionPanels elevation="0" variant="accordion">
             <VExpansionPanel :hide-actions="md">
-              <v-expansion-panel-title disable-icon-rotate>
-                <h4 class="text-h5">About this PR</h4>
+              <v-expansion-panel-title class="ms-0" disable-icon-rotate>
+                <VListItem class="px-0">
+                  <VCardTitle class="text-h5 text-wrap px-0 pb-0">
+                    {{ pr.desc }}
+                  </VCardTitle>
+                  <VCardSubtitle class="text-body-2 px-0">
+                    {{ pr.number }}
+                  </VCardSubtitle>
+                </VListItem>
                 <template v-slot:actions>
-                  <v-icon color="primary" icon="bx-info-circle" size="x-large">
+                  <IconBtn
+                    class="me-1"
+                    v-if="can.archive"
+                    @click="toggleArchive(pr.uuid)"
+                  >
+                    <VIcon icon="bx-archive"></VIcon>
+                  </IconBtn>
+                  <IconBtn class="me-2">
+                    <VIcon icon="bx-share-alt"></VIcon>
+                    <VMenu
+                      activator="parent"
+                      width="250"
+                      location="bottom end"
+                      offset="20px"
+                      :close-on-content-click="false"
+                    >
+                      <QrCode
+                        :item="{ scale: 5, link: route('pr', pr.uuid) }"
+                      ></QrCode>
+                    </VMenu>
+                  </IconBtn>
+                  <v-icon
+                    class="mt-1"
+                    color="primary"
+                    icon="bx-info-circle"
+                    size="x-large"
+                  >
                   </v-icon>
                 </template>
               </v-expansion-panel-title>
-              <VExpansionPanel-text
-                >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.</VExpansionPanel-text
-              >
+              <VExpansionPanel-text class="mb-3">
+                <v-card density="compact">
+                  <VCardText>
+                    <v-row>
+                      <!-- PR Value -->
+                      <v-col cols="12" md="6">
+                        <v-text-field
+                          readonly
+                          v-model="pr.value"
+                          label="PR Value"
+                          placeholder="1234.56"
+                          persistent-placeholder
+                          prefix="₱"
+                          outlined
+                        />
+                      </v-col>
+                      <!-- PR Mode -->
+                      <v-col cols="12" md="6">
+                        <V-Select
+                          readonly
+                          v-model="pr.mode"
+                          prepend-icon="mdi-gavel"
+                          placeholder="PR Mode"
+                          persistent-placeholder
+                        />
+                      </v-col>
+                    </v-row>
+
+                    <v-row>
+                      <!-- PR Purpose -->
+                      <v-col cols="12">
+                        <v-textarea
+                          readonly
+                          hide-details
+                          v-model="pr.purpose"
+                          label="Purpose"
+                          placeholder="The purpose or reason for the request."
+                          persistent-placeholder
+                          counter
+                          auto-grow
+                          rows="2"
+                          outlined
+                        />
+                      </v-col>
+                    </v-row>
+
+                    <v-row justify="space-around">
+                      <v-col cols="12" md="6">
+                        <!-- PR Event Need -->
+                        <v-text-field
+                          readonly
+                          v-model="pr.event_need"
+                          label="Event Date"
+                          placeholder="Target date to have the request."
+                          persistent-placeholder
+                          outlined
+                        />
+                      </v-col>
+
+                      <v-col cols="12" md="6">
+                        <!-- PR Event Location -->
+                        <v-text-field
+                          readonly
+                          hide-details
+                          v-model="pr.event_loc"
+                          label="Event Location"
+                          placeholder="Location of the event."
+                          persistent-placeholder
+                          outlined
+                        />
+                      </v-col>
+                    </v-row>
+                  </VCardText>
+                </v-card>
+              </VExpansionPanel-text>
             </VExpansionPanel>
           </VExpansionPanels>
+
+          <PrTabs class="mb-3" />
         </VCard>
       </VCol>
-      <VCol cols="12" md="4">
-        <VCard>
-          <VListItem class="px-3 py-2 pe-1" @click="link(`/pr/${pr.uuid}`)">
-            <template #append>
-              <IconBtn>
-                <VIcon icon="bx-dots-vertical"></VIcon>
-              </IconBtn>
-            </template>
-            <VCardTitle class="text-h5 pa-0 text-wrap">
-              {{ pr.desc }}
-            </VCardTitle>
-            <VCardSubtitle class="text-caption pa-0">
-              {{ pr.number }}
-            </VCardSubtitle>
+      <VCol v-if="can.view_stages" cols="12" md="4">
+        <VListItem prepend-icon="bi-check2-circle" class="mb-3 ps-1">
+          <VListItemTitle class="text-h5"> Assigned Process </VListItemTitle>
+        </VListItem>
+
+        <VCard v-for="stage in assigned_stages" :key="stage.uuid" class="mb-3">
+          <VListItem
+            class="py-2"
+            :title="
+              (stage.main_proc ? `${stage.main_proc}: ` : '') + stage.proc
+            "
+            @click="
+              link(
+                route('stage.show', {
+                  prdoc: pr.number,
+                  stageaction: stage.uuid,
+                }),
+              )
+            "
+          >
+            <VListItemSubtitle class="text-caption pa-0">
+              {{ dayjs(stage.created_at).fromNow() }}
+            </VListItemSubtitle>
           </VListItem>
         </VCard>
       </VCol>
     </VRow>
   </VContainer>
 </template>
+
+<style lang="scss" scoped>
+.pr-detail {
+  inset-block-start: 5.8rem;
+}
+</style>

@@ -42,9 +42,7 @@ onUnmounted(() => {
       class="scroll-to-top"
     >
       <VIcon icon="bx-up-arrow-alt"></VIcon>
-      <VTooltip activator="parent" location="start" open-delay="1000">
-        scroll to top
-      </VTooltip>
+      <VTooltip activator="parent" location="start"> scroll to top </VTooltip>
     </IconBtn>
   </transition>
 </template>

@@ -5,14 +5,17 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Foundation\Auth\User as verified;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles, SoftDeletes;
 
     protected static function boot()
     {
@@ -36,6 +39,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'suffix',
         'gender',
         'avatar',
+        'office_id',
         'role',
         'email',
         'password',
@@ -44,6 +48,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getNameAttribute()
     {
         return "{$this->first_name} {$this->last_name}";
+    }
+
+    public function getVerifiedStatusAttribute()
+    {
+        return $this->hasVerifiedEmail() ? 'verified' : 'not verified';
+    }
+
+    public function getStatusAttribute()
+    {
+        return $this->trashed() ? 'inactive' : 'active';
     }
 
     public function getFullnameAttribute()

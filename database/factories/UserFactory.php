@@ -32,7 +32,7 @@ class UserFactory extends Factory
         } elseif ($gender[0] == 'f' && $num % 2 == 1) {
             $num--;
         }
-        $avatarPath = ['http://[::1]:5173/resources/images/avatars/avatar-' . $num . '.png'];
+        $avatarPath = ['avatars/avatar-' . $num . '.png'];
 
         return [
             'last_name' => fake()->lastName($gender),
@@ -51,10 +51,9 @@ class UserFactory extends Factory
             'city' => $this->faker->city,
             'province' => $this->faker->state,
             'zip' => $this->faker->postcode,
-            'status' => $this->faker->randomElement(['inactive', 'active', 'restricted']),
 
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
+            // 'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
         ];

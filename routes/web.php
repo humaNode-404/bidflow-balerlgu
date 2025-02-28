@@ -1,21 +1,22 @@
 <?php
 
+use App\Models\User;
+use Inertia\Inertia;
+use App\Mail\TestMail;
+use App\Models\Office;
+use App\Events\NotificationSent;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PrController;
+use Illuminate\Foundation\Application;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AccountController;
+use App\Http\Controllers\ArchiveController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ArchiveController;
-use App\Http\Controllers\AccountController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\PrController;
-use App\Http\Controllers\StageActionController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use App\Models\Office;
-use App\Models\User;
-use App\Events\NotificationSent;
 use App\Http\Controllers\PrCreationController;
-use App\Mail\TestMail;
-use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\StageActionController;
+use App\Http\Controllers\BackupAndRestoreController;
 
 Route::redirect('/', '/login');
 
@@ -72,3 +73,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/users/delete', 'delete')->name('users.delete');
   });
 });
+
+

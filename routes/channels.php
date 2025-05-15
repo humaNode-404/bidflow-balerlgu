@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Broadcast;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
-Broadcast::channel('notifications', function ($user) {
-    return true; // You may want to restrict this to authenticated users
+Broadcast::channel('user.{id}', function ($id) {
+    return Auth::user()->id === $id;
 });

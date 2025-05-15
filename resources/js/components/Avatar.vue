@@ -13,11 +13,11 @@ const rolemode = {
     icon: 'bx-crown',
     color: 'primary',
   },
-  mod: {
+  bac: {
     icon: 'bx-star',
     color: 'info',
   },
-  user: {
+  'end-user': {
     icon: 'bx-badge-check',
     color: 'warning',
   },

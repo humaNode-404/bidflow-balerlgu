@@ -2,16 +2,19 @@
 <script setup>
 import GoBackBtn from '@/components/GoBackBtn.vue';
 import Footer from '@/layouts/components/Footer.vue';
-import NavbarNotifications from '@/layouts/components/NavbarNotifications.vue';
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue';
 import NavItems from '@/layouts/components/NavItems.vue';
 import UserProfile from '@/layouts/components/UserProfile.vue';
-import logoIcon from '@images/logo-icon.svg?raw';
 import logo from '@images/logo.svg?raw';
+import { Deferred } from '@inertiajs/vue3';
 import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue';
 import { useDisplay } from 'vuetify';
 
 const { mdAndDown } = useDisplay();
+
+defineProps({
+  notifs: Object,
+});
 </script>
 
 <template>
@@ -20,38 +23,45 @@ const { mdAndDown } = useDisplay();
     <template #navbar="{ toggleVerticalOverlayNavActive }">
       <div class="d-flex h-100 align-center">
         <Transition name="slide-fade">
-          <GoBackBtn />
+          <GoBackBtn v-if="false" />
         </Transition>
-        <IconBtn
-          v-if="mdAndDown"
-          class="ms-0"
-          @click="toggleVerticalOverlayNavActive(true)"
-        >
-          <VIcon icon="bx-menu" />
-          <VTooltip location="bottom" activator="parent" open-delay="250">
-            <span class="text-capitalize">Menu</span>
-          </VTooltip>
-        </IconBtn>
         <Transition name="slide-fade">
           <div v-if="mdAndDown" class="d-flex flex-row">
-            <Link href="/dashboard" class="app-logo app-title-wrapper">
-              <IconBtn class="mx-0">
-                <div class="d-flex" v-html="logoIcon" />
-                <VTooltip location="bottom" activator="parent" open-delay="250">
-                  <span class="text-capitalize">Home</span>
-                </VTooltip>
-              </IconBtn>
-            </Link>
-            <h5 class="d-inline text-h5 text-capitalize ms-1 pt-2">
-              {{ $page.component.split('/').at(-1) }}
-            </h5>
+            <IconBtn class="ms-0" @click="toggleVerticalOverlayNavActive(true)">
+              <VIcon icon="bx-menu" />
+              <VTooltip location="bottom" activator="parent" open-delay="250">
+                <span class="text-capitalize">Menu</span>
+              </VTooltip>
+            </IconBtn>
           </div>
         </Transition>
 
+        <Head :title="$page.component.split('/').at(-1)" />
+
+        <v-breadcrumbs
+          :items="$page.url.substr(1).split('?')[0].split('/')"
+          class="text-h5 text-capitalize ps-0"
+        >
+          <!-- <template v-slot:divider>
+            <v-icon icon="bx-chevron-right" />
+          </template> -->
+        </v-breadcrumbs>
+
         <VSpacer />
         <NavbarThemeSwitcher class="me-1" />
-
-        <NavbarNotifications class="me-1" />
+        <keep-alive>
+          <Deferred data="notifs">
+            <template #fallback>
+              <IconBtn class="me-1">
+                <VIcon icon="bx-bell" />
+                <VTooltip location="bottom" activator="parent">
+                  <span class="text-capitalize">Notifications</span>
+                </VTooltip>
+              </IconBtn>
+            </template>
+            <Notifications class="me-1" />
+          </Deferred>
+        </keep-alive>
 
         <UserProfile />
       </div>

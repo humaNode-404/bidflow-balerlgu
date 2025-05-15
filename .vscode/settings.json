@@ -48,18 +48,19 @@
   ],
   // Extension: Spell Checker
   "cSpell.words": [
+    "Biosystems",
     "Composables",
     "Customizer",
     "destr",
     "flagpack",
     "Iconify",
+    "nuxt",
     "ofetch",
     "psudo",
     "stylelint",
     "touchless",
     "triggerer",
-    "vuetify",
-    "nuxt"
+    "vuetify"
   ],
   // Extension: Comment Anchors
   "commentAnchors.tags.anchors": {

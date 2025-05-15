@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Office;
 use App\Models\User;
-use App\Http\Requests\User\Create;
+use App\Http\Requests\Settings\Users\Create;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\Rule;
@@ -14,31 +14,32 @@ use App\Rules\PrOfficeRule;
 
 class UserController extends Controller
 {
-    public function show()
+    public function index(Request $request)
     {
         $offices = Office::select('id', 'name', 'abbr')->distinct()->get();
-        return Inertia::render('users/Users', [
-            "offices" => $offices,
-            "users" => User::withTrashed()->get()->map(fn($user) => [
-                "id" => $user->id,
-                "avatar" => $user->avatar,
-                "name" => $user->name,
-                "first_name" => $user->first_name,
-                "middle_name" => $user->middle_name,
-                "last_name" => $user->last_name,
-                "email" => $user->email,
-                "office_id" => $user->office_id,
-                "role" => $user->role,
-                "status" => $user->status,
-                "verified_status" => $user->verified_status,
-                "email_verified_at" => $user->email_verified_at,
-                "phone" => $user->phone,
-                "address" => $user->address,
-            ])
+        return Inertia::render('settings/Users', [
+            "offices" => Inertia::defer(fn() => $offices),
+            "users" => Inertia::defer(fn() =>
+                User::withTrashed()->get()->map(fn($user) => [
+                    "id" => $user->id,
+                    "avatar" => $user->avatar,
+                    "name" => $user->name,
+                    "first_name" => $user->first_name,
+                    "middle_name" => $user->middle_name,
+                    "last_name" => $user->last_name,
+                    "email" => $user->email,
+                    "office" => $user->office->only(['id', 'abbr', 'name']),
+                    "role" => $user->role,
+                    "status" => $user->status,
+                    "verified_status" => $user->verified_status,
+                    "email_verified_at" => $user->email_verified_at,
+                    "phone" => $user->phone,
+                    "address" => $user->address,
+                ])),
         ]);
     }
 
-    public function create(Create $request): RedirectResponse
+    public function store(Create $request): RedirectResponse
     {
         $validated = $request->validated();
 
@@ -51,12 +52,12 @@ class UserController extends Controller
             'email' => $validated['email'
             ],
             'password' => $request['email'] . '_' . $request['office_id'],
-        ]);
+        ])->assignRole( $validated['role']);
 
         return redirect()->back();
     }
 
-    public function update(Request $request): RedirectResponse
+    public function update(Request $request, string $id): RedirectResponse
     {
 
         $validated = $request->validate(
@@ -78,16 +79,15 @@ class UserController extends Controller
             ]
         );
 
-        User::where('id', $request['id'])
-            ->update($validated);
-
+        $user = User::findOrFail($request['id']);
+        $user->update($validated);
 
         return back();
     }
 
-    public function delete(Request $request): RedirectResponse
+    public function destroy(string $id)
     {
-        $user = User::withTrashed()->find($request->id);
+        $user = User::withTrashed()->find($id);
 
         if ($user->trashed()) {
             $user->restore();

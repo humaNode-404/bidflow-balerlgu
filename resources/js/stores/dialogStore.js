@@ -34,7 +34,41 @@ export const editUserDialog = defineStore('editUserDialog', {
   },
 });
 
+export const editOfficeDialog = defineStore('editOfficeDialog', {
+  state: () => ({
+    isOpen: false,
+  }),
+  actions: {
+    openDialog() {
+      this.isOpen = true;
+    },
+    closeDialog() {
+      this.isOpen = false;
+    },
+  },
+  persist: {
+    storage: localStorage,
+  },
+});
+
 export const createUserDialog = defineStore('createUserDialog', {
+  state: () => ({
+    isOpen: false,
+  }),
+  actions: {
+    openDialog() {
+      this.isOpen = true;
+    },
+    closeDialog() {
+      this.isOpen = false;
+    },
+  },
+  persist: {
+    storage: localStorage,
+  },
+});
+
+export const createOfficeDialog = defineStore('createOfficeDialog', {
   state: () => ({
     isOpen: false,
   }),

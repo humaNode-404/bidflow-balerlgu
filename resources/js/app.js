@@ -4,6 +4,7 @@ import './echo';
 import defLayout from '@/layouts/Default.vue';
 import { registerPlugins } from '@core/utils/plugins';
 import { createInertiaApp, Head, Link } from '@inertiajs/vue3';
+import axios from 'axios';
 import { createApp, h } from 'vue';
 import { ZiggyVue } from 'ziggy-js';
 import './inertia-progress';
@@ -14,6 +15,8 @@ import '@styles/nprogress.scss';
 import '@styles/styles.scss';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Bidflow';
+window.axios = axios;
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 createInertiaApp({
   title: (title) => (title ? `${title} - ${appName}` : appName),

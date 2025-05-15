@@ -17,8 +17,8 @@ class PrEventNeedRule implements ValidationRule
         // Get today's date
         $today = now();
 
-        // Get tomorrow's date
-        $tomorrow = $today->copy()->addDay();
+        // Get the minimum date (1 week from today)
+        $minDate = $today->copy()->addWeek();
 
         // Get the maximum date (6 months from today)
         $maxDate = $today->copy()->addMonths(6);
@@ -26,9 +26,9 @@ class PrEventNeedRule implements ValidationRule
         // Parse the value into a date object
         $selectedDate = \Carbon\Carbon::parse($value);
 
-        // Check if the date is less than tomorrow
-        if ($selectedDate->lt($tomorrow)) {
-            $fail("The :attribute must be at least tomorrow.");
+        // Check if the date is less than 1 week from today
+        if ($selectedDate->lt($minDate)) {
+            $fail("The :attribute must be at least 1 week from today.");
         }
 
         // Check if the date exceeds the max range

@@ -16,29 +16,31 @@ return new class extends Migration {
             $table->string('last_name');
             $table->string('first_name');
             $table->string('middle_name')->nullable();
-            $table->string('prefix')->nullable();
             $table->string('suffix')->nullable();
             $table->string('gender')->nullable();
             $table->string('avatar')->nullable();
-            $table->enum('role', ['admin', 'user', 'mod'])->default('user');
+            $table->enum('role', ['admin', 'bac', 'end-user'])->default('end-user');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
 
             // Adding new columns
             $table->unsignedBigInteger('office_id')->nullable();  // Only define it once
+            $table->unsignedBigInteger('designation_id')->nullable();  // Only define it once
+            $table->unsignedBigInteger('modify_by')->nullable();  // Only define it once
 
             // Foreign Key Reference for office_id
             $table->foreign('office_id')->references('id')->on('offices')->onDelete('set null');
-            $table->string('designation')->nullable();
+            $table->foreign('designation_id')->references('id')->on('designations')->onDelete('set null');
+            $table->foreign('modify_by')->references('id')->on('users')->onDelete('set null');
+
             $table->string('phone', 11)->unique()->nullable();
             $table->string('address')->nullable();
-            $table->string('city')->default('Baler');
-            $table->string('province')->default('Aurora');
-            $table->string('zip')->nullable();
-            $table->softDeletes();
 
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+       
             $table->string('password');
             $table->rememberToken();
+            
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -66,11 +68,5 @@ return new class extends Migration {
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
-
-        Schema::table('users', function (Blueprint $table) {
-            // Dropping columns
-            $table->dropForeign(['office_id']);
-            $table->dropColumn(['office_id', 'designation', 'phone', 'address', 'city', 'province', 'country', 'zip', 'status']);
-        });
     }
 };

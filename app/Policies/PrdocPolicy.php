@@ -21,7 +21,7 @@ class PrdocPolicy
      */
     public function view(User $user, Prdoc $prdoc): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -29,7 +29,7 @@ class PrdocPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasRole('admin');
+        return false;
     }
 
     /**
@@ -37,7 +37,7 @@ class PrdocPolicy
      */
     public function update(User $user, Prdoc $prdoc): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -45,7 +45,7 @@ class PrdocPolicy
      */
     public function delete(User $user, Prdoc $prdoc): bool
     {
-        return $user->hasRole('admin');
+        return false;
     }
 
     /**
@@ -61,6 +61,6 @@ class PrdocPolicy
      */
     public function forceDelete(User $user, Prdoc $prdoc): bool
     {
-        return $user->hasRole('admin');
+        return false;
     }
 }

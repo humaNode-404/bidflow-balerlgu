@@ -10,8 +10,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Storage;
 
 class AccountController extends Controller
 {
@@ -19,21 +17,16 @@ class AccountController extends Controller
     public function show()
     {
         $acc = Auth::user();
-        $can = [
-            'editOffice' => $acc->role === 'admin',
-        ];
 
         $offices = Office::select('id', 'name', 'abbr')->distinct()->get();
-        return Inertia::render('acc/Account', [
-            "filters" => request()->only(['tab']),
-            "offices" => $offices ?: null,
-            "acc" => $acc ?: null,
-            'can' => $can,
+        return Inertia::render('Account', [
+            "offices" => Inertia::defer(fn() => $offices),
+            "acc" => Inertia::defer(fn() => $acc),
         ]);
     }
 
 
-    public function updateInfo(AccInfoRequest $request): RedirectResponse
+    public function updateInfo(AccInfoRequest $request)
     {
         // Access validated data
         $validated = $request->validated();
@@ -46,14 +39,19 @@ class AccountController extends Controller
                 'avatar' => 'image|mimes:jpeg,png,jpg,gif|max:3072',
             ]);
 
-            $fileExtension = $request->file('avatar')->getClientOriginalExtension();
-            $fileName = 'avatar-' . $user->uuid . '.' . $fileExtension;
+            $existingFiles = glob(storage_path('app/public/avatars/avatar-user-' . $user->id . '.*'));
+            foreach ($existingFiles as $existingFile) {
+                unlink($existingFile);
+            }
 
-            // Store the file and get the path
+            $fileExtension = $request->file('avatar')->getClientOriginalExtension();
+            $fileName = 'avatar-user-' . $user->id . '.' . $fileExtension;
+
+            // Store the file and overwrite if it already exists
             $avatarPath = $request->file('avatar')->storeAs('avatars', $fileName, 'public');
 
             // Update the avatar path in the database
-            $user->avatar = $avatarPath;
+            $user->avatar = '/storage/' . $avatarPath;
         }
 
 
@@ -69,10 +67,10 @@ class AccountController extends Controller
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
+
         $user->save();
 
-        // Redirect back or to a success page
-        return redirect()->route('account.show')->with('success', 'Information updated successfully!');
+        return redirect()->back()->with('success', 'Information updated successfully!');
     }
 
     public function updatePassword(Request $request): RedirectResponse
@@ -94,7 +92,7 @@ class AccountController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        return back();
+        return redirect()->back();
     }
 
 }

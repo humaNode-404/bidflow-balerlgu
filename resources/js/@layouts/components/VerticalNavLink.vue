@@ -10,6 +10,8 @@ defineProps({
   <li class="nav-link" :class="{ disabled: item.disable }">
     <Link
       :href="item.href"
+      preserve-state
+      preserve-scroll
       :target="item.target"
       :class="{ 'router-link-active router-link-exact-active': item.active }"
     >

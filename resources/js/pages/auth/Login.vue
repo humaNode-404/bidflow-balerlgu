@@ -7,9 +7,6 @@ import { useForm } from '@inertiajs/vue3';
 defineOptions({ layout: blankLayout });
 
 defineProps({
-  canResetPassword: {
-    type: Boolean,
-  },
   status: {
     type: String,
   },
@@ -102,11 +99,7 @@ const isPasswordVisible = ref(false);
             >
               <VCheckbox v-model="form.remember" label="Remember me" />
 
-              <Link
-                v-if="canResetPassword"
-                :href="route('password.request')"
-                class="text-primary"
-              >
+              <Link :href="route('password.request')" class="text-primary">
                 Forgot Password?
               </Link>
             </div>

@@ -11,7 +11,10 @@ use Illuminate\Support\Str;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Observers\UserObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy([UserObserver::class])]
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -35,7 +38,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'last_name',
         'first_name',
         'middle_name',
-        'prefix',
         'suffix',
         'gender',
         'avatar',
@@ -43,11 +45,17 @@ class User extends Authenticatable implements MustVerifyEmail
         'role',
         'email',
         'password',
+        'modify_by'
     ];
 
     public function getNameAttribute()
     {
         return "{$this->first_name} {$this->last_name}";
+    }
+
+    public function getNameInitialAttribute()
+    {
+        return ucwords($this->first_name)[0] . ucwords($this->last_name)[0];
     }
 
     public function getVerifiedStatusAttribute()
@@ -63,30 +71,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getFullnameAttribute()
     {
         $middleInitial = $this->middle_name ? strtoupper($this->middle_name[0]) . '.' : '';
-        return "{$this->first_name} {$middleInitial} {$this->last_name}";
-    }
-
-    /**
-     * Compute the full name with affixes.
-     *
-     * @param string|null $option (accepts 'prefix', 'suffix', or null for both)
-     * @return string
-     */
-    public function name_affix(?string $option = null): string
-    {
-
-        $fullname = $this->fullname;
-        $prefix = $this->prefix ?? '';
-        $suffix = $this->suffix ?? '';
-
-        switch ($option) {
-            case 'prefix':
-                return trim("{$this->prefix} {$fullname}");
-            case 'suffix':
-                return trim("{$fullname} {$this->suffix}");
-            default: // Both prefix and suffix
-                return trim("{$this->prefix} {$fullname} {$this->suffix}");
-        }
+        return "{$this->first_name} {$middleInitial} {$this->last_name} {$this->suffix}";
     }
 
     /**
@@ -110,5 +95,15 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function designation()
+    {
+        return $this->belongsTo(Designation::class);
+    }
+
+    public function office()
+    {
+        return $this->belongsTo(Office::class);
     }
 }

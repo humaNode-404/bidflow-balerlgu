@@ -1,42 +1,157 @@
 /* stylelint-disable @stylistic/declaration-block-trailing-semicolon */
 <script setup>
 // eslint-disable-next-line prettier/prettier
+import { router, usePage } from '@inertiajs/vue3';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import updateLocale from 'dayjs/plugin/updateLocale';
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar';
 
-// Define the events
-const emit = defineEmits(['remove', 'allread', 'click:notification']);
-
-// Sample notifications array passed as a prop
-const props = defineProps({
-  notifications: {
-    type: Array,
-    required: true,
+dayjs.extend(relativeTime);
+dayjs.extend(updateLocale);
+dayjs.updateLocale('en', {
+  relativeTime: {
+    future: 'in %s',
+    past: '%s ago',
+    s: 'now',
+    m: '1m',
+    mm: '%dm',
+    h: '1h',
+    hh: '%dh',
+    d: '1d',
+    dd: '%dd',
+    M: '1mo',
+    MM: '%dmos',
+    y: '1y',
+    yy: '%dy',
   },
 });
 
-const unSeenNo = ref(0);
-const prevState = ref(false);
-const hoveredId = ref(null);
-
-watchEffect(() => {
-  unSeenNo.value = 0;
-  props.notifications.forEach((item) => {
-    if (!item.isSeen) unSeenNo.value++;
-  });
+const unReadNo = ref(usePage().props.notifs.unReadNo);
+const notif_pages = ref(usePage().props.notifs.pages);
+const notifs = ref(usePage().props.notifs.pages.data);
+const notif = reactive({
+  hasmore: !(notif_pages.value.next_page_url == null),
+  isfetching: false,
 });
 
-// Functions to emit events
-const removeNotification = (id) => {
-  emit('remove', id); // Trigger 'remove' event
+watchEffect(async () => {
+  notif.hasmore = !(notif_pages.value.next_page_url == null);
+});
+
+// const x = ref(1);
+
+// onMounted(() => {
+//   // window.Echo.channel('notifications') // Ensure the channel matches your backend setup
+//   //   .listen('.App\\Events\\NotificationSent', (data) => {
+//   //     notifications.value.unshift(data); // This will push the new notification at the front
+//   //   });
+//   console.log('in');
+//   console.log(++x.value);
+// });
+
+// onUnmounted(() => {
+//   // window.Echo.leave('notifications');
+//   console.log('out');
+//   console.log(++x.value);
+// });
+
+const onVisible = (isIntersecting, entries, observer) => {
+  if (isIntersecting && !notif.isfetching) {
+    notif.isfetching = true;
+    router.reload({
+      only: ['notifs'],
+      data: {
+        page: new URL(notif_pages.value.next_page_url).searchParams.get(
+          'notifpage',
+        ),
+      },
+      preserveScroll: true,
+      preserveState: true,
+      preserveUrl: true,
+      showProgress: false,
+      onSuccess: () => {
+        notifs.value.unshift(...usePage().props.notifs.pages.data);
+        notif_pages.value = usePage().props.notifs.pages;
+        notif.isfetching = false;
+      },
+    });
+  }
 };
 
-const toggleAllRead = (prev) => {
-  prevState.value = !prevState.value;
-  emit('allread', prev); // Trigger 'remove' event
+const actionVisit = (id, action) => {
+  router.put(route('notif.update', { notif: id }), {
+    only: ['notifs'],
+    replace: true,
+    preserveState: true,
+    preserveScroll: true,
+  });
+  if (action) {
+    router.visit(action);
+  }
 };
 
-const notificationClicked = (notification) => {
-  emit('click:notification', notification); // Trigger 'click:notification' event
+const markAllAsRead = () => {
+  router.visit(route('notif.markAllAsRead'), {
+    method: 'post',
+    only: ['notifs'],
+    replace: true,
+    preserveState: true,
+    preserveScroll: true,
+    showProgress: false,
+    onSuccess: () => {
+      console.log('Marked all as read');
+      notifs.value = usePage().props.notifs.pages.data;
+      unReadNo.value = usePage().props.notifs.unReadNo;
+    },
+  });
+};
+
+const deleteAll = () => {
+  router.visit(route('notif.deleteAll'), {
+    method: 'post',
+    only: ['notifs'],
+    replace: true,
+    preserveState: true,
+    preserveScroll: true,
+    showProgress: false,
+    onSuccess: () => {
+      console.log('Deleted All notification');
+      notifs.value = usePage().props.notifs.pages.data;
+      unReadNo.value = usePage().props.notifs.unReadNo;
+    },
+  });
+};
+
+const toggleRead = (id) => {
+  router.visit(route('notif.update', { notif: id }), {
+    method: 'patch',
+    only: ['notifs'],
+    replace: true,
+    preserveState: true,
+    preserveScroll: true,
+    showProgress: false,
+    onSuccess: () => {
+      notifs.value = usePage().props.notifs.pages.data;
+      unReadNo.value = usePage().props.notifs.unReadNo;
+    },
+  });
+};
+
+const deleteNotif = (id) => {
+  router.delete(route('notif.destroy', { notif: id }), {
+    only: ['notifs'],
+    replace: true,
+    preserveScroll: true,
+    showProgress: false,
+    onSuccess: () => {
+      let notif = notifs.value.find((n) => n.id === id);
+      if (notif.read_at === null) {
+        unReadNo.value--;
+      }
+      notifs.value = notifs.value.filter((n) => n.id !== id);
+    },
+  });
 };
 </script>
 
@@ -44,18 +159,19 @@ const notificationClicked = (notification) => {
   <IconBtn class="me-0">
     <slot name="notif-icon">
       <VIcon icon="bx-bell" />
-      <VTooltip location="bottom" activator="parent" open-delay="250">
+      <VTooltip location="bottom" activator="parent">
         <span class="text-capitalize">Notifications</span>
       </VTooltip>
     </slot>
     <VBadge
-      v-if="unSeenNo"
-      dot
+      v-if="unReadNo >= 1"
       location="top right"
       offset-x="2"
       offset-y="-9"
       color="error"
-      ><slot for="notif-icon"></slot>
+      dot
+    >
+      <slot for="notif-icon"></slot>
     </VBadge>
     <slot v-else for="notif-icon"></slot>
     <VMenu
@@ -72,17 +188,19 @@ const notificationClicked = (notification) => {
             <strong>Notifications</strong>
           </VCardTitle>
           <template #append>
-            <VChip v-if="unSeenNo" color="primary" class="me-2">
-              {{ unSeenNo + ' new' }}
+            <VChip v-if="unReadNo" color="primary" class="me-2">
+              {{ unReadNo }} unread
             </VChip>
-            <IconBtn @click="toggleAllRead(prevState)">
-              <VIcon :icon="unSeenNo ? 'bx-envelope' : 'bx-envelope-open'" />
-              <VTooltip location="bottom" activator="parent" open-delay="1000">
-                <span v-if="notifications.length">
-                  {{ unSeenNo ? 'Mark all as read' : 'Mark all as unread' }}
-                </span>
-                <span v-else>Empty</span>
-              </VTooltip>
+            <IconBtn
+              @click="markAllAsRead"
+              v-tooltip:bottom="'Mark all as read'"
+            >
+              <VIcon
+                :icon="unReadNo > 0 ? 'bx-envelope' : 'bx-envelope-open'"
+              />
+            </IconBtn>
+            <IconBtn @click="deleteAll" v-tooltip:bottom="'Delete all'">
+              <VIcon icon="bx-trash" />
             </IconBtn>
           </template>
         </VCardItem>
@@ -91,70 +209,101 @@ const notificationClicked = (notification) => {
           tag="div"
           :options="{ wheelPropagation: false, suppressScrollX: true }"
         >
-          <VList class="notification-list rounded-0 py-0">
-            <TransitionGroup
-              appear
-              name="list"
-              tag="div"
-              class="tg-list"
-              mode="out-in"
-            >
+          <VList class="notification-list rounded-0 px-0" lines="three">
+            <TransitionGroup appear name="list" tag="div" class="tg-list">
               <VListItem
-                v-for="notif in notifications"
+                v-for="notif in notifs"
                 :key="notif.id"
-                @click="notificationClicked(notif)"
-                @mouseover="hoveredId = notif.id"
-                @mouseleave="hoveredId = null"
+                :active="notif.read_at == null"
+                color="info"
+                link
+                @click-once="actionVisit(notif.id, notif.data.action)"
               >
                 <template #prepend>
                   <VAvatar color="info" variant="tonal">
-                    <VImg v-if="notif.avatar" :src="notif.avatar" />
-                    <span v-else class="text-h5">{{ notif.avatarName }}</span>
+                    <VImg
+                      v-if="notif.data.avatar.avatar"
+                      :src="notif.data.avatar.avatar"
+                    />
+                    <span v-else class="text-h5">{{
+                      notif.data.avatar.name_initial
+                    }}</span>
                   </VAvatar>
                 </template>
                 <template #append>
-                  <slot name="remove-notif">
-                    <VBtn
-                      v-show="hoveredId === notif.id"
-                      color="muted"
-                      icon="bx-x"
-                      variant="text"
-                      @click="removeNotification(notif.id)"
-                    />
-                  </slot>
-                  <VBadge
-                    v-if="!notif.isSeen"
-                    dot
-                    color="primary"
-                    location="top right"
-                    offset-x="0"
-                    offset-y="-20"
-                  />
+                  <VMenu :close-on-content-click="false">
+                    <template #activator="{ props }">
+                      <VBtn
+                        v-bind="props"
+                        color="muted"
+                        icon="bx-dots-horizontal"
+                        variant="text"
+                      />
+                    </template>
+
+                    <VList>
+                      <VListItem
+                        :title="
+                          notif.read_at === null
+                            ? 'Mark as read'
+                            : 'Mark as unread'
+                        "
+                        @click-once="toggleRead(notif.id)"
+                      />
+                      <VListItem
+                        title="Delete"
+                        @click-once="deleteNotif(notif.id)"
+                      />
+                    </VList>
+                  </VMenu>
                 </template>
                 <template #title>
-                  <p class="font-weight-medium text-md mb-1">
-                    {{ notif.title }}
+                  <p class="font-weight-medium text-md mb-1 text-wrap">
+                    {{ notif.data.title }}
                   </p>
                 </template>
                 <template #subtitle>
-                  <p class="text-caption text-medium-emphasis mb-2">
-                    {{ notif.subtitle }}
+                  <p class="text-caption text-medium-emphasis mb-2 text-wrap">
+                    {{ notif.data.subtitle }}
                   </p>
                 </template>
-                <p class="text-caption mb-0">{{ notif.time }}</p>
+                <p class="text-caption mb-0">
+                  {{ dayjs(notif.created_at).fromNow() }}
+                </p>
               </VListItem>
-              <VEmptyState
-                v-if="!notifications.length"
-                icon="bx-bell-off"
-                title="You're All Caught Up!"
-                text="There are no new notifications at the moment. Check back later
-                for updates."
-              ></VEmptyState>
+              <VListItem v-if="notif.hasmore" key="1">
+                <VEmptyState
+                  v-intersect="{
+                    handler: onVisible,
+                    options: {
+                      threshold: [1.0],
+                    },
+                  }"
+                >
+                  <template #title>
+                    <v-progress-circular
+                      class="me-2"
+                      size="30"
+                      color="primary"
+                      indeterminate
+                    >
+                    </v-progress-circular>
+                    Loading...
+                  </template>
+                </VEmptyState>
+              </VListItem>
             </TransitionGroup>
+            <VEmptyState
+              v-if="!notifs.length"
+              icon="bx-bell-off"
+              title="You're All Caught Up!"
+              text="There are no new notifications at the moment. Check back later
+                for updates."
+            ></VEmptyState>
           </VList>
         </PerfectScrollbar>
         <VDivider />
-        <Link href="/notifications">
+        <Link href="/notifications" v-if="false">
           <VBtn block class="rounded-t-0"> View all Notifications </VBtn>
         </Link>
       </VCard>
@@ -162,7 +311,7 @@ const notificationClicked = (notification) => {
   </IconBtn>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .tg-list {
   overflow: hidden; /* Prevent scrollbar flickering during transition */
 }

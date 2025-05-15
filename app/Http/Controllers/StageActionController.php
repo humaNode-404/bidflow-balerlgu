@@ -14,7 +14,7 @@ class StageActionController extends Controller
 
     public function show(Prdoc $prdoc, StageAction $stageaction, Request $request)
     {
-        return Inertia::render("pr/StageActions", [
+        return Inertia::render("PR/Stage", [
             'stage' => $stageaction->toArray(),
         ]);
     }
@@ -29,14 +29,12 @@ class StageActionController extends Controller
         $stageaction->status = 'on hold';
 
         if ($request->hasFile('attachment')) {
-            $fileExtension = $request->file('attachment')->getClientOriginalExtension();
-            $fileName = 'attachment-' . $stageaction->uuid . '.' . $fileExtension;
-            $filePath = $request->file('attachment')->storeAs('attachments', $fileName, 'public');
-            $stageaction->attachment = $filePath;
+            $fileName = $request->file('attachment')->getClientOriginalName();
+            $filePath = $request->file('attachment')->storeAs('attachments/pr-' . $stageaction->prdoc->number, $fileName, 'public');
+            $stageaction->attachment = "/storage/" . $filePath;
         }
 
         $stageaction->save();
-        // dd($stageaction);
 
 
         return redirect()->back();
@@ -60,16 +58,13 @@ class StageActionController extends Controller
 
         // Load PR process JSON
         $prProcesses = json_decode(Storage::get('pr_process.json'), true);
-        // dd($prProcesses[$stageaction->proc_no]);
-
-        $stageaction->desc = $prProcesses[$stageaction->proc_no - 1]['desc'];
 
         if ($stageaction->proc_no < count($prProcesses)) {
 
             $process = $prProcesses[$stageaction->proc_no];
-            $status = $stageaction->proc_no == (count($prProcesses) - 1) ? "completed" : "pending";
 
-            StageAction::create([
+
+            $stage = StageAction::create([
                 'prdoc_id' => $stageaction->prdoc_id,
                 'user_group' => $process['user_group'],
                 'proc_no' => $process['proc_no'],
@@ -77,7 +72,7 @@ class StageActionController extends Controller
                 'proc' => $process['proc'],
                 'incharge' => $process['incharge'],
                 'desc' => "Waiting for the incharge office to received the documents",
-                'status' => $status,
+                'status' => "pending",
             ]);
         }
 

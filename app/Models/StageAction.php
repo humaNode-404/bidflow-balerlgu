@@ -5,7 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use App\Observers\StageActionObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy([StageActionObserver::class])]
 class StageAction extends Model
 {
     use HasFactory;
@@ -42,18 +45,18 @@ class StageAction extends Model
 
     public function getIsReceivedAttribute()
     {
-        return $this->received_at != null ? true : false;
+        return !is_null($this->received_at);
     }
 
     public function getIsCompletedAttribute()
     {
-        return $this->completed_at != null ? true : false;
+        return !is_null($this->completed_at);
     }
 
     // Relationships
     public function prdoc()
     {
-        return $this->belongsTo(Prdoc::class);
+        return $this->belongsTo(Prdoc::class)->withTrashed();
     }
 
     public function user_group()

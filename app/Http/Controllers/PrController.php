@@ -6,25 +6,17 @@ use App\Models\User;
 use App\Models\Office;
 use App\Models\Prdoc;
 use App\Models\StageAction;
-use App\Models\Stage;
 use Inertia\Inertia;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Redirect;
 use Inertia\Response;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth;
 
 class PrController extends Controller
 {
-  public function show(string $uuid, Request $request): Response
+  public function show(string $number, Request $request): Response
   {
-    $user = Auth::user();
-    $offices = Office::select('id', 'name', 'abbr', "user_group")->distinct()->get()->keyBy('id');
-    $office = $offices->get($user->office_id);
 
-    $prdoc = Prdoc::withTrashed()->where('uuid', $uuid)->get()->map(fn($pr) => [
+    $prdoc = Prdoc::withTrashed()->where('number', $number)->get()->map(fn($pr) => [
       'id' => $pr->id,
       'uuid' => $pr->uuid,
       'value' => $pr->value,
@@ -36,56 +28,43 @@ class PrController extends Controller
       'starred' => $pr->starred,
       'event_need' => $pr->event_need,
       'event_loc' => $pr->event_loc,
-      'office_id' => Office::find($pr->office_id)->only(['abbr', 'name']),
-      'user_id' => User::find($pr->user_id)->only(['uuid', 'name', 'role', 'avatar']),
+      'deleted_at' => $pr->deleted_at,
+      'failed_at' => $pr->failed_at,
+      'can_update' => $pr->can_update,
+      'office' => Office::find($pr->office_id)->only(['abbr', 'name']),
+      'user' => User::withTrashed()->find($pr->user_id)->only(['uuid', 'name', 'role', 'avatar']),
       'created_at' => Carbon::parse($pr->created_at)->format('Y-m-d H:i:s'),
       'stages' => StageAction::where('prdoc_id', $pr->id)
-        ->orderBy('created_at', 'desc')->get()->map(fn($stage) => [
+        ->orderBy('proc_no', 'desc')->get()->map(fn($stage) => [
           'id' => $stage->id,
           'uuid' => $stage->uuid,
+          'proc_no' => $stage->proc_no,
           'main_proc' => $stage->main_proc,
           'proc' => $stage->proc,
           'desc' => $stage->desc,
           'status' => $stage->status,
           'attachment' => $stage->attachment,
-          'created_at' => Carbon::parse($stage->created_at)->format('Y-m-d H:i:s'),
-          'updated_at' => Carbon::parse($stage->updated_at)->format('Y-m-d H:i:s'),
+          'created_at' => Carbon::parse($stage->created_at),
+          'updated_at' => Carbon::parse($stage->updated_at),
         ]),
-      'assigned_stages' => StageAction::where('prdoc_id', $pr->id)
-        ->where('user_group', $office->user_group)
-        ->orderBy('created_at', 'desc')->get()->map(fn($stage) => [
-          'id' => $stage->id,
-          'uuid' => $stage->uuid,
-          'main_proc' => $stage->main_proc,
-          'proc' => $stage->proc,
-          'desc' => $stage->desc,
-          'status' => $stage->status,
-          'attachment' => $stage->attachment,
-          'created_at' => Carbon::parse($stage->created_at)->format('Y-m-d H:i:s'),
-          'updated_at' => Carbon::parse($stage->updated_at)->format('Y-m-d H:i:s'),
-        ]),
-    ]);
+      'assigned_stage' => StageAction::where('prdoc_id', $pr->id)
+        ->orderBy('proc_no', 'desc')->first(),
+    ])->first();
 
-    $myprdoc = Prdoc::withTrashed()->find($prdoc[0]['id']);
-    $prProcesses = json_decode(Storage::get('pr_process.json'), true);
+    $prModes = json_decode(file_get_contents(storage_path('app/pr_modes.json')), true);
 
-    return Inertia::render('pr/Pr', [
-      'prdoc' => $prdoc,
-      'can' => [
-        'archive' => !$myprdoc->trashed() && count($myprdoc->stageactions()->get()) >= count($prProcesses),
-        'view_stages' => !$myprdoc->trashed(),
-      ],
+    return Inertia::render('PR', [
+      'prdoc' => Inertia::defer(fn() => $prdoc),
+      'prModes' => Inertia::defer(fn() => $prModes ?: []),
     ]);
   }
 
-  public function delete(Prdoc $prdoc, Request $request): RedirectResponse
+  public function delete(string $number, Request $request)
   {
+    $prdoc = Prdoc::withTrashed()->where('number', $number)->first();
     if ($prdoc->trashed()) {
       $prdoc->restore();
     } else
       $prdoc->delete();
-
-
-    return redirect("dashboard");
   }
 }

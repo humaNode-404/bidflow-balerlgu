@@ -57,6 +57,11 @@ return [
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
+            'dump' => [
+                'dump_binary_path' => 'C:/xampp/mysql/bin/',
+                'useSingleTransaction' => true,
+                'timeout' => 60,
+            ],
         ],
 
         'mariadb' => [
@@ -92,6 +97,11 @@ return [
             'prefix_indexes' => true,
             'search_path' => 'public',
             'sslmode' => 'prefer',
+            'dump' => [
+                'dump_binary_path' => 'C:/Program Files/PostgreSQL/17/bin/',
+                'useSingleTransaction' => true,
+                'timeout' => 60,
+            ],
         ],
 
         'sqlsrv' => [
@@ -144,7 +154,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'),
         ],
 
         'default' => [

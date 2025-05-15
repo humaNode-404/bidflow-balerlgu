@@ -3,10 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\Prdoc;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,6 +15,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             OfficeSeeder::class,
+            DesignationSeeder::class,
+            RolePermissionSeeder::class,
         ]);
 
         // Create an admin user
@@ -25,71 +25,58 @@ class DatabaseSeeder extends Seeder
             'first_name' => 'Reymark',
             'middle_name' => 'Libed',
             'role' => 'admin',
-            'prefix' => 'Mr.',
             'suffix' => 'Jr.',
             'gender' => 'male',
-            'avatar' => 'avatars/avatar-9.png',
+            'avatar' => '/storage/avatars/avatar-9.png',
             'office_id' => '1',
-            'designation' => 'BAC Chairman',
+            'designation_id' => '33',
             'phone' => '09669401992',
             'address' => 'Recto St. Brgy. Suklayin',
-            'city' => 'Baler',
-            'province' => 'Aurora',
-            'zip' => '3201',
             'email' => 'rymemarzan.stud.ofclacc1@gmail.com',
             'email_verified_at' => now(),
-            'password' => Hash::make('mypassword'),
-        ]);
+            'password' => Hash::make('my-password'),
+        ])->assignRole('admin');
 
         User::factory()->create([
             'last_name' => 'Portera',
             'first_name' => 'Angel',
             'middle_name' => 'Velasco',
-            'role' => 'mod',
-            'prefix' => '',
+            'role' => 'bac',
             'suffix' => '',
             'gender' => 'female',
-            'avatar' => 'avatars/avatar-10.png',
-            'office_id' => '2',
-            'designation' => 'TWG Chairman',
+            'avatar' => '/storage/avatars/avatar-10.png',
+            'office_id' => '13',
+            'designation_id' => '34',
             'phone' => '09232652345',
             'address' => 'Brgy. Buhangin',
-            'city' => 'Baler',
-            'province' => 'Aurora',
-            'zip' => '3201',
             'email' => 'angel@gmail.com',
             'email_verified_at' => now(),
             'password' => Hash::make('angel-password'),
-        ]);
+        ])->assignRole('bac');
 
         User::factory()->create([
             'last_name' => 'Lumasac',
             'first_name' => 'Azenith',
             'middle_name' => 'Marzan',
-            'role' => 'user',
-            'prefix' => '',
+            'role' => 'end-user',
             'suffix' => '',
             'gender' => 'female',
-            'avatar' => 'avatars/avatar-14.png',
+            'avatar' => '/storage/avatars/avatar-14.png',
             'office_id' => '7',
-            'designation' => 'PDO Staff',
+            'designation_id' => '53',
             'phone' => '09871234567',
             'address' => 'Baler',
-            'city' => 'Baler',
-            'province' => 'Aurora',
-            'zip' => '3201',
             'email' => 'aze@gmail.com',
             'email_verified_at' => now(),
             'password' => Hash::make('aze-password'),
-        ]);
+        ])->assignRole('end-user');
 
-        User::factory(49)->create();
+        User::factory(49)->create()->each(function ($user) {
+            $user->assignRole('end-user');
+        });
 
         $this->call([
             PrdocSeeder::class,
-        ]);
-
-        $this->call([
             StageSeeder::class,
         ]);
     }

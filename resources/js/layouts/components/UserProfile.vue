@@ -3,15 +3,13 @@
 import Avatar from '@/components/Avatar.vue';
 import { router, usePage } from '@inertiajs/vue3';
 
-let user =  usePage().props.auth.user;
-
 const resolveStatusVariant = (role) => {
   if (role === 'admin')
     return {
       color: 'primary',
       text: 'Admin',
     };
-  else if (role === 'mod')
+  else if (role === 'bac')
     return {
       color: 'info',
       text: 'Moderator',
@@ -28,19 +26,29 @@ const resolveStatusVariant = (role) => {
     };
 };
 
-watch(usePage,()=>{
-  user = usePage().props.auth.user;
-})
+const user = ref(usePage().props.auth.user);
 
-const link = (href,m ='get') => {
-  router.visit(href,{
+const link = (href, m = 'get') => {
+  router.visit(href, {
     method: m,
-    preserveState: false,
-    preserveScroll: false,
-    // onFinish: () => {
-    // },
   });
 };
+
+onMounted(() => {
+  window.Echo.channel(`user.${usePage().props.auth.user.id}`)
+    .listen('.profile.updated', (e) => {
+       router.reload( { 
+        only: ['auth'],
+       onSuccess: page => {
+        user.value = page.props.auth.user;
+       },
+        });
+    });
+});
+
+onUnmounted(() => {
+  window.Echo.leave(`user.${usePage().props.auth.user.id}`);
+});
 
 </script>
 
@@ -49,7 +57,7 @@ const link = (href,m ='get') => {
     <VTooltip location="bottom" activator="parent" open-delay="500">
       <span class="text-capitalize">Profile</span>
     </VTooltip>
-    <VImg v-if="user.avatar" :src="`/storage/${user.avatar}`" />
+    <VImg v-if="user.avatar" :src="user.avatar" />
     <span v-else class="text-body-2 initialism">{{
       user.name.split(' ').at(0)[0] + user.name.split(' ').at(-1)[0]
     }}</span>
@@ -65,7 +73,7 @@ const link = (href,m ='get') => {
                 :item="{
                   name: user.name,
                   role: user.role,
-                  avatar: `/storage/${user.avatar}`,
+                  avatar: user.avatar,
                 }"
               >
               </Avatar>
@@ -92,9 +100,7 @@ const link = (href,m ='get') => {
                 user.email_verified_at ? 'Verified User' : 'Not Verified User'
               "
             />
-            <VChip :color="resolveStatusVariant(user.role).color" size="small">
-              {{ resolveStatusVariant(user.role).text }}
-            </VChip>
+            {{ resolveStatusVariant(user.role).text }}
           </VListItemSubtitle>
         </VListItem>
         <VDivider class="my-2" />
@@ -102,35 +108,13 @@ const link = (href,m ='get') => {
         <VListItem
           color="primary"
           :active="$page.component.includes('acc')"
-          @click="link(route('account.show'))"
+          @click="link(route('account'))"
         >
           <template #prepend>
             <VIcon class="me-2" icon="bx-user" size="22" />
           </template>
           <VListItemTitle>Profile</VListItemTitle>
         </VListItem>
-        <!-- 
-        <VListItem
-          color="primary"
-          :active="$page.url.startsWith('/settings')"
-          @click="link('/settings')"
-        >
-          <template #prepend>
-            <VIcon class="me-2" icon="bx-cog" size="22" />
-          </template>
-          <VListItemTitle>Settings</VListItemTitle>
-        </VListItem>
-
-        <VListItem
-            color="primary"
-            :active="$page.url.startsWith('/faq')"
-            @click="link('/faq')"
-          >
-            <template #prepend>
-              <VIcon class="me-2" icon="bx-help-circle" size="22" />
-            </template>
-            <VListItemTitle>FAQ</VListItemTitle>
-          </VListItem> -->
 
         <VDivider class="my-2" />
 

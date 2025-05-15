@@ -4,70 +4,47 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "🔊 Reverb Start",
-            "type": "shell",
-            "command": "php artisan reverb:start",
-            "group": "Artisan",
-            "problemMatcher": []
-        },
-        {
-            "label": "🚀 Artisan Serve",
-            "type": "shell",
-            "command": "php artisan serve",
-            "group": "Artisan",
-            "problemMatcher": []
-        },
-        {
             "label": "🔽 Composer Install",
             "type": "shell",
             "command": "composer install",
-            "group": "build",
             "problemMatcher": []
         },
         {
             "label": "🔽 PNPM Install",
             "type": "shell",
             "command": "pnpm install",
-            "group": "build",
-            "problemMatcher": []
+            "problemMatcher": [],
         },
         {
-            "label": "🔽 NPM Install",
+            "label": "🔊 Reverb Start",
             "type": "shell",
-            "command": "npm install",
-            "group": "build",
-            "problemMatcher": []
-        },
-        {
-            "label": "⚡ PNPM Run Build",
-            "type": "shell",
-            "command": "pnpm run build",
-            "group": "Vite",
-            "problemMatcher": []
-        },
-        {
-            "label": "⚡ NPM Run Build",
-            "type": "shell",
-            "command": "npm run build",
-            "group": "Vite",
-            "problemMatcher": []
+            "command": "php artisan reverb:start --debug",
+            "problemMatcher": [],
+            "isBackground": true,
+            "group": {
+                "kind": "build",
+            }
         },
         {
             "label": "👨🏻‍💻 PNPM Run Dev",
             "type": "shell",
             "command": "pnpm run dev",
-            "group": "Vite",
-            "problemMatcher": []
+            "problemMatcher": [],
+            "isBackground": true,
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         },
         {
-            "label": "👨🏻‍💻 NPM Run Dev",
+            "label": "🚀 Artisan Serve",
             "type": "shell",
-            "command": "npm run dev",
-            "group": "Vite",
-            "problemMatcher": []
+            "command": "php artisan serve",
+            "problemMatcher": [],
+            "isBackground": true
         },
         {
-            "label": "🗑️ Clear All Caches",
+            "label": "🗑️ Clear All",
             "type": "shell",
             "command": "php artisan cache:clear; php artisan route:clear; php artisan config:clear; php artisan view:clear; ",
             "group": "build",
@@ -78,7 +55,7 @@
                     "args": [
                         "-Command"
                     ]
-                }
+                },
             }
         }
     ]

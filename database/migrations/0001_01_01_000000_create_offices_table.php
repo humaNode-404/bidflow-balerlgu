@@ -15,8 +15,8 @@ return new class extends Migration {
             $table->uuid('uuid')->unique();
             $table->string('name');
             $table->string('abbr');
-            $table->string('user_group');
-            $table->string('avatar');
+            $table->string('user_group')->default('end-user');
+            $table->string('avatar')->nullable();
             $table->timestamps();
         });
     }

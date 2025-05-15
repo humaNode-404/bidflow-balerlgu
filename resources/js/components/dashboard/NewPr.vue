@@ -1,7 +1,6 @@
 <!-- eslint-disable prettier/prettier -->
 <script setup>
 import { newPRDialog } from '@/stores/dialogStore';
-import { characterCountRules, dateInRangeRules, prNumberRules, prValueRules, requiredRule } from "@core/utils/validationRules";
 import { useForm } from '@inertiajs/vue3';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -56,15 +55,15 @@ watch(step,(value)=>{
 });
 
 const initialFormState = {
-  number: '',
+  number: '000-'.concat(dayjs(dayjs()).format('MM-YYYY') ,'-0000'),
   mode: 'Competitive Bidding',
   value: '',
   desc: '',
   purpose: '',
   event_need: null,
   event_loc: "Baler, Aurora",
-  office_id: null,
   user_id: null,
+  step: 1,
 };
 
 const form = useForm({ ...initialFormState });
@@ -89,57 +88,41 @@ watch(() => form.office_id, (newOfficeId, oldOfficeId) => {
   }
 });
 
-const step1Submit =  () => {
-form.post(route('pr.create.step1'), {
-      only: ['prModes', 'offices'],
+const submit =  () => {
+form.post(route('prdocs.store'), {
+      only: ['filters', 'offices', 'users'],
       replace: true,
       onSuccess: () => {
       step.value++;
-    },
-  });
-};
-
-const step2Submit =  () => {
-form.post(route('pr.create.step2'), {
-      only: ['prModes', 'offices'],
-      replace: true,
-      onSuccess: () => {
-      step.value++;
-    },
-  });
-};
-
-const step3Submit =  () => {
-form.post(route('pr.create.step3'), {
-      only: ['prModes', 'offices'],
-      replace: true,
-      onSuccess: () => {
-      step.value++;
-    },
-  });
-};
-
-const step4Submit =  () => {
-form.post(route('pr.create.step4'), {
-      only: ['prModes', 'offices', 'users'],
-      replace: true,
-      onSuccess: () => {
-      step.value++;
+      form.step = step.value;
+      form.clearErrors();
     },
   });
 };
 
 const finish = () => {
-  form.post(route('pr.create.step5'), {
-    only: ['prdocs', 'prModes', 'offices', 'users'],
+  form.post(route('prdocs.store'), {
+    only: ['prdocs', 'notifs'],
     replace: true,
     onSuccess: () => {
+      closeForm();
+    },
+  });
+};
+
+const closeForm = () => {
+      dialogStore.closeDialog();
       Object.assign(form, { ...initialFormState });
       form.clearErrors();
       step.value = 1;
-      dialogStore.closeDialog();
-    },
-  });
+};
+
+const prev = () => {
+     
+      form.clearErrors();
+      step.value--;
+      form.step = step.value;
+       console.log(form.step);
 };
 
 </script>
@@ -171,7 +154,7 @@ const finish = () => {
             rounded="lg"
             variant="elevated"
             color="error"
-            @click="dialogStore.closeDialog()"
+            @click="closeForm"
           >
             <VIcon icon="bx-x"></VIcon>
           </IconBtn>
@@ -207,17 +190,16 @@ const finish = () => {
               </VCardText>
 
               <VCardText :class="{ 'px-0': xs }">
-                <VForm ref="" @submit.prevent="step1Submit" validate-on="lazy">
+                <VForm ref="" @submit.prevent="submit" validate-on="lazy">
                   <v-row>
                     <!-- PR Number -->
                     <v-col cols="12" md="6">
                       <v-text-field
                         clearable
-                        v-model="form.number"
+                        v-model.trim="form.number"
                         label="PR Number"
                         placeholder="000-00-0000-0000"
                         persistent-placeholder
-                        :rules="prNumberRules"
                         :error-messages="form.errors.number"
                         outlined
                       />
@@ -235,7 +217,6 @@ const finish = () => {
                         placeholder="Competitive Bidding"
                         persistent-placeholder
                         prepend-inner-icon="mdi-gavel"
-                        :rules="[...requiredRule('PR Mode')]"
                         outlined
                       />
                     </v-col>
@@ -249,7 +230,6 @@ const finish = () => {
                         placeholder="1234.56"
                         persistent-placeholder
                         prefix="₱"
-                        :rules="prValueRules"
                         :error-messages="form.errors.value"
                         outlined
                       />
@@ -258,7 +238,7 @@ const finish = () => {
 
                   <VRow fluid justify="space-between">
                     <VCol>
-                      <VBtn block :disabled="btn.prev" @click="step--">
+                      <VBtn block :disabled="btn.prev" @click="prev">
                         Previous
                       </VBtn>
                     </VCol>
@@ -291,20 +271,20 @@ const finish = () => {
               </VCardText>
 
               <VCardText :class="{ 'px-0': xs }">
-                <VForm @submit.prevent="step2Submit" validate-on="lazy">
+                <VForm @submit.prevent="submit" validate-on="lazy">
                   <v-row>
                     <!-- PR Desc -->
                     <v-col cols="12">
                       <v-textarea
                         clearable
-                        v-model="form.desc"
+                        v-model.trim="form.desc"
                         label="Description"
                         placeholder="Brief description of the PR."
                         persistent-placeholder
                         counter
                         auto-grow
                         rows="1"
-                        :rules="characterCountRules(10, 50, 'Description')"
+                        :error-messages="form.errors.desc"
                         outlined
                       />
                     </v-col>
@@ -313,14 +293,14 @@ const finish = () => {
                     <v-col cols="12">
                       <v-textarea
                         clearable
-                        v-model="form.purpose"
+                        v-model.trim="form.purpose"
                         label="Purpose"
                         placeholder="The purpose or reason for the request."
                         persistent-placeholder
                         counter
                         auto-grow
                         rows="2"
-                        :rules="characterCountRules(15, 255, 'Purpose')"
+                        :error-messages="form.errors.purpose"
                         outlined
                       />
                     </v-col>
@@ -328,7 +308,7 @@ const finish = () => {
 
                   <VRow fluid justify="space-between">
                     <VCol>
-                      <VBtn block :disabled="btn.prev" @click="step--">
+                      <VBtn block :disabled="btn.prev" @click="prev">
                         Previous
                       </VBtn>
                     </VCol>
@@ -366,7 +346,7 @@ const finish = () => {
                 </VCardText>
 
                 <VCardText :class="{ 'px-0': xs }">
-                  <VForm @submit.prevent="step3Submit" validate-on="lazy">
+                  <VForm @submit.prevent="submit" validate-on="lazy">
                     <v-row justify="space-around">
                       <!-- PR Event Need -->
                       <v-col cols="12" md="6">
@@ -374,9 +354,15 @@ const finish = () => {
                           class="mx-auto"
                           hide-header
                           v-model:model-value="pickerValue"
-                          :min="dayjs().add(1, 'day').format('YYYY-MM-DD')"
+                          :min="
+                            dayjs()
+                              .add(1, 'week')
+                              .add(1, 'day')
+                              .format('YYYY-MM-DD')
+                          "
                           :max="dayjs().add(6, 'month').format('YYYY-MM-DD')"
                           @update:model-value="onDateChange"
+                          show-adjacent-months
                         ></v-date-picker>
                       </v-col>
                       <!-- PR Event Location -->
@@ -384,29 +370,25 @@ const finish = () => {
                         <v-text-field
                           clearable
                           readonly
-                          v-model="form.event_need"
+                          v-model.trim="form.event_need"
                           label="Event Date"
                           hint="Use the Date picker to modify this."
                           persistent-hint
                           placeholder="Target date to have the request."
                           persistent-placeholder
                           counter
-                          :rules="[
-                            ...requiredRule('Event Date'),
-                            ...dateInRangeRules('tomorrow', '+6 mos'),
-                          ]"
                           :error-messages="form.errors.event_need"
                           outlined
                         />
                         <br />
                         <v-text-field
                           clearable
-                          v-model="form.event_loc"
+                          v-model.trim="form.event_loc"
                           label="Event Location"
                           placeholder="Location of the event."
                           persistent-placeholder
                           counter
-                          :rules="characterCountRules(5, 50, 'Event Location')"
+                          :error-messages="form.errors.event_loc"
                           outlined
                         />
                       </v-col>
@@ -414,7 +396,7 @@ const finish = () => {
 
                     <VRow fluid justify="space-between">
                       <VCol>
-                        <VBtn block :disabled="btn.prev" @click="step--">
+                        <VBtn block :disabled="btn.prev" @click="prev">
                           Previous
                         </VBtn>
                       </VCol>
@@ -448,7 +430,7 @@ const finish = () => {
               </VCardText>
 
               <VCardText :class="{ 'px-0': xs }">
-                <VForm @submit.prevent="step4Submit" validate-on="lazy">
+                <VForm @submit.prevent="submit" validate-on="lazy">
                   <v-row justify="space-around">
                     <v-col cols="10">
                       <!-- Office Selection -->
@@ -465,7 +447,6 @@ const finish = () => {
                         item-value="id"
                         label="Baler-LGU Offices"
                         persistent-hint
-                        :rules="requiredRule('Office')"
                         outlined
                       >
                         <template #hint>
@@ -486,8 +467,8 @@ const finish = () => {
                         placeholder="Assign the request to a specific user."
                         persistent-placeholder
                         hint="Select office first"
+                        :error-messages="form.errors.user_id"
                         clearable
-                        :rules="requiredRule('End User')"
                       >
                       </v-select>
                     </v-col>
@@ -495,7 +476,7 @@ const finish = () => {
 
                   <VRow fluid justify="space-between">
                     <VCol>
-                      <VBtn block :disabled="btn.prev" @click="step--">
+                      <VBtn block :disabled="btn.prev" @click="prev">
                         Previous
                       </VBtn>
                     </VCol>
@@ -543,7 +524,6 @@ const finish = () => {
                           label="PR Number"
                           placeholder="000-00-0000-0000"
                           persistent-placeholder
-                          :rules="prNumberRules"
                           :error-messages="form.errors.number"
                           outlined
                         />
@@ -558,7 +538,6 @@ const finish = () => {
                           placeholder="1234.56"
                           persistent-placeholder
                           prefix="₱"
-                          :rules="prValueRules"
                           :error-messages="form.errors.value"
                           outlined
                         />
@@ -577,7 +556,7 @@ const finish = () => {
                           label="PR Mode"
                           placeholder="Competitive Bidding"
                           persistent-placeholder
-                          :rules="[...requiredRule('PR Mode')]"
+                          :error-messages="form.errors.mode"
                           outlined
                         />
                       </v-col>
@@ -589,14 +568,14 @@ const finish = () => {
                         <v-textarea
                           clearable
                           hide-details
-                          v-model="form.desc"
+                          v-model.trim="form.desc"
                           label="Description"
                           placeholder="Brief description of the PR."
                           persistent-placeholder
                           counter
                           auto-grow
                           rows="1"
-                          :rules="characterCountRules(10, 50, 'Description')"
+                          :error-messages="form.errors.desc"
                           outlined
                         />
                       </v-col>
@@ -606,14 +585,14 @@ const finish = () => {
                         <v-textarea
                           clearable
                           hide-details
-                          v-model="form.purpose"
+                          v-model.trim="form.purpose"
                           label="Purpose"
                           placeholder="The purpose or reason for the request."
                           persistent-placeholder
                           counter
                           auto-grow
                           rows="2"
-                          :rules="characterCountRules(15, 255, 'Purpose')"
+                          :error-messages="form.errors.purpose"
                           outlined
                         />
                       </v-col>
@@ -624,12 +603,11 @@ const finish = () => {
                         <!-- PR Event Need -->
                         <v-text-field
                           clearable
-                          v-model="form.event_need"
+                          v-model.trim="form.event_need"
                           label="Event Date"
                           placeholder="Target date to have the request."
                           persistent-placeholder
                           counter
-                          :rules="[...dateInRangeRules('tomorrow', '+6 mos')]"
                           :error-messages="form.errors.event_need"
                           outlined
                         />
@@ -640,12 +618,12 @@ const finish = () => {
                         <v-text-field
                           clearable
                           hide-details
-                          v-model="form.event_loc"
+                          v-model.trim="form.event_loc"
                           label="Event Location"
                           placeholder="Location of the event."
                           persistent-placeholder
                           counter
-                          :rules="characterCountRules(5, 50, 'Event Location')"
+                          :error-messages="form.errors.event_loc"
                           outlined
                         />
                       </v-col>
@@ -667,7 +645,6 @@ const finish = () => {
                           item-value="id"
                           label="Baler-LGU Offices"
                           persistent-hint
-                          :rules="requiredRule('Office')"
                           outlined
                         >
                           <template #hint>
@@ -689,8 +666,8 @@ const finish = () => {
                           placeholder="Assign the request to a specific user."
                           persistent-placeholder
                           hint="Select office first"
+                          :error-messages="form.errors.user_id"
                           clearable
-                          :rules="requiredRule('End User')"
                         >
                         </v-select>
                       </v-col>
@@ -698,7 +675,7 @@ const finish = () => {
 
                     <VRow fluid justify="space-between">
                       <VCol>
-                        <VBtn block :disabled="btn.prev" @click="step--">
+                        <VBtn block :disabled="btn.prev" @click="prev">
                           Previous
                         </VBtn>
                       </VCol>

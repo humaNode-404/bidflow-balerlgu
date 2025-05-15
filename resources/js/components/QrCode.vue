@@ -94,19 +94,14 @@ const downloadQRCode = () => {
   <VCard>
     <VCardItem class="px-4 py-2">
       <VCardTitle class="text-h6">
-        <strong>Qr Code</strong>
+        <strong>Scan Qr Code</strong>
       </VCardTitle>
     </VCardItem>
     <div class="d-flex m-4 justify-center">
       <canvas ref="qrContainer"></canvas>
     </div>
     <VCardText class="py-4">
-      <VTextField
-        readonly
-        label="Scan me"
-        :model-value="item.link"
-        type="input"
-      ></VTextField>
+      <VTextField readonly :model-value="item.link" type="input"></VTextField>
     </VCardText>
     <VCardActions class="d-flex justify-center">
       <div>

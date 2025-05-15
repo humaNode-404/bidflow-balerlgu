@@ -1,7 +1,5 @@
 {
   "extends": [
-    "stylelint-config-standard-scss",
-    "stylelint-config-idiomatic-order",
     "@stylistic/stylelint-config"
   ],
   "plugins": [
@@ -23,6 +21,14 @@
     }
   ],
   "rules": {
+    "@stylistic/declaration-block-trailing-semicolon": [
+      "always",
+      {
+        "ignore": [
+          "single-declaration"
+        ]
+      }
+    ],
     "@stylistic/max-line-length": [
       220,
       {

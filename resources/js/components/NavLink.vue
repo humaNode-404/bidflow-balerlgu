@@ -20,7 +20,13 @@ const classes = computed(() =>
 </script>
 
 <template>
-  <Link :href="href" :class="classes" preserve-state preserve-scroll>
+  <Link
+    :href="href"
+    :class="classes"
+    preserve-state
+    preserve-scroll
+    data-loading
+  >
     <slot />
   </Link>
 </template>

@@ -33,12 +33,6 @@ Route::middleware('guest')->group(function () {
 
     Route::post('reset-password', [NewPasswordController::class, 'store'])
         ->name('password.store');
-    
-    Route::prefix('database-api')->controller(BackupAndRestoreController::class)->group(function () {
-        Route::post('/backup', 'backup')->name('api.backup.db');
-        Route::post('/restore', 'restore')->name('api.restore.db');
-    });
-        
 });
 
 Route::middleware('auth')->group(function () {

@@ -3,10 +3,10 @@
 namespace App\Providers;
 
 
-use App\Models\Prdoc;
-use App\Policies\PrdocPolicy;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Cache\RateLimiting\Limit;
+use App\Http\Controllers\BackupController;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -23,15 +23,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        RateLimiter::for('backup-run', function () {
+            return Limit::perDay(BackupController::getMaxAttempts())->by('backup-run');
+        });
     }
-
-    /**
-     * The policy mappings for the application.
-     *
-     * @var array
-     */
-    protected $policies = [
-        Prdoc::class => PrdocPolicy::class,
-    ];
 }

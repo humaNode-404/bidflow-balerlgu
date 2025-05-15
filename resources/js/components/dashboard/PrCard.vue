@@ -3,14 +3,34 @@ import Avatar from '@/components/Avatar.vue';
 import { router, usePage } from '@inertiajs/vue3';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import updateLocale from 'dayjs/plugin/updateLocale';
+
 import { useDisplay } from 'vuetify';
 
 const { xs } = useDisplay();
 const pageUser = usePage().props.auth.user;
 dayjs.extend(relativeTime);
+dayjs.extend(updateLocale);
+dayjs.updateLocale('en', {
+  relativeTime: {
+    future: 'in %s',
+    past: '%s ago',
+    s: 'a few seconds',
+    m: '1m',
+    mm: '%dm',
+    h: '1h',
+    hh: '%dh',
+    d: '1d',
+    dd: '%dd',
+    M: '1mo',
+    MM: '%dmos',
+    y: '1y',
+    yy: '%dy',
+  },
+});
 
 defineProps({
-  prdocs: Array,
+  prdocs: Object,
 });
 
 const prstatus = {
@@ -60,7 +80,7 @@ const link = (href) => {
         elevation="4"
         :class="{ 'mx-0 px-0': xs }"
       >
-        <VListItem hover class="px-6 py-2" @click="link(`/pr/${pr.uuid}`)">
+        <VListItem hover class="px-6 py-2" @click="link(`/pr/${pr.number}`)">
           <template #prepend>
             <VListItemAction>
               <Avatar
@@ -69,9 +89,7 @@ const link = (href) => {
                   status: pr.user_id.status,
                   name: pr.user_id.name,
                   role: pr.user_id.role,
-                  avatar: pr.user_id.avatar
-                    ? `/storage/${pr.user_id.avatar}`
-                    : '',
+                  avatar: pr.user_id.avatar ? pr.user_id.avatar : '',
                   tooltipTitle: pr.user_id.name,
                 }"
               ></Avatar>
@@ -116,6 +134,32 @@ const link = (href) => {
               </div>
               <div class="text-primary">
                 {{ dayjs(pr.event_need).format('D MMM').split(' ')[1] }}
+              </div>
+            </div>
+          </VSheet>
+          <VSheet
+            v-if="pr.priority_level > 1"
+            rounded="lg"
+            :width="75"
+            :height="75"
+            elevation="10"
+            class="avatar-left"
+          >
+            <div class="vstack text-center">
+              <div class="text-h4 mb-1">
+                <v-icon
+                  v-if="pr.priority_level == 2"
+                  color="warning"
+                  icon="mdi-timelapse"
+                ></v-icon>
+                <v-icon
+                  v-else-if="pr.priority_level == 3"
+                  color="error"
+                  icon="mdi-car-emergency"
+                ></v-icon>
+              </div>
+              <div class="text-caption text-error">
+                <small>{{ pr.days_left }} days left</small>
               </div>
             </div>
           </VSheet>
@@ -185,6 +229,13 @@ const link = (href) => {
   border: 3px solid rgb(var(--v-theme-surface));
   inset-block-start: -2rem;
   inset-inline-start: 75%;
+}
+
+.avatar-left {
+  position: absolute;
+  border: 3px solid rgb(var(--v-theme-surface));
+  inset-block-start: -2rem;
+  inset-inline-start: 57%;
 }
 
 .list-enter-active,

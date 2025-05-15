@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->string('user_group')->nullable();
             $table->foreignId('user_id')->nullable();
             $table->string('incharge');
-            $table->string('proc_no');
+            $table->integer('proc_no');
             $table->string('main_proc');
             $table->string('proc');
             $table->string('desc')->nullable();

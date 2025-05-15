@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Stage;
 use App\Models\Office;
+use App\Models\User;
 use App\Models\Prdoc;
-use App\Models\StageAction;
+use App\Notifications\NewPurchaseRequest;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
@@ -18,23 +17,20 @@ class DashboardController extends Controller
 {
   public function show(Request $request): Response
   {
+    // $command = '"C:\Program Files\LibreOffice\program\soffice.exe" --headless --convert-to pdf "C:\Users\Azenith\Desktop\Aze_Narrative.docx" --outdir "C:\Users\Azenith\Desktop"';
+    // exec($command);
     $user = Auth::user();
-    $can = [
-      'prCreate' => Auth::user()->role == 'admin',
-      'prFilter' => Auth::user()->role == 'admin' || Auth::user()->role == 'mod',
-    ];
 
     $prProcesses = json_decode(Storage::get('pr_process.json'), true);
 
-
-    $prdocs = Prdoc::query()->when(request('search'), function ($query, $search) {
+    $prdocs = Prdoc::query()->notFailed()->when(request('search'), function ($query, $search) {
       $query->where(function ($q) use ($search) {
         $q->where('number', 'like', "%{$search}%")
           ->orWhere('desc', 'like', "%{$search}%")
           ->orWhere('mode', 'like', "%{$search}%");
       });
     })
-      ->when($user->role === 'user', function ($query) use ($user) {
+      ->when($user->role === 'end-user', function ($query) use ($user) {
         $query->where('user_id', $user->id);
       })
       ->orderBy('created_at', 'desc')
@@ -43,29 +39,55 @@ class DashboardController extends Controller
         'uuid' => $prdoc->uuid,
         'number' => $prdoc->number,
         'mode' => $prdoc->mode,
-        'status' => $prdoc->status,
+        'priority_level' => $prdoc->priority_level,
+        'days_left' => (\Carbon\Carbon::parse($prdoc->event_need)->diffInDays(now())),
         'desc' => $prdoc->desc,
         'event_need' => $prdoc->event_need,
-        'office_id' => Office::find($prdoc->office_id)->only(['abbr', 'name']),
-        'user_id' => User::find($prdoc->user_id)->only(['uuid', 'status', 'name', 'role', 'avatar']),
-        'created_at' => Carbon::parse($prdoc->created_at)->format('Y-m-d H:i:s'),
-        'progress' => intval((count($prdoc->stageactions()->get()) / count($prProcesses)) * 100),
+        'office_id' => $prdoc->office->only(['abbr', 'name']),
+        'user_id' => $prdoc->user->only(['uuid', 'status', 'name', 'role', 'avatar']),
+        'created_at' => $prdoc->created_at,
+        'progress' => intval(($prdoc->stage_count / count($prProcesses)) * 100),
         'current_progress' => count($prdoc->stageactions()->get()),
         'count_progress' => count($prProcesses),
-        'stage' => StageAction::where('prdoc_id', $prdoc->id)
-          ->orderBy('created_at', 'desc')
-          ->first(),
+        'stage' => $prdoc->stageactions->sortByDesc('created_at')->first(),
+      ]);
+
+    $prdocs_priority = Prdoc::query()->notFailed()->when(request('search'), function ($query, $search) {
+      $query->where(function ($q) use ($search) {
+        $q->where('number', 'like', "%{$search}%")
+          ->orWhere('desc', 'like', "%{$search}%")
+          ->orWhere('mode', 'like', "%{$search}%");
+      });
+    })
+      ->when($user->role === 'end-user', function ($query) use ($user) {
+        $query->where('user_id', $user->id);
+      })
+      ->get()
+      ->filter(fn($prdoc) => $prdoc->priority_level > 1) // Filter for priority level above 1
+      ->sortByDesc(fn($prdoc) => $prdoc->priority_level)
+      ->map(fn($prdoc) => [
+        'uuid' => $prdoc->uuid,
+        'number' => $prdoc->number,
+        'mode' => $prdoc->mode,
+        'priority_level' => $prdoc->priority_level,
+        'days_left' => (Carbon::parse($prdoc->event_need)->diffInDays(now())),
+        'desc' => $prdoc->desc,
+        'event_need' => $prdoc->event_need,
+        'office_id' => $prdoc->office->only(['abbr', 'name']),
+        'user_id' => $prdoc->user->only(['uuid', 'status', 'name', 'role', 'avatar']),
+        'created_at' => $prdoc->created_at,
+        'progress' => intval(($prdoc->stage_count / count($prProcesses)) * 100),
+        'current_progress' => count($prdoc->stageactions()->get()),
+        'count_progress' => count($prProcesses),
+        'stage' => $prdoc->stageactions->sortByDesc('created_at')->first(),
       ]);
 
 
+
     $prModes = json_decode(file_get_contents(storage_path('app/pr_modes.json')), true);
-    $offices = json_decode(file_get_contents(storage_path('app/offices.json')), true);
 
-    $officesWithIds = array_map(function ($office, $index) {
-      return array_merge($office, ['id' => $index + 1]);
-    }, $offices, array_keys($offices));
-
-    $users = User::where('role', 'user')
+    $offices = Office::all()->select(['id', 'name', 'abbr']);
+    $users = User::where('role', 'end-user')
       ->select('id', 'first_name', 'last_name', 'office_id', 'avatar')
       ->get()
       ->map(fn($user) => [
@@ -75,14 +97,19 @@ class DashboardController extends Controller
         "avatar" => $user->avatar,
       ]);
 
+    // $user->notify(new NewPurchaseRequest(Prdoc::findOrFail(4)));
+    // $user->notify(new NewPurchaseRequest(Prdoc::findOrFail(6)));
+    // $user->notify(new NewPurchaseRequest(Prdoc::findOrFail(7)));
+    // $user->notify(new NewPurchaseRequest(Prdoc::findOrFail(9)));
+    // $user->notify(new NewPurchaseRequest(Prdoc::findOrFail(7)));
+    // $user->notify(new NewPurchaseRequest(Prdoc::findOrFail(9)));
 
     return Inertia::render('Dashboard', [
       'prdocs' => Inertia::defer(fn() => $prdocs),
-      'filters' => request(['search']),
-      'prModes' => Inertia::lazy(fn() => $prModes ?: []),
-      'offices' => Inertia::lazy(fn() => $officesWithIds ?: []),
+      'priorities' => Inertia::optional(fn() => $prdocs_priority),
+      'prModes' => Inertia::defer(fn() => $prModes ?: []),
+      'offices' => Inertia::lazy(fn() => $offices ?: []),
       'users' => Inertia::lazy(fn() => $users ?: []),
-      'can' => $can,
     ]);
   }
 }

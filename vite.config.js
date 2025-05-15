@@ -5,12 +5,16 @@ import { fileURLToPath } from 'node:url';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { defineConfig } from 'vite';
+import { createHtmlPlugin } from 'vite-plugin-html';
+import vueDevTools from 'vite-plugin-vue-devtools';
 import vuetify from 'vite-plugin-vuetify';
 import svgLoader from 'vite-svg-loader';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    vueDevTools(),
+    createHtmlPlugin({}),
     vue({
       template: {
         transformAssetUrls: {

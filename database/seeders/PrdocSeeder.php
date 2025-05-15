@@ -18,8 +18,6 @@ class PrdocSeeder extends Seeder
 
         // Loop to create a set number of Prdoc entries
         foreach (range(1, 10) as $index) {
-            // Get random end_office and end_user from the database
-            $end_office = Office::inRandomOrder()->first();
             $end_user = User::inRandomOrder()->first();
 
             Prdoc::create([
@@ -31,7 +29,6 @@ class PrdocSeeder extends Seeder
                 'event_need' => $faker->dateTimeBetween('+1 month', '+5 months')->format('Y-m-d'), // Random date for event need
                 'event_end' => $faker->dateTimeThisYear()->format('Y-m-d'), // Random end date
                 'event_loc' => "Baler, Aurora",
-                'office_id' => $end_office->id, // Random office ID from existing offices
                 'user_id' => $end_user->id, // Random user ID from existing users
                 'value' => $faker->randomFloat(2, 1000, 100000), // Random monetary value up to a billion
             ]);

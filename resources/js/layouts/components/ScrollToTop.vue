@@ -15,7 +15,7 @@ const handleScroll = () => {
   debounceTimeout = setTimeout(() => {
     isVisible.value =
       window.scrollY >
-      (document.documentElement.scrollHeight - window.innerHeight) * 0.3;
+      (document.documentElement.scrollHeight - window.innerHeight) * 0.2;
   }, 75);
 };
 
@@ -42,7 +42,6 @@ onUnmounted(() => {
       class="scroll-to-top"
     >
       <VIcon icon="bx-up-arrow-alt"></VIcon>
-      <VTooltip activator="parent" location="start"> scroll to top </VTooltip>
     </IconBtn>
   </transition>
 </template>

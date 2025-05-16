@@ -1,8 +1,10 @@
 <script setup>
+import useAuth from '@/useAuth';
 import { router, useForm } from '@inertiajs/vue3';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
+const { hasRole } = useAuth();
 dayjs.extend(relativeTime);
 const props = defineProps({
   prdoc: Object,
@@ -173,7 +175,11 @@ function markAsFailed() {
             </VBtn>
           </v-col>
 
-          <VCol cols="12" class="d-flex flex-wrap gap-4">
+          <VCol
+            v-if="hasRole('admin')"
+            cols="12"
+            class="d-flex flex-wrap gap-4"
+          >
             <v-spacer></v-spacer>
 
             <VBtn color="primary" variant="tonal" @click="edit">

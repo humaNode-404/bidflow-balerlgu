@@ -78,7 +78,7 @@ const toggleArchive = (number) => {
       <VRow justify="space-between">
         <VCol
           cols="12"
-          :md="hasAnyRole(['admin', 'bac']) && prdoc.can_update ? '8' : '12'"
+          :md="hasAnyRole(['admin']) && prdoc.can_update ? '8' : '12'"
         >
           <VCard class="pr-detail">
             <VExpansionPanels v-model="panel" elevation="0" variant="accordion">
@@ -164,7 +164,7 @@ const toggleArchive = (number) => {
             <PrTabs class="mb-3" :stages="prdoc.stages" />
           </VCard>
         </VCol>
-        <VCol v-if="prdoc.can_update">
+        <VCol v-if="prdoc.can_update && hasAnyRole(['admin'])">
           <Stage :stage="prdoc.assigned_stage"></Stage>
         </VCol>
       </VRow>

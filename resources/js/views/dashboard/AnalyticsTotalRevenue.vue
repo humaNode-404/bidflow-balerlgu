@@ -1,48 +1,29 @@
 <script setup>
-import {
-  useDisplay,
-  useTheme,
-} from 'vuetify'
-import { hexToRgb } from '@core/utils/colorConverter'
+import { hexToRgb } from '@core/utils/colorConverter';
+import { useDisplay, useTheme } from 'vuetify';
 
-const vuetifyTheme = useTheme()
-const display = useDisplay()
+const vuetifyTheme = useTheme();
+const display = useDisplay();
 
 const series = [
   {
-    name: `${ new Date().getFullYear() - 1 }`,
-    data: [
-      18,
-      10,
-      15,
-      29,
-      18,
-      12,
-      9,
-    ],
+    name: `${new Date().getFullYear() - 1}`,
+    data: [18, 10, 15, 29, 18, 12, 9],
   },
   {
-    name: `${ new Date().getFullYear() - 2 }`,
-    data: [
-      -13,
-      -18,
-      -9,
-      -14,
-      -8,
-      -17,
-      -15,
-    ],
+    name: `${new Date().getFullYear() - 2}`,
+    data: [-13, -18, -9, -14, -8, -17, -15],
   },
-]
+];
 
 const chartOptions = computed(() => {
-  const currentTheme = vuetifyTheme.current.value.colors
-  const variableTheme = vuetifyTheme.current.value.variables
-  const disabledTextColor = `rgba(${ hexToRgb(String(currentTheme['on-surface'])) },${ variableTheme['disabled-opacity'] })`
-  const primaryTextColor = `rgba(${ hexToRgb(String(currentTheme['on-surface'])) },${ variableTheme['high-emphasis-opacity'] })`
-  const secondaryTextColor = `rgba(${ hexToRgb(String(currentTheme['on-surface'])) },${ variableTheme['medium-emphasis-opacity'] })`
-  const borderColor = `rgba(${ hexToRgb(String(variableTheme['border-color'])) },${ variableTheme['border-opacity'] })`
-  
+  const currentTheme = vuetifyTheme.current.value.colors;
+  const variableTheme = vuetifyTheme.current.value.variables;
+  const disabledTextColor = `rgba(${hexToRgb(String(currentTheme['on-surface']))},${variableTheme['disabled-opacity']})`;
+  const primaryTextColor = `rgba(${hexToRgb(String(currentTheme['on-surface']))},${variableTheme['high-emphasis-opacity']})`;
+  const secondaryTextColor = `rgba(${hexToRgb(String(currentTheme['on-surface']))},${variableTheme['medium-emphasis-opacity']})`;
+  const borderColor = `rgba(${hexToRgb(String(variableTheme['border-color']))},${variableTheme['border-opacity']})`;
+
   return {
     bar: {
       chart: {
@@ -58,8 +39,8 @@ const chartOptions = computed(() => {
         colors: [currentTheme.surface],
       },
       colors: [
-        `rgba(${ hexToRgb(String(currentTheme.primary)) }, 1)`,
-        `rgba(${ hexToRgb(String(currentTheme.info)) }, 1)`,
+        `rgba(${hexToRgb(String(currentTheme.primary))}, 1)`,
+        `rgba(${hexToRgb(String(currentTheme.info))}, 1)`,
       ],
       legend: {
         offsetX: -22,
@@ -101,15 +82,7 @@ const chartOptions = computed(() => {
         axisTicks: { show: false },
         crosshairs: { opacity: 0 },
         axisBorder: { show: false },
-        categories: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-        ],
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
         labels: {
           style: {
             fontSize: '13px',
@@ -211,7 +184,7 @@ const chartOptions = computed(() => {
       chart: { sparkline: { enabled: true } },
       labels: ['Growth'],
       stroke: { dashArray: 5 },
-      colors: [`rgba(${ hexToRgb(String(currentTheme.primary)) }, 1)`],
+      colors: [`rgba(${hexToRgb(String(currentTheme.primary))}, 1)`],
       states: {
         hover: { filter: { type: 'none' } },
         active: { filter: { type: 'none' } },
@@ -223,11 +196,7 @@ const chartOptions = computed(() => {
           opacityTo: 0.6,
           opacityFrom: 1,
           shadeIntensity: 0.5,
-          stops: [
-            30,
-            70,
-            100,
-          ],
+          stops: [30, 70, 100],
           inverseColors: false,
           gradientToColors: [currentTheme.primary],
         },
@@ -275,8 +244,8 @@ const chartOptions = computed(() => {
         },
       ],
     },
-  }
-})
+  };
+});
 
 const balanceData = [
   {
@@ -291,7 +260,7 @@ const balanceData = [
     year: '2022',
     color: 'info',
   },
-]
+];
 
 const moreList = [
   {
@@ -306,7 +275,7 @@ const moreList = [
     title: 'Update',
     value: 'Update',
   },
-]
+];
 </script>
 
 <template>
@@ -337,17 +306,9 @@ const moreList = [
         </VCardText>
       </VCol>
 
-      <VCol
-        cols="12"
-        sm="5"
-        xl="4"
-      >
-        <VCardText class="text-center pt-10">
-          <VBtn
-            variant="tonal"
-            class="mb-2"
-            append-icon="bx-chevron-down"
-          >
+      <VCol cols="12" sm="5" xl="4">
+        <VCardText class="pt-10 text-center">
+          <VBtn variant="tonal" class="mb-2" append-icon="bx-chevron-down">
             2023
             <VMenu activator="parent">
               <VList>
@@ -373,7 +334,9 @@ const moreList = [
           <h6 class="text-h6 text-medium-emphasis mb-8 mt-1">
             62% Company Growth
           </h6>
-          <div class="d-flex align-center justify-center flex-wrap gap-x-6 gap-y-3">
+          <div
+            class="d-flex align-center flex-wrap justify-center gap-x-6 gap-y-3"
+          >
             <div
               v-for="data in balanceData"
               :key="data.year"
@@ -402,5 +365,5 @@ const moreList = [
 </template>
 
 <style lang="scss">
-@use "@core-scss/template/libs/apex-chart.scss"
+@use '@core-scss/template/libs/apex-chart.scss';
 </style>

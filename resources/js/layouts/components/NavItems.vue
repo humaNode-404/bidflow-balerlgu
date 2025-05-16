@@ -51,6 +51,15 @@ const { can } = useAuth();
     }"
   />
 
+  <!--<VerticalNavLink
+    :item="{
+      title: 'Analytics',
+      icon: 'bx-chart',
+      href: route('analytics'),
+      active: $page.component.includes('Analytics'),
+    }"
+  /> -->
+
   <VerticalNavGroup
     v-if="can('modify-settings')"
     :item="{

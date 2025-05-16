@@ -5,7 +5,7 @@ import { Deferred, router, usePage } from '@inertiajs/vue3';
 import { debounce } from 'lodash';
 import { useDisplay } from 'vuetify';
 
-const { hasAnyRole, can } = useAuth();
+const { can } = useAuth();
 
 const { xs } = useDisplay();
 
@@ -15,51 +15,6 @@ defineProps({
   prModes: Object,
   offices: Object,
   users: Object,
-});
-
-const search = ref(usePage().props.flash.search);
-const activeTab = ref(usePage().props.flash.tab || 'all');
-
-watch(
-  search,
-  debounce((value) => {
-    if (value) {
-      router.get(
-        route('dashboard'),
-        { search: value, tab: activeTab.value },
-        {
-          only: ['prdocs', 'priorities'],
-          preserveScroll: true,
-          preserveState: true,
-          replace: true,
-        },
-      );
-    } else {
-      router.get(
-        route('dashboard'),
-        { tab: activeTab.value },
-        {
-          preserveScroll: true,
-          preserveState: true,
-          replace: true,
-        },
-      );
-    }
-  }, 500),
-);
-
-watch(activeTab, (value) => {
-  router.get(
-    route('dashboard'),
-    { search: search.value, tab: value },
-    {
-      only: ['flash', 'priorities'],
-      showProgress: false,
-      preserveScroll: true,
-      preserveState: true,
-      replace: true,
-    },
-  );
 });
 
 const tabs = [
@@ -74,16 +29,82 @@ const tabs = [
     tab: 'priority',
   },
 ];
+
+const flash = reactive({
+  search: usePage().props.flash.search,
+  tab: tabs.some((t) => t.tab === usePage().props.flash.tab)
+    ? usePage().props.flash.tab
+    : 'all',
+});
+
+watch(
+  () => flash.search,
+  debounce((value) => {
+    if (value) {
+      router.get(
+        route('dashboard'),
+        { search: value, tab: flash.tab },
+        {
+          only: ['prdocs', 'priorities'],
+          preserveScroll: true,
+          preserveState: true,
+          replace: true,
+        },
+      );
+    } else {
+      router.get(
+        route('dashboard'),
+        { tab: flash.tab },
+        {
+          only: ['flash', 'priorities'],
+          preserveScroll: true,
+          preserveState: true,
+          replace: true,
+        },
+      );
+    }
+  }, 500),
+);
+
+watch(
+  () => flash.tab,
+  (value) => {
+    router.get(
+      route('dashboard'),
+      { search: flash.search, tab: value },
+      {
+        only: ['flash', 'priorities'],
+        showProgress: false,
+        preserveScroll: true,
+        preserveState: true,
+        replace: true,
+      },
+    );
+  },
+);
+
+onMounted(() => {
+  let tab = usePage().props.flash.tab;
+  if (tab == 'priority') {
+    router.get(
+      route('dashboard'),
+      { tab: tab },
+      {
+        only: ['flash', 'priorities'],
+        showProgress: false,
+        preserveScroll: true,
+        preserveState: true,
+        replace: true,
+      },
+    );
+  }
+});
 </script>
 
 <template>
   <VRow>
     <VCol cols="12">
-      <VCard
-        v-if="hasAnyRole(['admin', 'bac'])"
-        density="compact"
-        class="m-0 p-0"
-      >
+      <VCard density="compact" class="m-0 p-0">
         <VListItem>
           <template #prepend>
             <NewPr
@@ -99,7 +120,7 @@ const tabs = [
             v-if="can('use-filter')"
             class="mx-2"
             hint="Search scope to PR (Mode, Description, Number)"
-            v-model="search"
+            v-model="flash.search"
             clearable
             prepend-inner-icon="bx-search"
             placeholder="Search..."
@@ -108,7 +129,7 @@ const tabs = [
         </VListItem>
       </VCard>
 
-      <VTabs v-model="activeTab" class="v-tabs-pill mt-1 pb-0">
+      <VTabs v-model="flash.tab" class="v-tabs-pill mt-1 pb-0">
         <VTab v-for="item in tabs" :key="item.icon" :value="item.tab">
           <VIcon size="20" start :icon="item.icon" />
           {{ item.title }}
@@ -116,7 +137,7 @@ const tabs = [
       </VTabs>
     </VCol>
     <VCol>
-      <VWindow v-model="activeTab" class="mt-5">
+      <VWindow v-model="flash.tab" class="mt-5">
         <VWindowItem value="all">
           <Deferred data="prdocs">
             <template #fallback>

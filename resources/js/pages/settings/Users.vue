@@ -274,6 +274,7 @@ const toggleActive = (id) => {
 
         <!-- role -->
         <template #item.role="{ item }">
+          <VSheet></VSheet>
           <VChip :color="resolveStatusVariant(item.role).color" size="small">
             {{ resolveStatusVariant(item.role).text }}
           </VChip>

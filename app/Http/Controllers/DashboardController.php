@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Office;
 use App\Models\User;
 use App\Models\Prdoc;
-use App\Notifications\NewPurchaseRequest;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
@@ -49,7 +48,7 @@ class DashboardController extends Controller
         'progress' => intval(($prdoc->stage_count / count($prProcesses)) * 100),
         'current_progress' => count($prdoc->stageactions()->get()),
         'count_progress' => count($prProcesses),
-        'stage' => $prdoc->stageactions->sortByDesc('created_at')->first(),
+        'stage' => $prdoc->stageactions->sortByDesc('proc_no')->first(),
       ]);
 
     $prdocs_priority = Prdoc::query()->notFailed()->when(request('search'), function ($query, $search) {
@@ -79,7 +78,7 @@ class DashboardController extends Controller
         'progress' => intval(($prdoc->stage_count / count($prProcesses)) * 100),
         'current_progress' => count($prdoc->stageactions()->get()),
         'count_progress' => count($prProcesses),
-        'stage' => $prdoc->stageactions->sortByDesc('created_at')->first(),
+        'stage' => $prdoc->stageactions->sortByDesc('proc_no')->first(),
       ]);
 
 

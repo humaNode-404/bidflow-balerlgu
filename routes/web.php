@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OfficeController;
+use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\PrController;
 use App\Http\Controllers\PrdocController;
 use App\Http\Controllers\NotificationController;
@@ -67,6 +68,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
   Route::middleware(['role:admin'])->group(function () {
     Route::prefix('settings')->group(function () {
+      // Route::controller(AnalyticsController::class)->group(function () {
+      //   Route::get('/analytics', 'index')->name('analytics');
+      // });
+
       Route::resource('offices', OfficeController::class);
 
       Route::resource('users', UserController::class);

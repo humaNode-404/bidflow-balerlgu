@@ -6,6 +6,7 @@ import { registerPlugins } from '@core/utils/plugins';
 import { createInertiaApp, Head, Link } from '@inertiajs/vue3';
 import axios from 'axios';
 import { createApp, h } from 'vue';
+import ApexCharts from 'vue3-apexcharts';
 import { ZiggyVue } from 'ziggy-js';
 import './inertia-progress';
 
@@ -32,6 +33,7 @@ createInertiaApp({
     const app = createApp({ render: () => h(App, props) })
       .component('Head', Head)
       .component('Link', Link)
+      .component('apexchart', ApexCharts)
       .use(plugin)
       .use(ZiggyVue);
 

@@ -236,7 +236,7 @@ const deleteNotif = (id) => {
                       <VBtn
                         v-bind="props"
                         color="muted"
-                        icon="bx-dots-horizontal"
+                        icon="bx-dots-vertical-rounded"
                         variant="text"
                       />
                     </template>

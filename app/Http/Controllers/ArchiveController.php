@@ -44,7 +44,7 @@ class ArchiveController extends Controller
                 'progress' => intval(($prdoc->stage_count / count($prProcesses)) * 100),
                 'current_progress' => count($prdoc->stageactions()->get()),
                 'count_progress' => count($prProcesses),
-                'stage' => $prdoc->stageactions->sortByDesc('created_at')->first(),
+                'stage' => $prdoc->stageactions->sortByDesc('proc_no')->first(),
             ]);
 
         $failed = Prdoc::failed()->when(request('search'), function ($query, $search) {
@@ -73,7 +73,7 @@ class ArchiveController extends Controller
                 'progress' => intval(($prdoc->stage_count / count($prProcesses)) * 100),
                 'current_progress' => count($prdoc->stageactions()->get()),
                 'count_progress' => count($prProcesses),
-                'stage' => $prdoc->stageactions->sortByDesc('created_at')->first(),
+                'stage' => $prdoc->stageactions->sortByDesc('proc_no')->first(),
             ]);
 
         return Inertia::render('Archive', [

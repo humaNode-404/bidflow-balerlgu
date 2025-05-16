@@ -14,7 +14,7 @@ declare module 'vue' {
     CardStatisticsVertical: typeof import('./resources/js/@core/components/cards/CardStatisticsVertical.vue')['default']
     CardStatisticsWithImages: typeof import('./resources/js/@core/components/cards/CardStatisticsWithImages.vue')['default']
     Checkbox: typeof import('./resources/js/components/Checkbox.vue')['default']
-    copy: typeof import('./resources/js/components/settings/NewOffice.vue')['default']
+    copy: typeof import('./resources/js/components/analytics/PrTimeline copy.vue')['default']
     DangerButton: typeof import('./resources/js/components/DangerButton.vue')['default']
     Dropdown: typeof import('./resources/js/components/Dropdown.vue')['default']
     DropdownLink: typeof import('./resources/js/components/DropdownLink.vue')['default']
@@ -39,6 +39,8 @@ declare module 'vue' {
     PrForm: typeof import('./resources/js/components/pr/PrForm.vue')['default']
     PrimaryButton: typeof import('./resources/js/components/PrimaryButton.vue')['default']
     PrTabs: typeof import('./resources/js/components/pr/PrTabs.vue')['default']
+    PrTimeline: typeof import('./resources/js/components/analytics/PrTimeline.vue')['default']
+    PrTrends: typeof import('./resources/js/components/analytics/PrTrends.vue')['default']
     QrCode: typeof import('./resources/js/components/QrCode.vue')['default']
     ResponsiveNavLink: typeof import('./resources/js/components/ResponsiveNavLink.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
@@ -49,5 +51,6 @@ declare module 'vue' {
     TextInput: typeof import('./resources/js/components/TextInput.vue')['default']
     ThemeSwitcher: typeof import('./resources/js/@core/components/ThemeSwitcher.vue')['default']
     Timeline: typeof import('./resources/js/components/pr/Timeline.vue')['default']
+    VueApexCharts: typeof import('vue3-apexcharts')['default']
   }
 }

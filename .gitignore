@@ -42,7 +42,6 @@ dist-ssr
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
-!.vscode/tasks.json
 !.vscode/*.code-snippets
 !.vscode/tours
 .idea

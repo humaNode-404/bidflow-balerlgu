@@ -1,0 +1,62 @@
+// See https://go.microsoft.com/fwlink/?LinkId=733558
+// for the documentation about the tasks.json format
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "🔽 Composer Install",
+            "type": "shell",
+            "command": "composer install",
+            "problemMatcher": []
+        },
+        {
+            "label": "🔽 PNPM Install",
+            "type": "shell",
+            "command": "pnpm install",
+            "problemMatcher": [],
+        },
+        {
+            "label": "🔊 Reverb Start",
+            "type": "shell",
+            "command": "php artisan reverb:start --debug",
+            "problemMatcher": [],
+            "isBackground": true,
+            "group": {
+                "kind": "build",
+            }
+        },
+        {
+            "label": "👨🏻‍💻 PNPM Run Dev",
+            "type": "shell",
+            "command": "pnpm run dev",
+            "problemMatcher": [],
+            "isBackground": true,
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "🚀 Artisan Serve",
+            "type": "shell",
+            "command": "php artisan serve",
+            "problemMatcher": [],
+            "isBackground": true
+        },
+        {
+            "label": "🗑️ Clear All",
+            "type": "shell",
+            "command": "php artisan cache:clear; php artisan route:clear; php artisan config:clear; php artisan view:clear; ",
+            "group": "build",
+            "problemMatcher": [],
+            "options": {
+                "shell": {
+                    "executable": "powershell",
+                    "args": [
+                        "-Command"
+                    ]
+                },
+            }
+        }
+    ]
+}

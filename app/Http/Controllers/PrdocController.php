@@ -72,7 +72,7 @@ class PrdocController extends Controller
     ]);
 
     // Load PR process JSON
-    $prProcesses = json_decode(Storage::get('pr_process.json'), true);
+    $prProcesses = json_decode(Storage::get('static-data/pr_process.json'), true);
 
     if ($prProcesses && count($prProcesses) > 0) {
       // Initialize the first process

@@ -22,7 +22,7 @@ class StageActionObserver implements ShouldHandleEventsAfterCommit
     public function updated(StageAction $stageAction): void
     {
         $prdoc = $stageAction->prdoc()->first();
-        $prProcesses = json_decode(Storage::get('pr_process.json'), true);
+        $prProcesses = json_decode(Storage::get('static-data/pr_process.json'), true);
 
         if ($prdoc && count($prProcesses) == $prdoc->stage_count) {
             if (!is_null($stageAction->completed_at)) {

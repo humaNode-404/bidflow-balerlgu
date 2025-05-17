@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Settings\Users;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\PrOfficeRule;
 use App\Models\User;
 use Illuminate\Validation\Rule;
 
@@ -25,7 +24,7 @@ class Create extends FormRequest
     public function rules(): array
     {
         return [
-            'office_id' => ['required', new PrOfficeRule()],
+            'office_id' => ['required', 'exists:offices,id'],
             'role' => [
                 'required',
                 'string',

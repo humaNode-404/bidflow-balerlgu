@@ -1,4 +1,9 @@
 *
 !public/
+!public/attachments/
+!public/avatars/
+!public/avatars/preset/
+!public/avatars/preset/**
 !static-data/
+!static-data/**
 !.gitignore

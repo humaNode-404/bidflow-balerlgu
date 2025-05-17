@@ -1,0 +1,80 @@
+[
+    {
+        "name": "Bids and Awards Committee",
+        "abbr": "BAC",
+        "user_group": "bac",
+        "avatar": ""
+    },
+    {
+        "name": "Mayor's Office",
+        "abbr": "MO",
+        "user_group": "mo_staff",
+        "avatar": ""
+    },
+    {
+        "name": "Health Office",
+        "abbr": "HO",
+        "user_group": "end_user",
+        "avatar": ""
+    },
+    {
+        "name": "Treasury Office",
+        "abbr": "TO",
+        "user_group": "end_user",
+        "avatar": ""
+    },
+    {
+        "name": "Engineering Office",
+        "abbr": "EO",
+        "user_group": "end_user",
+        "avatar": ""
+    },
+    {
+        "name": "Planning and Development Office",
+        "abbr": "PDO",
+        "user_group": "end_user",
+        "avatar": ""
+    },
+    {
+        "name": "Civil Registrar's Office",
+        "abbr": "CRO",
+        "user_group": "end_user",
+        "avatar": ""
+    },
+    {
+        "name": "Depart of Social Welfare and Development",
+        "abbr": "DSWD",
+        "user_group": "end_user",
+        "avatar": ""
+    },
+    {
+        "name": "Agricultural Office",
+        "abbr": "AO",
+        "user_group": "end_user",
+        "avatar": ""
+    },
+    {
+        "name": "Disaster Risk Reduction and Management Office",
+        "abbr": "DRRMO",
+        "user_group": "end_user",
+        "avatar": ""
+    },
+    {
+        "name": "Budget Office",
+        "abbr": "BO",
+        "user_group": "end_user",
+        "avatar": ""
+    },
+    {
+        "name": "Public Information Office",
+        "abbr": "PIO",
+        "user_group": "end_user",
+        "avatar": ""
+    },
+    {
+        "name": "Human Resource Management Office",
+        "abbr": "HRMO",
+        "user_group": "end_user",
+        "avatar": ""
+    }
+]

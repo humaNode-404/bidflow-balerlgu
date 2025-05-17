@@ -10,6 +10,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class PrController extends Controller
 {
@@ -51,7 +52,7 @@ class PrController extends Controller
         ->orderBy('proc_no', 'desc')->first(),
     ])->first();
 
-    $prModes = json_decode(file_get_contents(storage_path('app/pr_modes.json')), true);
+    $prModes = json_decode(Storage::get('static-data/pr_modes.json'), true);
 
     return Inertia::render('PR', [
       'prdoc' => Inertia::defer(fn() => $prdoc),

@@ -22,7 +22,7 @@ class PrdocSeeder extends Seeder
 
             Prdoc::create([
                 'number' => $faker->unique()->numerify('###-##-####-####'), // A random number like 000-00-000-0000
-                'mode' => collect(json_decode(File::get(storage_path('app/pr_modes.json'))))->random(),// Random mode
+                'mode' => collect(json_decode(Storage::get('static-data/pr_modes.json')))->random(),// Random mode
                 'desc' => $faker->sentence(2), // Random description
                 'purpose' => $faker->sentence(10), // Same as desc, for simplicity
                 'event_start' => $faker->dateTimeBetween('-10 months', '+1 month')->format('Y-m-d'), // Random date for event need

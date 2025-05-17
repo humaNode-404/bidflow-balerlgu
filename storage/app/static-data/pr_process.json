@@ -1,0 +1,250 @@
+[
+    {
+        "proc_no": "1",
+        "main_proc": "",
+        "proc": "Approval of PR",
+        "incharge": "BAC Office",
+        "user_group": "bac",
+        "desc": "The PR is reviewed and approved by the BAC Office."
+    },
+    {
+        "proc_no": "2",
+        "main_proc": "",
+        "proc": "PR Transmitted to MO",
+        "incharge": "MO Staff",
+        "user_group": "mo_staff",
+        "desc": "The approved PR is sent to the Municipal Office for further processing."
+    },
+    {
+        "proc_no": "3",
+        "main_proc": "",
+        "proc": "PR Returned to BAC Office",
+        "incharge": "BAC Office",
+        "user_group": "bac",
+        "desc": "The PR is returned to the BAC Office for additional actions or corrections."
+    },
+    {
+        "proc_no": "4",
+        "main_proc": "",
+        "proc": "BAC Resolution",
+        "incharge": "BAC Office",
+        "user_group": "bac",
+        "desc": "A resolution is created by the BAC Office regarding the PR."
+    },
+    {
+        "proc_no": "5",
+        "main_proc": "BAC Resolution Signing",
+        "proc": "Requisitioning Officer",
+        "incharge": "End User",
+        "user_group": "end_user",
+        "desc": "The requisitioning officer reviews and signs the BAC resolution."
+    },
+    {
+        "proc_no": "6",
+        "main_proc": "BAC Resolution Signing",
+        "proc": "BAC Member",
+        "incharge": "BAC Office",
+        "user_group": "bac",
+        "desc": "A BAC member signs the BAC resolution as part of the approval process."
+    },
+    {
+        "proc_no": "7",
+        "main_proc": "BAC Resolution Signing",
+        "proc": "BAC Member",
+        "incharge": "BAC Office",
+        "user_group": "bac",
+        "desc": "The second BAC member signs the BAC resolution to ensure consensus."
+    },
+    {
+        "proc_no": "8",
+        "main_proc": "BAC Resolution Signing",
+        "proc": "BAC Member",
+        "incharge": "BAC Office",
+        "user_group": "bac",
+        "desc": "The third BAC member adds their signature to the resolution."
+    },
+    {
+        "proc_no": "9",
+        "main_proc": "BAC Resolution Signing",
+        "proc": "BAC Vice Chairman",
+        "incharge": "BAC Office",
+        "user_group": "bac",
+        "desc": "The BAC Vice Chairman reviews and signs the resolution."
+    },
+    {
+        "proc_no": "10",
+        "main_proc": "BAC Resolution Signing",
+        "proc": "BAC Chairman",
+        "incharge": "BAC Office",
+        "user_group": "bac",
+        "desc": "The BAC Chairman provides the final signature to complete the resolution."
+    },
+    {
+        "proc_no": "11",
+        "main_proc": "Posting to PhilGeps (if>50K)",
+        "proc": "Actual Posting",
+        "incharge": "BAC Office",
+        "user_group": "bac",
+        "desc": "The PR is posted to the PhilGeps system for transparency and procurement standards."
+    },
+    {
+        "proc_no": "12",
+        "main_proc": "Posting to PhilGeps (if>50K)",
+        "proc": "Closing",
+        "incharge": "BAC Office",
+        "user_group": "bac",
+        "desc": "The posting on PhilGeps is closed after the necessary duration or responses are received."
+    },
+    {
+        "proc_no": "13",
+        "main_proc": "",
+        "proc": "Release of RFQ",
+        "incharge": "BAC Office",
+        "user_group": "bac",
+        "desc": "The Request for Quotation (RFQ) is released to potential suppliers or vendors."
+    },
+    {
+        "proc_no": "14",
+        "main_proc": "",
+        "proc": "RFQ received at BAC Office",
+        "incharge": "BAC Office",
+        "user_group": "bac",
+        "desc": "The BAC Office receives responses or quotations from vendors."
+    },
+    {
+        "proc_no": "15",
+        "main_proc": "",
+        "proc": "Endorsement to TWG",
+        "incharge": "TWG",
+        "user_group": "twg",
+        "desc": "The RFQ or related documents are sent to the Technical Working Group (TWG) for evaluation."
+    },
+    {
+        "proc_no": "16",
+        "main_proc": "",
+        "proc": "TWG Eval. returned to BAC",
+        "incharge": "TWG",
+        "user_group": "twg",
+        "desc": "The TWG\"s evaluation is returned to the BAC for further review."
+    },
+    {
+        "proc_no": "17",
+        "main_proc": "Abstract of Quotation Signing",
+        "proc": "Requisitioning Officer",
+        "incharge": "End User",
+        "user_group": "end_user",
+        "desc": "The requisitioning officer signs the abstract of quotations for confirmation."
+    },
+    {
+        "proc_no": "18",
+        "main_proc": "Abstract of Quotation Signing",
+        "proc": "BAC Member",
+        "incharge": "BAC Office",
+        "user_group": "bac",
+        "desc": "A BAC member signs the abstract of quotations to validate the details."
+    },
+    {
+        "proc_no": "19",
+        "main_proc": "Abstract of Quotation Signing",
+        "proc": "BAC Member",
+        "incharge": "BAC Office",
+        "user_group": "bac",
+        "desc": "Another BAC member adds their signature to the abstract of quotations."
+    },
+    {
+        "proc_no": "20",
+        "main_proc": "Abstract of Quotation Signing",
+        "proc": "BAC Member",
+        "incharge": "BAC Office",
+        "user_group": "bac",
+        "desc": "The third BAC member signs the abstract of quotations."
+    },
+    {
+        "proc_no": "21",
+        "main_proc": "Abstract of Quotation Signing",
+        "proc": "BAC Vice Chairman",
+        "incharge": "BAC Office",
+        "user_group": "bac",
+        "desc": "The BAC Vice Chairman reviews and signs the abstract of quotations."
+    },
+    {
+        "proc_no": "22",
+        "main_proc": "Abstract of Quotation Signing",
+        "proc": "BAC Chairman",
+        "incharge": "BAC Office",
+        "user_group": "bac",
+        "desc": "The BAC Chairman provides the final signature for the abstract of quotations."
+    },
+    {
+        "proc_no": "23",
+        "main_proc": "BAC Resolution Award Signing",
+        "proc": "Requisitioning Officer",
+        "incharge": "End User",
+        "user_group": "end_user",
+        "desc": "The requisitioning officer signs the resolution to finalize the award."
+    },
+    {
+        "proc_no": "24",
+        "main_proc": "BAC Resolution Award Signing",
+        "proc": "BAC Member",
+        "incharge": "BAC Office",
+        "user_group": "bac",
+        "desc": "A BAC member signs the resolution to formalize the award process."
+    },
+    {
+        "proc_no": "25",
+        "main_proc": "BAC Resolution Award Signing",
+        "proc": "BAC Member",
+        "incharge": "BAC Office",
+        "user_group": "bac",
+        "desc": "Another BAC member signs the resolution to ensure the process is followed."
+    },
+    {
+        "proc_no": "26",
+        "main_proc": "BAC Resolution Award Signing",
+        "proc": "BAC Member",
+        "incharge": "BAC Office",
+        "user_group": "bac",
+        "desc": "The third BAC member signs the resolution for completion."
+    },
+    {
+        "proc_no": "27",
+        "main_proc": "BAC Resolution Award Signing",
+        "proc": "BAC Vice Chairman",
+        "incharge": "BAC Office",
+        "user_group": "bac",
+        "desc": "The BAC Vice Chairman reviews and signs the resolution to approve the award."
+    },
+    {
+        "proc_no": "28",
+        "main_proc": "BAC Resolution Award Signing",
+        "proc": "BAC Chairman",
+        "incharge": "BAC Office",
+        "user_group": "bac",
+        "desc": "The BAC Chairman signs the resolution to finalize the award."
+    },
+    {
+        "proc_no": "29",
+        "main_proc": "",
+        "proc": "NOA transmitted to MO",
+        "incharge": "MO Staff",
+        "user_group": "mo_staff",
+        "desc": "The Notice of Award (NOA) is transmitted to the Municipal Office for approval."
+    },
+    {
+        "proc_no": "30",
+        "main_proc": "",
+        "proc": "Approved NOA returned",
+        "incharge": "BAC Office",
+        "user_group": "bac",
+        "desc": "The approved NOA is returned to the BAC Office for finalization."
+    },
+    {
+        "proc_no": "31",
+        "main_proc": "",
+        "proc": "Approved NOA received",
+        "incharge": "End User",
+        "user_group": "end_user",
+        "desc": "The approved Notice of Award (NOA) is received by the end user."
+    }
+]

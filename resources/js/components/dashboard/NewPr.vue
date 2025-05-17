@@ -217,6 +217,7 @@ const prev = () => {
                         placeholder="Competitive Bidding"
                         persistent-placeholder
                         prepend-inner-icon="mdi-gavel"
+                        :error-messages="form.errors.mode"
                         outlined
                       />
                     </v-col>

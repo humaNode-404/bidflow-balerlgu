@@ -20,8 +20,6 @@ class DashboardController extends Controller
     // exec($command);
     $user = Auth::user();
 
-    $prProcesses = json_decode(Storage::get('pr_process.json'), true);
-
     $prdocs = Prdoc::query()->notFailed()->when(request('search'), function ($query, $search) {
       $query->where(function ($q) use ($search) {
         $q->where('number', 'like', "%{$search}%")
@@ -39,15 +37,15 @@ class DashboardController extends Controller
         'number' => $prdoc->number,
         'mode' => $prdoc->mode,
         'priority_level' => $prdoc->priority_level,
-        'days_left' => (\Carbon\Carbon::parse($prdoc->event_need)->diffInDays(now())),
+        'days_left' => (Carbon::parse($prdoc->event_need)->diffInDays(now())),
         'desc' => $prdoc->desc,
         'event_need' => $prdoc->event_need,
         'office_id' => $prdoc->office->only(['abbr', 'name']),
         'user_id' => $prdoc->user->only(['uuid', 'status', 'name', 'role', 'avatar']),
         'created_at' => $prdoc->created_at,
-        'progress' => intval(($prdoc->stage_count / count($prProcesses)) * 100),
-        'current_progress' => count($prdoc->stageactions()->get()),
-        'count_progress' => count($prProcesses),
+        'progress' => $prdoc->stage_progress,
+        'current_progress' => $prdoc->stage_count,
+        'count_progress' => $prdoc->max_progress,
         'stage' => $prdoc->stageactions->sortByDesc('proc_no')->first(),
       ]);
 
@@ -75,15 +73,15 @@ class DashboardController extends Controller
         'office_id' => $prdoc->office->only(['abbr', 'name']),
         'user_id' => $prdoc->user->only(['uuid', 'status', 'name', 'role', 'avatar']),
         'created_at' => $prdoc->created_at,
-        'progress' => intval(($prdoc->stage_count / count($prProcesses)) * 100),
-        'current_progress' => count($prdoc->stageactions()->get()),
-        'count_progress' => count($prProcesses),
+        'progress' => $prdoc->stage_progress,
+        'current_progress' => $prdoc->stage_count,
+        'count_progress' => $prdoc->max_progress,
         'stage' => $prdoc->stageactions->sortByDesc('proc_no')->first(),
       ]);
 
 
 
-    $prModes = json_decode(file_get_contents(storage_path('app/pr_modes.json')), true);
+    $prModes = json_decode(Storage::get('static-data/pr_modes.json'), true);
 
     $offices = Office::all()->select(['id', 'name', 'abbr']);
     $users = User::where('role', 'end-user')
@@ -95,13 +93,6 @@ class DashboardController extends Controller
         "name" => "{$user->first_name} {$user->last_name}",
         "avatar" => $user->avatar,
       ]);
-
-    // $user->notify(new NewPurchaseRequest(Prdoc::findOrFail(4)));
-    // $user->notify(new NewPurchaseRequest(Prdoc::findOrFail(6)));
-    // $user->notify(new NewPurchaseRequest(Prdoc::findOrFail(7)));
-    // $user->notify(new NewPurchaseRequest(Prdoc::findOrFail(9)));
-    // $user->notify(new NewPurchaseRequest(Prdoc::findOrFail(7)));
-    // $user->notify(new NewPurchaseRequest(Prdoc::findOrFail(9)));
 
     return Inertia::render('Dashboard', [
       'prdocs' => Inertia::defer(fn() => $prdocs),

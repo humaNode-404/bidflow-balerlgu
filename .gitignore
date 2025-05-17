@@ -4,7 +4,6 @@
 /public/hot
 /public/storage
 /storage/*.key
-!storage/app/static-data/
 /vendor
 .env
 .env.backup
@@ -38,12 +37,12 @@ dist-ssr
 /cypress/screenshots/
 
 # 👉 Custom Git ignores
+!.vscode/tasks.json
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
-!.vscode/tasks.json
 !.vscode/*.code-snippets
 !.vscode/tours
 .idea

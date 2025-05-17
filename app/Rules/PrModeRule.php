@@ -16,13 +16,10 @@ class PrModeRule implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         // Load the JSON file
-        $modes = json_decode(Storage::get('pr_modes.json'), true);
-
-        // Get the valid keys (mode names)
-        $validModes = array_keys($modes);
+        $modes = json_decode(Storage::get('static-data/pr_modes.json'), true);
 
         // Check if the value is in the valid modes
-        if (!in_array($value, $validModes)) {
+        if (!in_array($value, $modes)) {
             $fail("The selected :attribute is invalid, value doesn't exist");
         }
     }

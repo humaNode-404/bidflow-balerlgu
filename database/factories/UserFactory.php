@@ -32,7 +32,7 @@ class UserFactory extends Factory
         } elseif ($gender[0] == 'f' && $num % 2 == 1) {
             $num--;
         }
-        $avatarPath = ['/storage/avatars/avatar-' . $num . '.png'];
+        $avatarPath = ['/storage/avatars/preset/avatar-' . $num . '.png'];
 
         return [
             'last_name' => fake()->lastName($gender),

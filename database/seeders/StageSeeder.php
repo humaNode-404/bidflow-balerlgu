@@ -4,17 +4,16 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Prdoc;
-use App\Models\Stage;
 use App\Models\StageAction;
-use App\Models\User;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+
 
 class StageSeeder extends Seeder
 {
     public function run()
     {
         $faker = \Faker\Factory::create();
-        $prProcess = json_decode(File::get(storage_path('app/pr_process.json')), true);
+        $prProcess = json_decode(Storage::get('static-data/pr_process.json'), true);
 
         $prdocs = Prdoc::all();
         foreach ($prdocs as $prdoc) {

@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Account;
 
 use App\Models\User;
-use App\Rules\PrOfficeRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -30,7 +29,7 @@ class AccInfoRequest extends FormRequest
             'last_name' => ['required', 'string', 'max:125'],
             'address' => ['required', 'string', 'max:125'],
             'phone' => ['required', 'digits:11'],
-            'office_id' => ['required', new PrOfficeRule()],
+            'office_id' => ['required', 'exists:offices,id'],
             'email' => [
                 'required',
                 'string',

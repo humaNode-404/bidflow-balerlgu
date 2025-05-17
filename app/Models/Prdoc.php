@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use App\Observers\PrdocObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Support\Facades\Storage;
 
 #[ObservedBy([PrdocObserver::class])]
 class Prdoc extends Model
@@ -26,12 +27,6 @@ class Prdoc extends Model
     });
   }
 
-  /**
-   * Scope a query to only include failed prdocs.
-   */
-  /**
-   * Scope a query to only include failed prdocs.
-   */
   public function scopeFailed(Builder $query): void
   {
     $query->whereNotNull('failed_at');
@@ -77,6 +72,18 @@ class Prdoc extends Model
   public function getStageCountAttribute()
   {
     return count($this->stageactions()->get());
+  }
+
+  public function getStageProgressAttribute()
+  {
+    $prProcesses = json_decode(Storage::get('static-data/pr_process.json'), true);
+    return intval(($this->stage_count / count($prProcesses)) * 100);
+  }
+
+  public function getMaxProgressAttribute()
+  {
+    $prProcesses = json_decode(Storage::get('static-data/pr_process.json'), true);
+    return intval(count($prProcesses));
   }
 
   public function getOfficeIdAttribute()

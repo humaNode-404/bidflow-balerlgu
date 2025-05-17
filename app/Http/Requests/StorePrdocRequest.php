@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Prdoc;
 use App\Rules\PrNumberRule;
+use App\Rules\PrModeRule;
 use App\Rules\PrValueRule;
 use App\Rules\PrEventNeedRule;
 use Illuminate\Validation\Rule;
@@ -30,7 +31,7 @@ class StorePrdocRequest extends FormRequest
     {
         return [
             'number' => ['required', new PrNumberRule(), Rule::unique(Prdoc::class)],
-            'mode' => ['required'],
+            'mode' => ['required', new PrModeRule()],
             'value' => ['required', new PrValueRule()],
             'desc' => ['required', 'min:10', 'max:50',],
             'purpose' => ['required', 'min:15', 'max:255',],
@@ -49,7 +50,7 @@ class StorePrdocRequest extends FormRequest
     {
         return [
             'number' => 'PR Number',
-            'mode' => ['required'],
+            'mode' => 'Mode',
             'value' => 'PR Value',
             'desc' => 'Description',
             'purpose' => 'Purpose',

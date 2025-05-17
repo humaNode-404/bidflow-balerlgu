@@ -57,7 +57,7 @@ class StageActionController extends Controller
         $stageaction->completed_at = now();
 
         // Load PR process JSON
-        $prProcesses = json_decode(Storage::get('pr_process.json'), true);
+        $prProcesses = json_decode(Storage::get('static-data/pr_process.json'), true);
 
         if ($stageaction->proc_no < count($prProcesses)) {
 

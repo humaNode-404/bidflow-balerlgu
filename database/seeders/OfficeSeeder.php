@@ -4,14 +4,14 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Office;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class OfficeSeeder extends Seeder
 {
     public function run()
     {
         // Load office data from JSON file
-        $offices = json_decode(File::get(storage_path('app/offices.json')), true);
+        $offices = json_decode(Storage::get('static-data/offices.json'), true);
 
         // Insert data into the 'offices' table
         foreach ($offices as $data) {

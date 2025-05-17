@@ -8,15 +8,12 @@ use Inertia\Response;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class ArchiveController extends Controller
 {
     public function show(Request $request): Response
     {
         $user = Auth::user();
-
-        $prProcesses = json_decode(Storage::get('pr_process.json'), true);
 
         $completed = Prdoc::onlyTrashed()->when(request('search'), function ($query, $search) {
             $query->where(function ($q) use ($search) {
@@ -41,9 +38,9 @@ class ArchiveController extends Controller
                 'office_id' => $prdoc->office->only(['abbr', 'name']),
                 'user_id' => $prdoc->user->only(['uuid', 'status', 'name', 'role', 'avatar']),
                 'created_at' => $prdoc->created_at,
-                'progress' => intval(($prdoc->stage_count / count($prProcesses)) * 100),
-                'current_progress' => count($prdoc->stageactions()->get()),
-                'count_progress' => count($prProcesses),
+                'progress' => $prdoc->stage_progress,
+                'current_progress' => $prdoc->stage_count,
+                'count_progress' => $prdoc->max_progress,
                 'stage' => $prdoc->stageactions->sortByDesc('proc_no')->first(),
             ]);
 
@@ -70,9 +67,9 @@ class ArchiveController extends Controller
                 'office_id' => $prdoc->office->only(['abbr', 'name']),
                 'user_id' => $prdoc->user->only(['uuid', 'status', 'name', 'role', 'avatar']),
                 'created_at' => $prdoc->created_at,
-                'progress' => intval(($prdoc->stage_count / count($prProcesses)) * 100),
-                'current_progress' => count($prdoc->stageactions()->get()),
-                'count_progress' => count($prProcesses),
+                'progress' => $prdoc->stage_progress,
+                'current_progress' => $prdoc->stage_count,
+                'count_progress' => $prdoc->max_progress,
                 'stage' => $prdoc->stageactions->sortByDesc('proc_no')->first(),
             ]);
 

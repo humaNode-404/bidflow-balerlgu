@@ -10,7 +10,6 @@ use App\Http\Requests\Settings\Users\Create;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\Rule;
-use App\Rules\PrOfficeRule;
 
 class UserController extends Controller
 {
@@ -52,7 +51,7 @@ class UserController extends Controller
             'email' => $validated['email'
             ],
             'password' => $request['email'] . '_' . $request['office_id'],
-        ])->assignRole( $validated['role']);
+        ])->assignRole($validated['role']);
 
         return redirect()->back();
     }
@@ -67,7 +66,7 @@ class UserController extends Controller
                 'last_name' => ['required', 'string', 'max:125'],
                 'address' => ['required', 'string', 'max:125'],
                 'phone' => ['required', 'digits:11'],
-                'office_id' => ['required', new PrOfficeRule()],
+                'office_id' => ['required', 'exists:offices,id'],
                 'email' => [
                     'required',
                     'string',

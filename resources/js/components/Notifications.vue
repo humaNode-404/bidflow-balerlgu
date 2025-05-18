@@ -40,21 +40,15 @@ watchEffect(async () => {
   notif.hasmore = !(notif.pages.next_page_url == null);
 });
 
-// const x = ref(1);
-
 // onMounted(() => {
 //   // window.Echo.channel('notifications') // Ensure the channel matches your backend setup
 //   //   .listen('.App\\Events\\NotificationSent', (data) => {
 //   //     notifications.value.unshift(data); // This will push the new notification at the front
 //   //   });
-//   console.log('in');
-//   console.log(++x.value);
 // });
 
 // onUnmounted(() => {
 //   // window.Echo.leave('notifications');
-//   console.log('out');
-//   console.log(++x.value);
 // });
 
 const onVisible = (isIntersecting, entries, observer) => {
@@ -79,24 +73,36 @@ const onVisible = (isIntersecting, entries, observer) => {
 };
 
 function actionVisit(id, action) {
-  router.put(route('notif.update', { notif: id }), {
-    only: ['notifs'],
-    replace: true,
-    preserveState: true,
-    preserveScroll: true,
-    showProgress: false,
-    onStart: () => {
-      notif.processing = true;
-    },
-    onFinish: () => {
-      notif.processing = false;
-    },
-    onSuccess: () => {
-      if (action) {
-        router.visit(action);
-      }
-    },
-  });
+  let n = notif.data.find((n) => n.id === id);
+  if (n.read_at === null) {
+    router.visit(route('notif.update', { notif: id }), {
+      method: 'put',
+      only: ['notifs'],
+      replace: true,
+      preserveState: true,
+      preserveScroll: true,
+      showProgress: false,
+      onStart: () => {
+        notif.processing = true;
+      },
+      onFinish: () => {
+        notif.processing = false;
+      },
+      onSuccess: (page) => {
+        notif.pages = page.props.notifs.pages;
+        notif.unReadNo = page.props.notifs.unReadNo;
+        if (action) {
+          router.visit(action, {
+            onFinish: () => {
+              console.log(`Finsh visiting: ${action}`);
+            },
+          });
+        }
+      },
+    });
+  } else if (action) {
+    router.visit(action);
+  }
 }
 
 function markAllAsRead() {

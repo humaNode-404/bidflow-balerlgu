@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\RateLimiter;
 
 class BackupController extends Controller
 {
-    protected int $maxAttempts = 3;
 
     public static function getMaxAttempts(): int
     {

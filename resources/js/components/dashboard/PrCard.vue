@@ -1,6 +1,6 @@
 <script setup>
 import Avatar from '@/components/Avatar.vue';
-import { router, usePage } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import updateLocale from 'dayjs/plugin/updateLocale';
@@ -8,7 +8,6 @@ import updateLocale from 'dayjs/plugin/updateLocale';
 import { useDisplay } from 'vuetify';
 
 const { xs } = useDisplay();
-const pageUser = usePage().props.auth.user;
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
 dayjs.updateLocale('en', {
@@ -97,9 +96,6 @@ const link = (href) => {
           </template>
           <VListItemTitle class="text-button text-capitalize">
             {{ pr.user_id.name }}
-            <span v-if="pr.user_id.uuid == pageUser.uuid" class="text-caption">
-              - You
-            </span>
           </VListItemTitle>
           <VListItemSubtitle>
             <VChip

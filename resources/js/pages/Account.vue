@@ -12,7 +12,24 @@ defineProps({
   acc: Object,
 });
 
-const activeTab = ref(usePage().props.flash.tab);
+const tabs = [
+  {
+    title: 'Profile',
+    icon: 'bx-user',
+    tab: 'profile',
+  },
+  {
+    title: 'Security',
+    icon: 'bx-lock-open',
+    tab: 'security',
+  },
+];
+
+const activeTab = ref(
+  tabs.some((t) => t.tab === usePage().props.flash.tab)
+    ? usePage().props.flash.tab
+    : 'profile',
+);
 
 watch(activeTab, (value) => {
   router.get(
@@ -27,19 +44,6 @@ watch(activeTab, (value) => {
     },
   );
 });
-
-const tabs = [
-  {
-    title: 'Profile',
-    icon: 'bx-user',
-    tab: 'profile',
-  },
-  {
-    title: 'Security',
-    icon: 'bx-lock-open',
-    tab: 'security',
-  },
-];
 </script>
 
 <template>

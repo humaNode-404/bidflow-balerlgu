@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\NewPurchaseRequest;
 
 class DashboardController extends Controller
 {
@@ -84,7 +86,7 @@ class DashboardController extends Controller
     $prModes = json_decode(Storage::get('static-data/pr_modes.json'), true);
 
     $offices = Office::all()->select(['id', 'name', 'abbr']);
-    $users = User::where('role', 'end-user')
+    $users = User::role(['end-user'])
       ->select('id', 'first_name', 'last_name', 'office_id', 'avatar')
       ->get()
       ->map(fn($user) => [
@@ -94,12 +96,16 @@ class DashboardController extends Controller
         "avatar" => $user->avatar,
       ]);
 
+    // $user->notify(new NewPurchaseRequest(Prdoc::findOrFail(1)));
+    // $user->notify(new NewPurchaseRequest(Prdoc::findOrFail(2)));
+    // $user->notify(new NewPurchaseRequest(Prdoc::findOrFail(3)));
+
     return Inertia::render('Dashboard', [
       'prdocs' => Inertia::defer(fn() => $prdocs),
       'priorities' => Inertia::optional(fn() => $prdocs_priority),
-      'prModes' => Inertia::defer(fn() => $prModes ?: []),
-      'offices' => Inertia::lazy(fn() => $offices ?: []),
-      'users' => Inertia::lazy(fn() => $users ?: []),
+      'prModes' => Inertia::optional(fn() => $prModes ?: []),
+      'offices' => Inertia::optional(fn() => $offices ?: []),
+      'users' => Inertia::optional(fn() => $users ?: []),
     ]);
   }
 }

@@ -26,7 +26,7 @@ const tabs = [
   {
     title: 'High Priority',
     icon: 'mdi-priority-high',
-    tab: 'priority',
+    tab: 'priorities',
   },
 ];
 
@@ -37,68 +37,41 @@ const flash = reactive({
     : 'all',
 });
 
+onMounted(() => {
+  if (flash.tab == 'priorities') {
+    pageReload();
+  }
+});
+
 watch(
   () => flash.search,
-  debounce((value) => {
-    if (value) {
-      router.get(
-        route('dashboard'),
-        { search: value, tab: flash.tab },
-        {
-          only: ['prdocs', 'priorities'],
-          preserveScroll: true,
-          preserveState: true,
-          replace: true,
-        },
-      );
-    } else {
-      router.get(
-        route('dashboard'),
-        { tab: flash.tab },
-        {
-          only: ['flash', 'priorities'],
-          preserveScroll: true,
-          preserveState: true,
-          replace: true,
-        },
-      );
-    }
+  debounce(() => {
+    pageReload();
   }, 500),
 );
 
 watch(
   () => flash.tab,
-  (value) => {
-    router.get(
-      route('dashboard'),
-      { search: flash.search, tab: value },
-      {
-        only: ['flash', 'priorities'],
-        showProgress: false,
-        preserveScroll: true,
-        preserveState: true,
-        replace: true,
-      },
-    );
+  () => {
+    pageReload();
   },
 );
 
-onMounted(() => {
-  let tab = usePage().props.flash.tab;
-  if (tab == 'priority') {
-    router.get(
-      route('dashboard'),
-      { tab: tab },
-      {
-        only: ['flash', 'priorities'],
-        showProgress: false,
-        preserveScroll: true,
-        preserveState: true,
-        replace: true,
-      },
-    );
-  }
-});
+function pageReload() {
+  router.get(
+    route('dashboard'),
+    flash.search
+      ? { search: flash.search, tab: flash.tab }
+      : { tab: flash.tab },
+    {
+      only: [flash.tab == 'all' ? 'prdocs' : flash.tab, 'flash'],
+      showProgress: false,
+      preserveScroll: true,
+      preserveState: true,
+      replace: true,
+    },
+  );
+}
 </script>
 
 <template>
@@ -173,7 +146,7 @@ onMounted(() => {
           </Deferred>
         </VWindowItem>
 
-        <VWindowItem value="priority">
+        <VWindowItem value="priorities">
           <Deferred data="priorities">
             <template #fallback>
               <VRow>

@@ -1,7 +1,6 @@
 import './echo';
 
-//import blankLayout from '@/layouts/Blank.vue';
-import defLayout from '@/layouts/Default.vue';
+import DefLayout from '@/layouts/Default.vue';
 import { registerPlugins } from '@core/utils/plugins';
 import { createInertiaApp, Head, Link } from '@inertiajs/vue3';
 import axios from 'axios';
@@ -25,7 +24,7 @@ createInertiaApp({
     const pages = import.meta.glob('./pages/**/*.vue', { eager: true });
     let page = pages[`./pages/${name}.vue`];
 
-    page.default.layout = page.default.layout || defLayout;
+    page.default.layout = page.default.layout || DefLayout;
     return page;
   },
   setup({ el, App, props, plugin }) {

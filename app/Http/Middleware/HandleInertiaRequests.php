@@ -33,7 +33,7 @@ class HandleInertiaRequests extends Middleware
   public function share(Request $request): array
   {
     $user = Auth::user();
-    $per_page = 20;
+    $per_page = 10;
     $notifPage = $request->notifpage;
     $notifications = Auth::user()?->notifications()
       ->latest()
@@ -42,18 +42,18 @@ class HandleInertiaRequests extends Middleware
     $unReadNo = Auth::user()?->unreadNotifications()->count();
 
     return [
-      ...parent::share($request), // Include the parent's share data.
+      ...parent::share($request),
       'notifs' => Inertia::defer(fn() => ['pages' => $notifications, 'unReadNo' => $unReadNo])->deepMerge(),
-      'flash' => $request, // Share flash session data.
-      'auth' => Inertia::always(fn() => [
-        'user' => Inertia::defer(fn() => $user?->only([
+      'flash' => $request,
+      'auth' => Inertia::defer(fn() => [
+        'user' => $user?->only([
           'id',
           'name',
           'first_name',
           'email_verified_at',
           'role',
           'avatar',
-        ])),
+        ]),
         'roles' => Auth::user()?->getRoleNames() ?? [],
         'permissions' => Auth::user()?->getAllPermissions()->pluck('name') ?? [],
       ]),

@@ -1,7 +1,7 @@
 <!-- eslint-disable prettier/prettier -->
 <script setup>
 import { newPRDialog } from '@/stores/dialogStore';
-import { useForm } from '@inertiajs/vue3';
+import { useForm, router } from '@inertiajs/vue3';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar';
@@ -14,6 +14,8 @@ const props = defineProps({
     type: null,
   },
 });
+
+const only = ['prModes', 'offices', 'users'];
 
 const { xs } = useDisplay();
 const dialogStore = newPRDialog();
@@ -90,8 +92,8 @@ watch(() => form.office_id, (newOfficeId, oldOfficeId) => {
 
 const submit =  () => {
 form.post(route('prdocs.store'), {
-      only: ['filters', 'offices', 'users'],
       replace: true,
+      only: only,
       onSuccess: () => {
       step.value++;
       form.step = step.value;
@@ -118,13 +120,16 @@ const closeForm = () => {
 };
 
 const prev = () => {
-     
       form.clearErrors();
       step.value--;
       form.step = step.value;
-       console.log(form.step);
 };
 
+onMounted(()=>{
+ router.reload({
+  only: only,
+ })
+});
 </script>
 
 <template>

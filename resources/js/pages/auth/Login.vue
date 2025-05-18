@@ -1,7 +1,6 @@
 <script setup>
 import Auth from '@/layouts/Auth.vue';
 import blankLayout from '@/layouts/Blank.vue';
-import { requiredRule } from '@core/utils/validationRules';
 import { useForm } from '@inertiajs/vue3';
 
 defineOptions({ layout: blankLayout });
@@ -19,9 +18,7 @@ const form = useForm({
 });
 
 const submit = () => {
-  form.post(route('login'), {
-    onFinish: () => form.reset('password'),
-  });
+  form.post(route('login'), {});
 };
 
 const isPasswordVisible = ref(false);
@@ -50,8 +47,7 @@ const isPasswordVisible = ref(false);
         <VRow>
           <VAlert
             v-if="
-              form.errors.email &&
-              form.errors.email != 'The email field is required.'
+              form.errors.email == 'These credentials do not match our records.'
             "
             type="error"
             variant="tonal"
@@ -70,7 +66,12 @@ const isPasswordVisible = ref(false);
               type="email"
               placeholder="username@email.com"
               autocomplete="username"
-              :rules="[...requiredRule('Email')]"
+              :error-messages="
+                form.errors.email ==
+                'These credentials do not match our records.'
+                  ? ''
+                  : form.errors.email
+              "
             />
           </VCol>
 
@@ -85,12 +86,7 @@ const isPasswordVisible = ref(false);
               :type="isPasswordVisible ? 'text' : 'password'"
               :append-inner-icon="isPasswordVisible ? 'bx-hide' : 'bx-show'"
               @click:append-inner="isPasswordVisible = !isPasswordVisible"
-              :rules="
-                form.errors.email ==
-                'These credentials do not match our records.'
-                  ? []
-                  : [...requiredRule('Password')]
-              "
+              :error-messages="form.errors.password"
             />
 
             <!-- remember me checkbox -->

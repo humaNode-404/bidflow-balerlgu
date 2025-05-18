@@ -1,6 +1,7 @@
 <!-- eslint-disable prettier/prettier -->
 <script setup>
 import GoBackBtn from '@/components/GoBackBtn.vue';
+import Notifications from '@/components/Notifications.vue';
 import Footer from '@/layouts/components/Footer.vue';
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue';
 import NavItems from '@/layouts/components/NavItems.vue';
@@ -12,9 +13,6 @@ import { useDisplay } from 'vuetify';
 
 const { mdAndDown } = useDisplay();
 
-defineProps({
-  notifs: Object,
-});
 </script>
 
 <template>
@@ -49,21 +47,29 @@ defineProps({
 
         <VSpacer />
         <NavbarThemeSwitcher class="me-1" />
-        <keep-alive>
-          <Deferred data="notifs">
-            <template #fallback>
-              <IconBtn class="me-1">
-                <VIcon icon="bx-bell" />
-                <VTooltip location="bottom" activator="parent">
-                  <span class="text-capitalize">Notifications</span>
-                </VTooltip>
-              </IconBtn>
-            </template>
-            <Notifications class="me-1" />
-          </Deferred>
-        </keep-alive>
 
-        <UserProfile />
+        <Deferred data="notifs">
+          <template #fallback>
+            <IconBtn class="me-1">
+              <VIcon icon="bx-bell" />
+              <VTooltip location="bottom" activator="parent">
+                <span class="text-capitalize">Notifications</span>
+              </VTooltip>
+            </IconBtn>
+          </template>
+          <keep-alive>
+            <component :is="Notifications" />
+          </keep-alive>
+        </Deferred>
+
+        <Deferred data="auth">
+          <template #fallback>
+            <VAvatar class="cursor-pointer" color="primary" variant="tonal">
+              <VIcon icon="bi-person" />
+            </VAvatar>
+          </template>
+          <UserProfile />
+        </Deferred>
       </div>
     </template>
 
@@ -76,12 +82,11 @@ defineProps({
         <h1 class="app-logo-title mt-2">bidflow</h1>
       </Link>
 
-      <IconBtn
-        class="d-block d-lg-none"
-        @click="toggleIsOverlayNavActive(false)"
-      >
-        <VIcon icon="bx-x" />
-      </IconBtn>
+      <div class="position-relative">
+        <IconBtn class="ms-4 mt-3" @click="toggleIsOverlayNavActive(false)">
+          <VIcon icon="bx-x" />
+        </IconBtn>
+      </div>
     </template>
 
     <template #vertical-nav-content>

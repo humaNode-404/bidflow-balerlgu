@@ -32,7 +32,7 @@ onMounted(() => {
 
 const filter = reactive({
   model: null,
-  list: ['All User', 'Active Status', 'Verified Status', 'Offices'],
+  list: ['All User', 'Roles', 'Active Status', 'Verified Status', 'Offices'],
   groupBy: [],
 });
 
@@ -73,6 +73,8 @@ const headers = [
 
 filter.groupBy = computed(() => {
   switch (filter.model) {
+    case 'Roles':
+      return [{ key: 'role' }];
     case 'Active Status':
       return [{ key: 'status' }];
     case 'Verified Status':

@@ -35,19 +35,19 @@ const link = (href, m = 'get') => {
 };
 
 onMounted(() => {
-  window.Echo.channel(`user.${usePage().props.auth.user.id}`)
-    .listen('.profile.updated', (e) => {
+  window.Echo.channel(`user.${user.value.id}`)
+    .listen('.profile.updated', () => {
        router.reload( { 
         only: ['auth'],
        onSuccess: page => {
-        user.value = page.props.auth.user;
+          user.value = page.props.auth?.user;
        },
         });
     });
 });
 
 onUnmounted(() => {
-  window.Echo.leave(`user.${usePage().props.auth.user.id}`);
+  window.Echo.leave(`user.${user.value.id}`);
 });
 
 </script>
@@ -58,9 +58,10 @@ onUnmounted(() => {
       <span class="text-capitalize">Profile</span>
     </VTooltip>
     <VImg v-if="user.avatar" :src="user.avatar" />
-    <span v-else class="text-body-2 initialism">{{
+    <span v-else-if="user.name" class="text-body-2 initialism">{{
       user.name.split(' ').at(0)[0] + user.name.split(' ').at(-1)[0]
     }}</span>
+    <VIcon v-else icon="bi-person"></VIcon>
 
     <!-- SECTION Menu -->
     <VMenu activator="parent" location="bottom end" offset="20px">

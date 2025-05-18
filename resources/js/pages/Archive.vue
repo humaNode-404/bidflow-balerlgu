@@ -13,51 +13,6 @@ defineProps({
   failed: Object,
 });
 
-const search = ref(usePage().props.flash.search);
-const activeTab = ref(usePage().props.flash.tab || 'all');
-
-watch(
-  search,
-  debounce((value) => {
-    if (value) {
-      router.get(
-        route('archive'),
-        { search: value, tab: activeTab.value },
-        {
-          only: ['completed', 'failed'],
-          preserveScroll: true,
-          preserveState: true,
-          replace: true,
-        },
-      );
-    } else {
-      router.get(
-        route('archive'),
-        { tab: activeTab.value },
-        {
-          preserveScroll: true,
-          preserveState: true,
-          replace: true,
-        },
-      );
-    }
-  }, 500),
-);
-
-watch(activeTab, (value) => {
-  router.get(
-    route('archive'),
-    { search: search.value, tab: value },
-    {
-      only: ['flash', 'failed'],
-      showProgress: false,
-      preserveScroll: true,
-      preserveState: true,
-      replace: true,
-    },
-  );
-});
-
 const tabs = [
   {
     title: 'Completed',
@@ -71,36 +26,60 @@ const tabs = [
   },
 ];
 
-onMounted(() => {
-  if (activeTab.value == 'priority')
-    router.get(
-      route('archive'),
-      { search: search.value, tab: activeTab.value },
-      {
-        only: ['flash', 'failed'],
-        showProgress: false,
-        preserveScroll: true,
-        preserveState: true,
-        replace: true,
-      },
-    );
+const flash = reactive({
+  search: usePage().props.flash.search,
+  tab: tabs.some((t) => t.tab === usePage().props.flash.tab)
+    ? usePage().props.flash.tab
+    : 'completed',
 });
+
+watch(
+  () => flash.search,
+  debounce(() => {
+    pageReload();
+  }, 500),
+);
+
+watch(
+  () => flash.tab,
+  () => {
+    pageReload();
+  },
+);
+
+onMounted(() => {
+  if (flash.tab == 'failed') {
+    pageReload();
+  }
+});
+
+const pageReload = () => {
+  router.get(
+    route('archive'),
+    flash.search
+      ? { search: flash.search, tab: flash.tab }
+      : { tab: flash.tab },
+    {
+      only: [flash.tab, 'flash'],
+      showProgress: false,
+      preserveScroll: true,
+      preserveState: true,
+      replace: true,
+    },
+  );
+};
 </script>
 
 <template>
   <VRow>
     <VCol cols="12">
-      <VCard
-        v-if="hasAnyRole(['admin', 'bac'])"
-        density="compact"
-        class="m-0 p-0"
-      >
+      <VCard density="compact" class="m-0 p-0">
         <VListItem>
           <VTextField
             v-if="can('use-filter')"
             class="mx-2"
             hint="Search scope to PR (Mode, Description, Number)"
-            v-model="search"
+            v-model="flash.search"
             clearable
             prepend-inner-icon="bx-search"
             placeholder="Search..."
@@ -109,7 +88,7 @@ onMounted(() => {
         </VListItem>
       </VCard>
 
-      <VTabs v-model="activeTab" class="v-tabs-pill mt-1 pb-0">
+      <VTabs v-model="flash.tab" class="v-tabs-pill mt-1 pb-0">
         <VTab v-for="item in tabs" :key="item.icon" :value="item.tab">
           <VIcon size="20" start :icon="item.icon" />
           {{ item.title }}
@@ -117,7 +96,7 @@ onMounted(() => {
       </VTabs>
     </VCol>
     <VCol>
-      <VWindow v-model="activeTab" class="mt-5">
+      <VWindow v-model="flash.tab" class="mt-5">
         <VWindowItem value="completed">
           <Deferred data="completed">
             <template #fallback>

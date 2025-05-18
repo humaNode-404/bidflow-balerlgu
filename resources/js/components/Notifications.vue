@@ -78,19 +78,28 @@ const onVisible = (isIntersecting, entries, observer) => {
   }
 };
 
-const actionVisit = (id, action) => {
+function actionVisit(id, action) {
   router.put(route('notif.update', { notif: id }), {
     only: ['notifs'],
     replace: true,
     preserveState: true,
     preserveScroll: true,
+    showProgress: false,
+    onStart: () => {
+      notif.processing = true;
+    },
+    onFinish: () => {
+      notif.processing = false;
+    },
+    onSuccess: () => {
+      if (action) {
+        router.visit(action);
+      }
+    },
   });
-  if (action) {
-    router.visit(action);
-  }
-};
+}
 
-const markAllAsRead = () => {
+function markAllAsRead() {
   router.visit(route('notif.markAllAsRead'), {
     method: 'post',
     only: ['notifs'],
@@ -113,9 +122,9 @@ const markAllAsRead = () => {
       if (notif.unReadNo) console.log('Marked all notification as read');
     },
   });
-};
+}
 
-const deleteAll = () => {
+function deleteAll() {
   router.visit(route('notif.deleteAll'), {
     method: 'post',
     only: ['notifs'],
@@ -136,9 +145,9 @@ const deleteAll = () => {
       if (notif.data.length) console.log('Deleted all notification');
     },
   });
-};
+}
 
-const toggleRead = (id) => {
+function toggleRead(id) {
   router.visit(route('notif.update', { notif: id }), {
     method: 'patch',
     only: ['notifs'],
@@ -166,9 +175,9 @@ const toggleRead = (id) => {
       notif.unReadNo = page.props.notifs.unReadNo;
     },
   });
-};
+}
 
-const deleteNotif = (id) => {
+function deleteNotif(id) {
   router.delete(route('notif.destroy', { notif: id }), {
     only: ['notifs'],
     replace: true,
@@ -187,7 +196,7 @@ const deleteNotif = (id) => {
       console.log(`Notification ${id} was successfully deleted.`);
     },
   });
-};
+}
 </script>
 
 <template>

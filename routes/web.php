@@ -81,7 +81,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
           Route::get('', 'list')->name('backup');
           Route::post('/run', 'run')->middleware('throttle:backup-run')->name('backup.run');
           Route::post('/clean', 'clean')->name('backup.clean');
-          Route::post('/download/{file}', 'download')->name('backup.download');
+          Route::get('/download/{file}', 'download')->name('backup.download');
         });
       });
     });
